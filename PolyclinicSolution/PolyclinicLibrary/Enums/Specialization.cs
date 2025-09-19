@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Hospital.Domain.Enums;
+
+/// <summary>
+/// List of doctor's specialization
+/// </summary>
 public enum Specialization
 {
     Therapist,

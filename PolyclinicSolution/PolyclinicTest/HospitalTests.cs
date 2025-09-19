@@ -2,6 +2,10 @@ using Hospital.Domain.Fixtures;
 
 namespace Hospital.Tests;
 
+/// <summary>
+/// Unit Tests of Domain classes
+/// </summary>
+/// <param name="hospital"></param>
 public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFixture>
 {
     [Fact]

@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Hospital.Domain.Fixtures;
+
+/// <summary>
+/// Fixture data for Unit-Tests
+/// </summary>
 public class HospitalFixture
 {
     public List<Patient> Patients { get; } = [];
