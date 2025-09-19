@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PolyclinicLibrary.Models;
+namespace Hospital.Domain.Models;
 public class Appointment
 {
-    public string PatientPassportNumber { get; set; }
-    public string DoctorPassportNumber { get; set; }
-    public DateTime AppointmentDateTime { get; set; }
-    public int RoomNumber { get; set; }
-    public bool IsRepeat { get; set; }
+    public required int Id { get; set; }
+    public required Patient Patient { get; set; }
+    public required Doctor Doctor { get; set; }
+    public required DateTime AppointmentDateTime { get; set; }
+    public required int RoomNumber { get; set; }
+    public required bool IsRepeat { get; set; }
 }

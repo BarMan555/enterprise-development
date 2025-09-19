@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using PolyclinicLibrary.Enums;
+using Hospital.Domain.Enums;
 
-namespace PolyclinicLibrary.Models;
+namespace Hospital.Domain.Models;
 public class Patient
 {
-    public int Id { get; set; }
-    public string FullName { get; set; }
-    public Gender Gender { get; set; }
-    public DateTime DateOfBirth { get; set; }
-    public string Address { get; set; }
-    public BloodType BloodType { get; set; }
-    public RhFactor RhFactor { get; set; }
-    public string PhoneNumber { get; set; }
+    public required int Id { get; set; }
+    public required string FullName { get; set; }
+    public required Gender Gender { get; set; }
+    public required DateTime DateOfBirth { get; set; }
+    public required string Address { get; set; }
+    public required BloodType BloodType { get; set; }
+    public required RhFactor RhFactor { get; set; }
+    public required string PhoneNumber { get; set; }
 }
 
 // Пациент характеризуется номером паспорта, ФИО, полом,

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PolyclinicLibrary\PolyclinicLibrary.csproj" />
+    <ProjectReference Include="..\PolyclinicLibrary\Hospital.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

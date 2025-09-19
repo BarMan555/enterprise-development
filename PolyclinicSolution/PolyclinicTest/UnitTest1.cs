@@ -1,10 +1,12 @@
+using PolyclinicLibrary;
+
 namespace PolyclinicLybrary.Test;
 
-public class UnitTest1
+public class PolyclinicTests
 {
     [Fact]
-    public void Test1()
+    public void ShowAllDoctor_WhereExpMore_TenYears()
     {
-
+        var Polyclinic 
     }
 }

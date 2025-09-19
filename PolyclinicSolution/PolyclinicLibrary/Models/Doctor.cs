@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using PolyclinicLibrary.Enums;
+using Hospital.Domain.Enums;
 
-namespace PolyclinicLibrary.Models;
+namespace Hospital.Domain.Models;
 public class Doctor
 {
-    public int Id { get; set; }
-    public string FullName { get; set; }
-    public DateTime DateOfBirth { get; set; }
-    public Specialization Specialization { get; set; }
-    public int ExperienceYears { get; set; }
+    public required int Id { get; set; }
+    public required string FullName { get; set; }
+    public required DateTime DateOfBirth { get; set; }
+    public required Specialization Specialization { get; set; }
+    public required int ExperienceYears { get; set; }
 
 }
 
