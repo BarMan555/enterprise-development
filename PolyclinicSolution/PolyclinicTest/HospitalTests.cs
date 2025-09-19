@@ -8,6 +8,9 @@ namespace Hospital.Tests;
 /// <param name="hospital"></param>
 public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFixture>
 {
+    /// <summary>
+    /// Test to verify retrieval of doctors with at least 10 years of experience.
+    /// </summary>
     [Fact]
     public void GetDoctorsWithExperienceAtLeast10Years()
     {
@@ -29,6 +32,10 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
         Assert.Equal(expectedDoctors.OrderBy(doc => doc), result.OrderBy(doc => doc));
     }
 
+    /// <summary>
+    /// Test to verify retrieval of patients assigned to a specific doctor,
+    /// ordered by patient full name. 
+    /// </summary>
     [Fact]
     public void PatientsByDoctorOrderedByName()
     {
@@ -48,6 +55,9 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
         Assert.Equal(expectedPatients.OrderBy(name => name), result.OrderBy(name => name));
     }
 
+    /// <summary>
+    /// Test to verify counting of repeat patient appointments for the last month.
+    /// </summary>
     [Fact]
     public void RepeatAppointmentsCountLastMonth()
     {
@@ -63,6 +73,10 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
         Assert.Equal(expectedCount, result);
     }
 
+    /// <summary>
+    /// Test to verify retrieval of patients over 30 years old who have
+    /// appointments with multiple doctors, ordered by birth date.
+    /// </summary>
     [Fact]
     public void PatientsOver30WithMultipleDoctorsOrderedByBirthDate()
     {
@@ -86,6 +100,10 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
         Assert.Equal(expectedPatients, result);
     }
 
+    /// <summary>
+    /// Test to verify retrieval of appointments for the current month
+    /// happening in a specific room. 
+    /// </summary>
     [Fact]
     public void AppointmentsInRoomCurrentMonth()
     {
