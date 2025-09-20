@@ -167,7 +167,7 @@ public class HospitalFixture
             Id = 1,
             Patient = Patients[0], // Иванов Иван Иванович
             Doctor = Doctors[0],   // Смирнов Александр Васильевич (Кардиолог)
-            AppointmentDateTime = new DateTime(2024, 1, 15, 10, 0, 0),
+            AppointmentDateTime = new DateTime(2025, 8, 15, 10, 0, 0),
             RoomNumber = 101,
             IsReturnVisit = false
             },
@@ -176,7 +176,7 @@ public class HospitalFixture
                 Id = 2,
                 Patient = Patients[1], // Петрова Анна Сергеевна
                 Doctor = Doctors[1],   // Иванова Мария Петровна (Педиатр)
-                AppointmentDateTime = new DateTime(2024, 1, 15, 11, 30, 0),
+                AppointmentDateTime = new DateTime(2025, 8, 15, 11, 30, 0),
                 RoomNumber = 205,
                 IsReturnVisit = true
             },
@@ -185,7 +185,7 @@ public class HospitalFixture
                 Id = 3,
                 Patient = Patients[2], // Сидоров Михаил Петрович
                 Doctor = Doctors[2],   // Кузнецов Дмитрий Сергеевич (Хирург)
-                AppointmentDateTime = new DateTime(2024, 1, 16, 9, 0, 0),
+                AppointmentDateTime = new DateTime(2025, 9, 16, 9, 0, 0),
                 RoomNumber = 312,
                 IsReturnVisit = false
             },
@@ -194,7 +194,7 @@ public class HospitalFixture
                 Id = 4,
                 Patient = Patients[3], // Козлова Елена Викторовна
                 Doctor = Doctors[3],   // Петрова Ольга Игоревна (Невролог)
-                AppointmentDateTime = new DateTime(2024, 1, 16, 14, 15, 0),
+                AppointmentDateTime = new DateTime(2025, 8, 16, 14, 15, 0),
                 RoomNumber = 118,
                 IsReturnVisit = false
             },
@@ -203,7 +203,7 @@ public class HospitalFixture
                 Id = 5,
                 Patient = Patients[4], // Николаев Дмитрий Александрович
                 Doctor = Doctors[4],   // Васильев Игорь Николаевич (Терапевт)
-                AppointmentDateTime = new DateTime(2024, 1, 17, 16, 45, 0),
+                AppointmentDateTime = new DateTime(2025, 8, 17, 16, 45, 0),
                 RoomNumber = 201,
                 IsReturnVisit = true
             },
@@ -212,7 +212,7 @@ public class HospitalFixture
                 Id = 6,
                 Patient = Patients[0], // Иванов Иван Иванович
                 Doctor = Doctors[6],   // Алексеев Павел Михайлович (Офтальмолог)
-                AppointmentDateTime = new DateTime(2024, 1, 18, 13, 0, 0),
+                AppointmentDateTime = new DateTime(2025, 8, 18, 13, 0, 0),
                 RoomNumber = 404,
                 IsReturnVisit = false
             },
@@ -221,7 +221,7 @@ public class HospitalFixture
                 Id = 7,
                 Patient = Patients[1], // Петрова Анна Сергеевна
                 Doctor = Doctors[0],   // Соколова Анна Дмитриевна (Гинеколог)
-                AppointmentDateTime = new DateTime(2024, 1, 19, 10, 30, 0),
+                AppointmentDateTime = new DateTime(2025, 8, 19, 10, 30, 0),
                 RoomNumber = 222,
                 IsReturnVisit = true
             },
@@ -230,7 +230,7 @@ public class HospitalFixture
                 Id = 8,
                 Patient = Patients[2], // Сидоров Михаил Петрович
                 Doctor = Doctors[1],   // Смирнов Александр Васильевич (Кардиолог)
-                AppointmentDateTime = new DateTime(2024, 1, 19, 15, 20, 0),
+                AppointmentDateTime = new DateTime(2025, 8, 19, 15, 20, 0),
                 RoomNumber = 101,
                 IsReturnVisit = false
             }

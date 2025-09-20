@@ -12,7 +12,7 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     /// Test to verify retrieval of doctors with at least 10 years of experience.
     /// </summary>
     [Fact]
-    public void GetDoctorsWithExperienceAtLeast10Years()
+    public void GetDoctorsWithExperience_WhenExperienceAtLeast10Years_ReturnsExperiencedDoctorsOrderedByName()
     {
         var expectedDoctors = new List<string>
         {
@@ -37,7 +37,7 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     /// ordered by patient full name. 
     /// </summary>
     [Fact]
-    public void PatientsByDoctorOrderedByName()
+    public void GetPatientsByDoctor_WhenDoctorIsSpecified_ReturnsPatientsOrderedByName()
     {
         var doctor = hospital.Doctors[0]; // Смирнов Александр Васильевич
         var expectedPatients = new List<string>
@@ -59,10 +59,11 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     /// Test to verify counting of repeat patient appointments for the last month.
     /// </summary>
     [Fact]
-    public void RepeatAppointmentsCountLastMonth()
+    public void CountAppointments_WhenRepeatVisitsInLastMonth_ReturnsCorrectCount()
     {
-        var lastMonthStart = new DateTime(2024, 1, 1);
-        var lastMonthEnd = new DateTime(2024, 1, 31);
+        var currentDate = DateTime.Now;
+        var lastMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(-1);
+        var lastMonthEnd = lastMonthStart.AddMonths(1).AddDays(-1);
         var expectedCount = 3;
 
         var result = hospital.Appointments
@@ -78,9 +79,9 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     /// appointments with multiple doctors, ordered by birth date.
     /// </summary>
     [Fact]
-    public void PatientsOver30WithMultipleDoctorsOrderedByBirthDate()
+    public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBirthDate()
     {
-        var currentDate = new DateTime(2024, 1, 1);
+        var currentDate = DateTime.Now;
         var age30 = currentDate.AddYears(-30);
 
         var expectedPatients = new List<string>
@@ -105,11 +106,12 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     /// happening in a specific room. 
     /// </summary>
     [Fact]
-    public void AppointmentsInRoomCurrentMonth()
+    public void GetAppointments_WhenInSpecificRoomCurrentMonth_ReturnsAppointmentsOrderedByDateTime()
     {
         var roomNumber = 101;
-        var currentMonthStart = new DateTime(2024, 1, 1);
-        var currentMonthEnd = new DateTime(2024, 1, 31);
+        var currentDate = DateTime.Now;
+        var currentMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddDays(-1*currentDate.Day);
+        var currentMonthEnd = currentMonthStart.AddMonths(1).AddDays(-1);
 
         var expectedAppointmentIds = new List<int> { 1, 8 };
 
