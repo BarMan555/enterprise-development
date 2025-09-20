@@ -1,10 +1,5 @@
 ﻿using Hospital.Domain.Models;
 using Hospital.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hospital.Domain.Fixtures;
 
@@ -13,14 +8,31 @@ namespace Hospital.Domain.Fixtures;
 /// </summary>
 public class HospitalFixture
 {
+    /// <summary>
+    /// List of the test patients
+    /// </summary>
     public List<Patient> Patients { get; } = [];
+
+    /// <summary>
+    /// List of the test doctors
+    /// </summary>
     public List<Doctor> Doctors { get; } = [];
+
+    /// <summary>
+    /// List of the test specialization for test doctors
+    /// </summary>
+    public List<Specialization> Specializations { get; } = [];
+    
+    /// <summary>
+    /// List og the test appointments
+    /// </summary>
     public List<Appointment> Appointments{ get; } = [];
 
     public HospitalFixture()
     {
         Patients.AddRange([
-            new Patient{
+            new Patient
+            {
                 Id = 1,
                 FullName = "Иванов Иван Иванович",
                 Gender = Gender.Male,
@@ -30,7 +42,8 @@ public class HospitalFixture
                 RhFactor = RhFactor.Positive,
                 PhoneNumber = "+7 (495) 123-45-67"
             },
-            new Patient{
+            new Patient
+            {
                 Id = 2,
                 FullName = "Петрова Анна Сергеевна",
                 Gender = Gender.Female,
@@ -40,7 +53,8 @@ public class HospitalFixture
                 RhFactor = RhFactor.Negative,
                 PhoneNumber = "+7 (812) 987-65-43"
             },
-            new Patient{
+            new Patient
+            {
                 Id = 3,
                 FullName = "Сидоров Михаил Петрович",
                 Gender = Gender.Male,
@@ -50,7 +64,8 @@ public class HospitalFixture
                 RhFactor = RhFactor.Positive,
                 PhoneNumber = "+7 (343) 456-78-90"
             },
-            new Patient{
+            new Patient
+            {
                 Id = 4,
                 FullName = "Козлова Елена Викторовна",
                 Gender = Gender.Female,
@@ -60,7 +75,8 @@ public class HospitalFixture
                 RhFactor = RhFactor.Negative,
                 PhoneNumber = "+7 (383) 234-56-78"
             },
-            new Patient{
+            new Patient
+            {
                 Id = 5,
                 FullName = "Николаев Дмитрий Александрович",
                 Gender = Gender.Male,
@@ -72,122 +88,151 @@ public class HospitalFixture
             }
         ]);
 
-        Doctors.AddRange([
-            new Doctor{
+        Specializations.AddRange
+        ([
+            new Specialization(){Id=0, Name=SpecializationName.Pediatrician},
+            new Specialization(){Id=1, Name=SpecializationName.Surgeon},
+            new Specialization(){Id=2, Name=SpecializationName.Neurologist},
+            new Specialization(){Id=3, Name=SpecializationName.Cardiologist},
+            new Specialization(){Id=4, Name=SpecializationName.Dentist},
+            new Specialization(){Id=5, Name=SpecializationName.Ophthalmologist},
+            new Specialization(){Id=6, Name=SpecializationName.Therapist},
+        ]);
+
+        Doctors.AddRange
+        ([
+            new Doctor
+            {
                 Id = 1,
                 FullName = "Смирнов Александр Васильевич",
                 DateOfBirth = new DateTime(1978, 5, 12),
-                Specialization = Specialization.Cardiologist,
+                Specialization = Specializations[0],
                 ExperienceYears = 15
-                },
-            new Doctor{
+            },
+            new Doctor
+            {
                 Id = 2,
                 FullName = "Иванова Мария Петровна",
                 DateOfBirth = new DateTime(1985, 8, 24),
-                Specialization = Specialization.Pediatrician,
+                Specialization = Specializations[1],
                 ExperienceYears = 8
             },
-            new Doctor{
+            new Doctor
+            {
                 Id = 3,
                 FullName = "Кузнецов Дмитрий Сергеевич",
                 DateOfBirth = new DateTime(1970, 3, 5),
-                Specialization = Specialization.Surgeon,
+                Specialization = Specializations[2],
                 ExperienceYears = 25
             },
-            new Doctor{
+            new Doctor
+            {
                 Id = 4,
                 FullName = "Петрова Ольга Игоревна",
                 DateOfBirth = new DateTime(1990, 11, 17),
-                Specialization = Specialization.Neurologist,
+                Specialization = Specializations[3],
                 ExperienceYears = 5
             },
-            new Doctor{
+            new Doctor
+            {
                 Id = 5,
                 FullName = "Васильев Игорь Николаевич",
                 DateOfBirth = new DateTime(1965, 2, 28),
-                Specialization = Specialization.Therapist,
+                Specialization = Specializations[4],
                 ExperienceYears = 30
             },
-            new Doctor{
+            new Doctor
+            {
                 Id = 6,
                 FullName = "Николаева Екатерина Владимировна",
                 DateOfBirth = new DateTime(1982, 7, 14),
-                Specialization = Specialization.Dentist,
+                Specialization = Specializations[5],
                 ExperienceYears = 12
             },
-            new Doctor{
+            new Doctor
+            {
                 Id = 7,
                 FullName = "Алексеев Павел Михайлович",
                 DateOfBirth = new DateTime(1975, 9, 3),
-                Specialization = Specialization.Ophthalmologist,
+                Specialization = Specializations[6],
                 ExperienceYears = 18
-        }]);
+            }
+        ]);
 
-        Appointments.AddRange([
+        Appointments.AddRange
+        ([
 
-            new Appointment{
+            new Appointment
+            {
             Id = 1,
             Patient = Patients[0], // Иванов Иван Иванович
             Doctor = Doctors[0],   // Смирнов Александр Васильевич (Кардиолог)
             AppointmentDateTime = new DateTime(2024, 1, 15, 10, 0, 0),
             RoomNumber = 101,
-            IsRepeat = false
+            IsReturnVisit = false
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 2,
                 Patient = Patients[1], // Петрова Анна Сергеевна
                 Doctor = Doctors[1],   // Иванова Мария Петровна (Педиатр)
                 AppointmentDateTime = new DateTime(2024, 1, 15, 11, 30, 0),
                 RoomNumber = 205,
-                IsRepeat = true
+                IsReturnVisit = true
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 3,
                 Patient = Patients[2], // Сидоров Михаил Петрович
                 Doctor = Doctors[2],   // Кузнецов Дмитрий Сергеевич (Хирург)
                 AppointmentDateTime = new DateTime(2024, 1, 16, 9, 0, 0),
                 RoomNumber = 312,
-                IsRepeat = false
+                IsReturnVisit = false
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 4,
                 Patient = Patients[3], // Козлова Елена Викторовна
                 Doctor = Doctors[3],   // Петрова Ольга Игоревна (Невролог)
                 AppointmentDateTime = new DateTime(2024, 1, 16, 14, 15, 0),
                 RoomNumber = 118,
-                IsRepeat = false
+                IsReturnVisit = false
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 5,
                 Patient = Patients[4], // Николаев Дмитрий Александрович
                 Doctor = Doctors[4],   // Васильев Игорь Николаевич (Терапевт)
                 AppointmentDateTime = new DateTime(2024, 1, 17, 16, 45, 0),
                 RoomNumber = 201,
-                IsRepeat = true
+                IsReturnVisit = true
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 6,
                 Patient = Patients[0], // Иванов Иван Иванович
                 Doctor = Doctors[6],   // Алексеев Павел Михайлович (Офтальмолог)
                 AppointmentDateTime = new DateTime(2024, 1, 18, 13, 0, 0),
                 RoomNumber = 404,
-                IsRepeat = false
+                IsReturnVisit = false
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 7,
                 Patient = Patients[1], // Петрова Анна Сергеевна
                 Doctor = Doctors[0],   // Соколова Анна Дмитриевна (Гинеколог)
                 AppointmentDateTime = new DateTime(2024, 1, 19, 10, 30, 0),
                 RoomNumber = 222,
-                IsRepeat = true
+                IsReturnVisit = true
             },
-            new Appointment{
+            new Appointment
+            {
                 Id = 8,
                 Patient = Patients[2], // Сидоров Михаил Петрович
                 Doctor = Doctors[1],   // Смирнов Александр Васильевич (Кардиолог)
                 AppointmentDateTime = new DateTime(2024, 1, 19, 15, 20, 0),
                 RoomNumber = 101,
-                IsRepeat = false
+                IsReturnVisit = false
             }
 
         ]);

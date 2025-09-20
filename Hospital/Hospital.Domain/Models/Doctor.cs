@@ -1,40 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Hospital.Domain.Enums;
+﻿using Hospital.Domain.Enums;
 
 namespace Hospital.Domain.Models;
 
 /// <summary>
-/// Represents an <see cref="Doctor"> 
+/// Represents an Doctor
 /// </summary>
 public class Doctor
 {
     /// <summary>
-    /// Unique identifier of the <see cref="Doctor"/>
+    /// Unique identifier of the Doctor
     /// </summary>
     public required int Id { get; set; }
 
     /// <summary>
-    /// Name of the <see cref="Doctor"/>
+    /// Name of the Doctor
     /// </summary>
     public required string FullName { get; set; }
 
     /// <summary>
-    /// Date of Birthday of the <see cref="Doctor"/>
+    /// Date of Birthday of the Doctor
     /// </summary>
     public required DateTime DateOfBirth { get; set; }
 
     /// <summary>
-    /// Specialization of the <see cref="Doctor"/>
+    /// Specialization of the Doctor
     /// </summary>
     public required Specialization Specialization { get; set; }
 
     /// <summary>
-    /// Experience of the <see cref="Doctor"/>
+    /// Experience of the Doctor
     /// </summary>
     public required int ExperienceYears { get; set; }
 

@@ -1,4 +1,4 @@
-using Hospital.Domain.Fixtures;
+п»їusing Hospital.Domain.Fixtures;
 
 namespace Hospital.Tests;
 
@@ -16,11 +16,11 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     {
         var expectedDoctors = new List<string>
         {
-            "Смирнов Александр Васильевич",
-            "Кузнецов Дмитрий Сергеевич",
-            "Васильев Игорь Николаевич",
-            "Николаева Екатерина Владимировна",
-            "Алексеев Павел Михайлович"
+            "РЎРјРёСЂРЅРѕРІ РђР»РµРєСЃР°РЅРґСЂ Р’Р°СЃРёР»СЊРµРІРёС‡",
+            "РљСѓР·РЅРµС†РѕРІ Р”РјРёС‚СЂРёР№ РЎРµСЂРіРµРµРІРёС‡",
+            "Р’Р°СЃРёР»СЊРµРІ РРіРѕСЂСЊ РќРёРєРѕР»Р°РµРІРёС‡",
+            "РќРёРєРѕР»Р°РµРІР° Р•РєР°С‚РµСЂРёРЅР° Р’Р»Р°РґРёРјРёСЂРѕРІРЅР°",
+            "РђР»РµРєСЃРµРµРІ РџР°РІРµР» РњРёС…Р°Р№Р»РѕРІРёС‡"
         };
 
         var result = hospital.Doctors
@@ -39,11 +39,11 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     [Fact]
     public void PatientsByDoctorOrderedByName()
     {
-        var doctor = hospital.Doctors[0]; // Смирнов Александр Васильевич
+        var doctor = hospital.Doctors[0]; // РЎРјРёСЂРЅРѕРІ РђР»РµРєСЃР°РЅРґСЂ Р’Р°СЃРёР»СЊРµРІРёС‡
         var expectedPatients = new List<string>
         {
-            "Петрова Анна Сергеевна",
-            "Иванов Иван Иванович"
+            "РџРµС‚СЂРѕРІР° РђРЅРЅР° РЎРµСЂРіРµРµРІРЅР°",
+            "РРІР°РЅРѕРІ РРІР°РЅ РРІР°РЅРѕРІРёС‡"
         };
 
         var result = hospital.Appointments
@@ -66,7 +66,7 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
         var expectedCount = 3;
 
         var result = hospital.Appointments
-            .Count(a => a.IsRepeat &&
+            .Count(a => a.IsReturnVisit &&
                        a.AppointmentDateTime >= lastMonthStart &&
                        a.AppointmentDateTime <= lastMonthEnd);
 
@@ -85,9 +85,9 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
 
         var expectedPatients = new List<string>
         {
-            "Сидоров Михаил Петрович",
-            "Иванов Иван Иванович",
-            "Петрова Анна Сергеевна"
+            "РЎРёРґРѕСЂРѕРІ РњРёС…Р°РёР» РџРµС‚СЂРѕРІРёС‡",
+            "РРІР°РЅРѕРІ РРІР°РЅ РРІР°РЅРѕРІРёС‡",
+            "РџРµС‚СЂРѕРІР° РђРЅРЅР° РЎРµСЂРіРµРµРІРЅР°"
         };
 
         var result = hospital.Patients
