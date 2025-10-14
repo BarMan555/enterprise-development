@@ -13,7 +13,7 @@ public class InMemoryPatientRepository : IPatientRepository
 
     private int GenerateId()
     {
-        return _currentId + 1;
+        return _currentId++;
     }
 
     public int Create(Patient entity)
