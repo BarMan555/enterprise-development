@@ -11,6 +11,14 @@ public class InMemoryPatientRepository : IPatientRepository
     
     private int _currentId = 1;
 
+    public InMemoryPatientRepository(InMemoryPatientRepositorySeeder? seeder)
+    {
+        if(seeder == null) return;
+
+        _items = seeder.GetItems();
+        _currentId = seeder.GetCurrentId();
+    }
+
     private int GenerateId()
     {
         return _currentId++;

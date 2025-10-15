@@ -1,4 +1,5 @@
-﻿using Hospital.Domain.Fixtures;
+﻿using System.Globalization;
+using Hospital.Domain.Fixtures;
 
 namespace Hospital.Tests;
 
@@ -58,62 +59,62 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
     /// <summary>
     /// Test to verify counting of repeat patient appointments for the last month.
     /// </summary>
-    [Fact]
-    public void CountAppointments_WhenRepeatVisitsInLastMonth_ReturnsCorrectCount()
+    [Theory]
+    [InlineData("2025-09-15", 3)] // 15 сентября 2025, ожидаем 3 записи
+    public void CountAppointments_WhenRepeatVisitsInLastMonth_ReturnsCorrectCount(string currentDateString, int expectedCount)
     {
-        var currentDate = DateTime.Now;
+        // Парсим дату с явным указанием формата
+        var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
         var lastMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(-1);
         var lastMonthEnd = lastMonthStart.AddMonths(1).AddDays(-1);
-        var expectedCount = 3;
 
         var result = hospital.Appointments
             .Count(a => a.IsReturnVisit &&
-                       a.AppointmentDateTime >= lastMonthStart &&
-                       a.AppointmentDateTime <= lastMonthEnd);
+                        a.AppointmentDateTime >= lastMonthStart &&
+                        a.AppointmentDateTime <= lastMonthEnd);
 
         Assert.Equal(expectedCount, result);
     }
-
     /// <summary>
     /// Test to verify retrieval of patients over 30 years old who have
-    /// appointments with multiple doctors, ordered by birth date.
+    /// appointments with multiple doctors, ordered by birthdate.
     /// </summary>
-    [Fact]
-    public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBirthDate()
+[Theory]
+[InlineData("2025-09-15")] // Фиксированная дата для тестирования
+public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBirthDate(string currentDateString)
+{
+    // Парсим дату с явным указанием формата
+    var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+    var age30 = currentDate.AddYears(-30);
+
+    var expectedPatients = new List<string>
     {
-        var currentDate = DateTime.Now;
-        var age30 = currentDate.AddYears(-30);
+        "Сидоров Михаил Петрович",
+        "Иванов Иван Иванович",
+        "Петрова Анна Сергеевна"
+    };
 
-        var expectedPatients = new List<string>
-        {
-            "Сидоров Михаил Петрович",
-            "Иванов Иван Иванович",
-            "Петрова Анна Сергеевна"
-        };
+    var result = hospital.Patients
+        .Where(p => p.DateOfBirth <= age30)
+        .Where(p => hospital.Appointments.Count(a => a.Patient.Id == p.Id) > 1)
+        .OrderBy(p => p.DateOfBirth)
+        .Select(p => p.FullName)
+        .ToList();
 
-        var result = hospital.Patients
-            .Where(p => p.DateOfBirth <= age30)
-            .Where(p => hospital.Appointments.Count(a => a.Patient.Id == p.Id) > 1)
-            .OrderBy(p => p.DateOfBirth)
-            .Select(p => p.FullName)
-            .ToList();
-
-        Assert.Equal(expectedPatients, result);
-    }
-
+    Assert.Equal(expectedPatients, result);
+}
     /// <summary>
     /// Test to verify retrieval of appointments for the current month
     /// happening in a specific room. 
     /// </summary>
-    [Fact]
-    public void GetAppointments_WhenInSpecificRoomCurrentMonth_ReturnsAppointmentsOrderedByDateTime()
+    [Theory]
+    [InlineData("2025-09-29", new[] {1, 8})] // Фиксированная дата для тестирования
+    public void GetAppointments_WhenInSpecificRoomCurrentMonth_ReturnsAppointmentsOrderedByDateTime(string currentDateString, int[] expectedAppointments)
     {
         var roomNumber = 101;
-        var currentDate = DateTime.Now;
+        var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
         var currentMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddDays(-1*currentDate.Day);
         var currentMonthEnd = currentMonthStart.AddMonths(1).AddDays(-1);
-
-        var expectedAppointmentIds = new List<int> { 1, 8 };
 
         var result = hospital.Appointments
             .Where(a => a.RoomNumber == roomNumber &&
@@ -123,6 +124,6 @@ public class HospitalTests(HospitalFixture hospital) : IClassFixture<HospitalFix
             .Select(a => a.Id)
             .ToList();
 
-        Assert.Equal(expectedAppointmentIds, result);
+        Assert.Equal(expectedAppointments, result);
     }
 }

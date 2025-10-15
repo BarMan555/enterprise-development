@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Tests", "Hospital.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Infrastructure.InMemory", "Hospital.Infrastructure.InMemory\Hospital.Infrastructure.InMemory.csproj", "{503C5202-B6A9-4BAE-A6D9-C2070E661B74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Application", "Hospital.Application\Hospital.Application.csproj", "{18853199-83E6-4E57-B826-E16B3865932C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{503C5202-B6A9-4BAE-A6D9-C2070E661B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{503C5202-B6A9-4BAE-A6D9-C2070E661B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{503C5202-B6A9-4BAE-A6D9-C2070E661B74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18853199-83E6-4E57-B826-E16B3865932C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18853199-83E6-4E57-B826-E16B3865932C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18853199-83E6-4E57-B826-E16B3865932C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18853199-83E6-4E57-B826-E16B3865932C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
