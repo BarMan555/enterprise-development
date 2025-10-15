@@ -1,4 +1,3 @@
-using Hospital.Domain;
 using Hospital.Domain.Models;
 using Hospital.Domain.Repositories;
 using Hospital.Infrastructure.InMemory.Seeders;
