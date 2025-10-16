@@ -4,7 +4,7 @@ using Hospital.Infrastructure.InMemory.Seeders;
 
 namespace Hospital.Infrastructure.InMemory.Repositories;
 
-public class InMemoryAppointmentRepository
+public class InMemoryAppointmentRepository :  IAppointmentRepository
 {
     private readonly List<Appointment> _items = [];
     

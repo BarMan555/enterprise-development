@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Hospital.Domain.Fixtures;
+using Hospital.Tests.Fixtures;
 
 namespace Hospital.Tests;
 

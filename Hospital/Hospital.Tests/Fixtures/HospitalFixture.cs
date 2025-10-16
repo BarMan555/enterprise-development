@@ -1,7 +1,7 @@
 ﻿using Hospital.Domain.Models;
 using Hospital.Domain.Enums;
 
-namespace Hospital.Domain.Fixtures;
+namespace Hospital.Tests.Fixtures;
 
 /// <summary>
 /// Fixture data for Unit-Tests
