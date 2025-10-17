@@ -1,0 +1,113 @@
+using System.Globalization;
+using Hospital.Tests.Fixtures;
+
+namespace Hospital.Tests;
+
+/// <summary>
+/// Unit Tests of Domain classes
+/// </summary>
+/// <param name="fixture"></param>
+public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<HospitalRepoFixture>
+{
+    /// <summary>
+    /// Test to verify retrieval of doctors with at least 10 years of experience.
+    /// </summary>
+    [Fact]
+    public void GetDoctorsWithExperience_WhenExperienceAtLeast10Years_ReturnsExperiencedDoctorsOrderedByName()
+    {
+        var expectedDoctors = new List<string>
+        {
+            "Смирнов Александр Васильевич",
+            "Кузнецов Дмитрий Сергеевич",
+            "Васильев Игорь Николаевич",
+            "Николаева Екатерина Владимировна",
+            "Алексеев Павел Михайлович"
+        };
+
+        var result = fixture.DoctorService.FindDoctorsWithExperienceAtLeastYears(10)
+            .Select(d => d.FullName).ToList();
+        
+        Assert.Equal(expectedDoctors.OrderBy(doc => doc), result.OrderBy(doc => doc));
+    }
+
+    /// <summary>
+    /// Test to verify retrieval of patients assigned to a specific doctor,
+    /// ordered by patient full name. 
+    /// </summary>
+    [Fact]
+    public void GetPatientsByDoctor_WhenDoctorIsSpecified_ReturnsPatientsOrderedByName()
+    {
+        var doctorId = 0; // Смирнов Александр Васильевич
+        var expectedPatients = new List<string>
+        {
+            "Петрова Анна Сергеевна",
+            "Иванов Иван Иванович"
+        };
+
+        var result = fixture.AppointmentService.FindPatientsByDoctor(doctorId)
+            .Select(p => p.FullName).ToList();
+            
+
+        Assert.Equal(expectedPatients.OrderBy(name => name), result.OrderBy(name => name));
+    }
+
+    /// <summary>
+    /// Test to verify counting of repeat patient appointments for the last month.
+    /// </summary>
+    [Theory]
+    [InlineData("2025-09-15", 3)] // 15 сентября 2025, ожидаем 3 записи
+    public void CountAppointments_WhenRepeatVisitsInLastMonth_ReturnsCorrectCount(string currentDateString, int expectedCount)
+    {
+        // Парсим дату с явным указанием формата
+        var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var lastMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(-1);
+        var lastMonthEnd = lastMonthStart.AddMonths(1).AddDays(-1);
+
+        var result = fixture.AppointmentService.CountAppointmentWithRepeatVisitsInDate(lastMonthStart, lastMonthEnd);
+
+        Assert.Equal(expectedCount, result);
+    }
+    /// <summary>
+    /// Test to verify retrieval of patients over 30 years old who have
+    /// appointments with multiple doctors, ordered by birthdate.
+    /// </summary>
+    [Theory]
+    [InlineData("2025-09-15", 30)] // Фиксированная дата для тестирования
+    public void GetPatients_WhenOverAgeWithMultipleDoctors_ReturnsPatientsOrderedByBirthDate(string currentDateString, int age)
+    {
+        // Парсим дату с явным указанием формата
+        var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var age30 = currentDate.AddYears(-1 * age);
+
+        var expectedPatients = new List<string>
+        {
+            "Сидоров Михаил Петрович",
+            "Иванов Иван Иванович",
+            "Петрова Анна Сергеевна"
+        };
+
+        var result = fixture.AppointmentService
+            .SortPatientWithMultipleDoctors(fixture.PatientService.FindPatientsOverAge(currentDate, age))
+            .Select(p => p.FullName).ToList();
+
+        Assert.Equal(expectedPatients, result);
+    }   
+    /// <summary>
+    /// Test to verify retrieval of appointments for the current month
+    /// happening in a specific room. 
+    /// </summary>
+    [Theory]
+    [InlineData("2025-09-29", new[] {1, 8})] // Фиксированная дата для тестирования
+    public void GetAppointments_WhenInSpecificRoomCurrentMonth_ReturnsAppointmentsOrderedByDateTime(string currentDateString, int[] expectedAppointments)
+    {
+        var roomNumber = 101;
+        var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var currentMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddDays(-1*currentDate.Day);
+        var currentMonthEnd = currentMonthStart.AddMonths(1).AddDays(-1);
+
+        var result = fixture.AppointmentService.FindAppoinmentsInSpecificRoomInDate(roomNumber, currentMonthStart, currentMonthEnd)
+            .Select(a => a.Id);
+
+        Assert.Equal(expectedAppointments, result);
+    }
+}
