@@ -43,4 +43,34 @@ public class AppointmentService(IAppointmentRepository repository)
     {
         return repository.Delete(id);
     }
+
+    public List<Patient> FindPatientsByDoctor(int doctorId)
+    {
+        return (from a in repository.Read()
+            where a.Doctor.Id == doctorId
+            select a.Patient).ToList();
+    }
+
+    public int CountAppointmentWithRepeatVisitsInDate(DateTime start, DateTime end)
+    {
+        return (from a in repository.Read()
+                where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
+                select a.Id).Count();
+    }
+
+    public List<Patient> SortPatientWithMultipleDoctors(List<Patient> patients)
+    {
+        return (patients
+            .Where(p => repository.Read().Count(a => a.Patient.Id == p.Id) > 1)
+            .OrderBy(p => p.DateOfBirth)
+            ).ToList();
+    }
+
+    public List<Appointment> FindAppoinmentsInSpecificRoomInDate(int roomNumber,  DateTime start, DateTime end)
+    {
+        return (from a in repository.Read()
+                where a.RoomNumber == roomNumber
+                where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
+                select a).ToList();
+    }
 }

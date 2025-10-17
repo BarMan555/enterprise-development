@@ -42,4 +42,12 @@ public class DoctorService(IDoctorRepository repository)
     {
         return repository.Delete(id);
     }
+
+    public List<Doctor> FindDoctorsWithExperienceAtLeastYears(int experienceYears)
+    {
+        return (
+            from d in repository.Read()
+            where d.ExperienceYears >= experienceYears select d
+            ).ToList();
+    }
 }

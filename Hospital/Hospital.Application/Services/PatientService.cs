@@ -1,6 +1,5 @@
 using Hospital.Application.Dto;
 using Hospital.Domain.Models;
-using Hospital.Domain.Enums;
 using Hospital.Domain.Repositories;
 
 namespace Hospital.Application.Services;
@@ -45,5 +44,12 @@ public class PatientService(IPatientRepository repository)
     public bool DeletePatient(int id)
     {
         return repository.Delete(id);
+    }
+
+    public List<Patient> FindPatientsOverAge(DateTime today, int age)
+    {
+        return (from p in repository.Read()
+            where (today - p.DateOfBirth).Days / 365 >= age
+            select p).ToList();
     }
 }
