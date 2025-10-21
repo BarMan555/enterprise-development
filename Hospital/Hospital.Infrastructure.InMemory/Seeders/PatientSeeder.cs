@@ -3,7 +3,7 @@ using Hospital.Domain.Models;
 
 namespace Hospital.Infrastructure.InMemory.Seeders;
 
-public class InMemoryPatientRepositorySeeder
+public class InMemoryPatientRepositorySeeder : ISeeder<Patient, int>
 {
     public List<Patient> GetItems() =>
     [
@@ -36,7 +36,7 @@ public class InMemoryPatientRepositorySeeder
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1978, 11, 5),
             Address = "г. Екатеринбург, ул. Мира, д. 17, кв. 8",
-            BloodType = BloodType.AB,
+            BloodType = BloodType.Ab,
             RhFactor = RhFactor.Positive,
             PhoneNumber = "+7 (343) 456-78-90"
         },

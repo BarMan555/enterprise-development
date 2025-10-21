@@ -3,7 +3,7 @@ using Hospital.Domain.Models;
 
 namespace Hospital.Infrastructure.InMemory.Seeders;
 
-public class InMemoryDoctorRepositorySeeder
+public class InMemoryDoctorRepositorySeeder : ISeeder<Doctor, int>
 {
     private List<Specialization> _specializations =
     [

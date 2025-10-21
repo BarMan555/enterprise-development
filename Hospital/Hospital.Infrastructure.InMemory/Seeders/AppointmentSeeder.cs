@@ -4,7 +4,7 @@ using Hospital.Domain.Models;
 
 namespace Hospital.Infrastructure.InMemory.Seeders;
 
-public class InMemoryAppointmentRepositorySeeder
+public class InMemoryAppointmentRepositorySeeder :  ISeeder<Appointment, int>
 {
 
     private List<Patient> _patients = (new InMemoryPatientRepositorySeeder()).GetItems();
