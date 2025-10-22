@@ -14,8 +14,8 @@
 
 ### Классы
 * [Patient](./Hospital/Hospital.Domain/Models/Patient.cs) - класс описывает пациента
-* [Doctor](./Hospital/Hospital/Hospital.Domain/Models/Doctor.cs) - класс описывает доктора
-* [Appointment](./Hospital/Hospital/Hospital.Domain/Models/Appointment.cs) - класс описывает прием к врачу
+* [Doctor](./Hospital/Hospital.Domain/Models/Doctor.cs) - класс описывает доктора
+* [Appointment](./Hospital/Hospital.Domain/Models/Appointment.cs) - класс описывает прием к врачу
 
 ### Перечисления
 * [BloodType](./Hospital/Hospital.Domain/Enums/BloodType.cs) - группа крови пациента
