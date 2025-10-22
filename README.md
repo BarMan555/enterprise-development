@@ -13,25 +13,25 @@
 При записи на прием пациента в базе данных фиксируется дата и время приема, номер кабинета, а также индикатор того, является ли прием повторным.
 
 ### Классы
-* [Patient](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Models/Patient.cs) - класс описывает пациента
-* [Doctor](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Models/Doctor.cs) - класс описывает доктора
-* [Appointment](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Models/Appointment.cs) - класс описывает прием к врачу
+* [Patient](./Hospital/Hospital.Domain/Models/Patient.cs) - класс описывает пациента
+* [Doctor](./Hospital/Hospital/Hospital.Domain/Models/Doctor.cs) - класс описывает доктора
+* [Appointment](./Hospital/Hospital/Hospital.Domain/Models/Appointment.cs) - класс описывает прием к врачу
 
 ### Перечисления
-* [BloodType](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Enums/BloodType.cs) - группа крови пациента
-* [Gender](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Enums/Gender.cs) - гендер пациента
-* [RhFactor](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Enums/RhFactor.cs) - резус фактор пациента
-* [Speciallization](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Domain/Enums/Speciallization.cs) - специализация врача
+* [BloodType](./Hospital/Hospital.Domain/Enums/BloodType.cs) - группа крови пациента
+* [Gender](./Hospital/Hospital.Domain/Enums/Gender.cs) - гендер пациента
+* [RhFactor](./HospitalHospital.Domain/Enums/RhFactor.cs) - резус фактор пациента
+* [Speciallization](./Hospital/Hospital.Domain/Enums/Speciallization.cs) - специализация врача
 
 ### Тесты
-[HospitalRepoTests](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Tests/HospitalRepoTests.cs) - заданные по варианту юнит-тесты 
+[HospitalRepoTests](./Hospital/Hospital.Tests/HospitalRepoTests.cs) - заданные по варианту юнит-тесты 
 1. GetDoctorsWithExperience_WhenExperienceAtLeast10Years_ReturnsExperiencedDoctorsOrderedByName() - Вывести информацию о всех врачах, стаж работы которых не менее 10 лет.
 2. GetPatientsByDoctor_WhenDoctorIsSpecified_ReturnsPatientsOrderedByName() - Вывести информацию о всех пациентах, записанных на прием к указанному врачу, упорядочить по ФИО.
 3. CountAppointments_WhenRepeatVisitsInLastMonth_ReturnsCorrectCount() - Вывести информацию о количестве повторных приемов пациентов за последний месяц.
 4. GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBirthDate() - Вывести информацию о пациентах старше 30 лет, которые записаны на прием к нескольким врачам, упорядочить по дате рождения.
 5. GetAppointments_WhenInSpecificRoomCurrentMonth_ReturnsAppointmentsOrderedByDateTime() - Вывести информацию о приемах за текущий месяц, проходящих в выбранном кабинете.
 
-[HospitalRepoFixture](https://github.com/BarMan555/enterprise-development/blob/main/Hospital.Tests/Fixtures/HospitalRepoFixture.cs) - фикстура, использующая для заполнения репозитории.
+[HospitalRepoFixture](./Hospital/Hospital.Tests/Fixtures/HospitalRepoFixture.cs) - фикстура, использующая для заполнения репозитории.
 
 ### Hospital.Infrastructure.InMemory - Слой для доступа к данным
 - **Repositories** - Реализации репозиториев:
