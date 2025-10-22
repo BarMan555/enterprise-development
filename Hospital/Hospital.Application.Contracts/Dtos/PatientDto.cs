@@ -1,7 +1,11 @@
 using Hospital.Domain.Enums;
+using Hospital.Domain.Models;
 
-namespace Hospital.Application.Dto;
+namespace Hospital.Application.Contracts.Dtos;
 
+/// <summary>
+/// DTO Represents a Patient who can book <see cref="Appointment"/>.
+/// </summary>
 public class PatientDto
 {
     /// <summary>

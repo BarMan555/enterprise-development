@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Infrastructure.InM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Application", "Hospital.Application\Hospital.Application.csproj", "{18853199-83E6-4E57-B826-E16B3865932C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Api", "Hospital.Api\Hospital.Api.csproj", "{24AA96CE-A218-471C-AD4D-CBD149CED345}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Application.Contracts", "Hospital.Application.Contracts\Hospital.Application.Contracts.csproj", "{EB3380A9-F5D4-46BA-A24C-31ECD5D5716E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{18853199-83E6-4E57-B826-E16B3865932C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18853199-83E6-4E57-B826-E16B3865932C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18853199-83E6-4E57-B826-E16B3865932C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24AA96CE-A218-471C-AD4D-CBD149CED345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24AA96CE-A218-471C-AD4D-CBD149CED345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24AA96CE-A218-471C-AD4D-CBD149CED345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24AA96CE-A218-471C-AD4D-CBD149CED345}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB3380A9-F5D4-46BA-A24C-31ECD5D5716E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3380A9-F5D4-46BA-A24C-31ECD5D5716E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3380A9-F5D4-46BA-A24C-31ECD5D5716E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3380A9-F5D4-46BA-A24C-31ECD5D5716E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

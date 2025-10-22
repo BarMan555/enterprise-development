@@ -1,6 +1,6 @@
 using Hospital.Domain.Models;
 
-namespace Hospital.Application.Dto;
+namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
 /// DTO Represents a Appointment for registering a <see cref="Patient"/> with a <see cref="Doctor"/>

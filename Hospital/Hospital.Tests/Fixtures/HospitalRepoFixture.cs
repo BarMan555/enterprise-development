@@ -1,4 +1,7 @@
+using AutoMapper;
 using Hospital.Application.Services;
+using Hospital.Application;
+using Hospital.Domain.Models;
 using Hospital.Infrastructure.InMemory.Repositories;
 using Hospital.Infrastructure.InMemory.Seeders;
 
@@ -6,9 +9,9 @@ namespace Hospital.Tests.Fixtures;
 
 public class HospitalRepoFixture
 {
-    public PatientService PatientService { get; }
-    public DoctorService DoctorService { get; }
-    public AppointmentService AppointmentService { get; }
+    public InMemoryPatientRepository PatientRepository { get; }
+    public InMemoryDoctorRepository DoctorRepository { get; }
+    public InMemoryAppointmentRepository AppointmentRepository { get; }
 
     public HospitalRepoFixture()
     {
@@ -16,12 +19,8 @@ public class HospitalRepoFixture
         var doctorSeeder = new InMemoryDoctorRepositorySeeder();
         var appointmentSeeder = new InMemoryAppointmentRepositorySeeder();
         
-        var patientRepository = new InMemoryPatientRepository(patientSeeder); 
-        var doctorRepository = new InMemoryDoctorRepository(doctorSeeder);
-        var appointmentRepository = new InMemoryAppointmentRepository(appointmentSeeder);
-        
-        PatientService = new PatientService(patientRepository);
-        DoctorService = new DoctorService(doctorRepository);
-        AppointmentService = new AppointmentService(appointmentRepository);
+        PatientRepository = new InMemoryPatientRepository(patientSeeder); 
+        DoctorRepository = new InMemoryDoctorRepository(doctorSeeder);
+        AppointmentRepository = new InMemoryAppointmentRepository(appointmentSeeder);
     }
 }

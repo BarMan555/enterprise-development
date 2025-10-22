@@ -1,6 +1,6 @@
 using Hospital.Domain.Enums;
 
-namespace Hospital.Application.Dto;
+namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
 /// DTO Represents a Doctor

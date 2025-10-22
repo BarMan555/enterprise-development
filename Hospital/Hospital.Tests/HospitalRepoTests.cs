@@ -24,9 +24,12 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
             "Алексеев Павел Михайлович"
         };
 
-        var result = fixture.DoctorService.FindDoctorsWithExperienceAtLeastYears(10)
-            .Select(d => d.FullName).ToList();
-        
+        var result = fixture.DoctorRepository.ReadAll()
+            .Where(d => d.ExperienceYears >= 10)
+            .OrderBy(d => d.FullName)
+            .Select(d => d.FullName)
+            .ToList();
+
         Assert.Equal(expectedDoctors.OrderBy(doc => doc), result.OrderBy(doc => doc));
     }
 
@@ -37,16 +40,18 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
     [Fact]
     public void GetPatientsByDoctor_WhenDoctorIsSpecified_ReturnsPatientsOrderedByName()
     {
-        var doctorId = 0; // Смирнов Александр Васильевич
+        var doctor = fixture.DoctorRepository.ReadAll()[0]; // Смирнов Александр Васильевич
         var expectedPatients = new List<string>
         {
             "Петрова Анна Сергеевна",
             "Иванов Иван Иванович"
         };
 
-        var result = fixture.AppointmentService.FindPatientsByDoctor(doctorId)
-            .Select(p => p.FullName).ToList();
-            
+        var result = fixture.AppointmentRepository.ReadAll()
+            .Where(a => a.Doctor.Id == doctor.Id)
+            .Select(a => a.Patient.FullName)
+            .OrderBy(name => name)
+            .ToList();
 
         Assert.Equal(expectedPatients.OrderBy(name => name), result.OrderBy(name => name));
     }
@@ -63,7 +68,10 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
         var lastMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(-1);
         var lastMonthEnd = lastMonthStart.AddMonths(1).AddDays(-1);
 
-        var result = fixture.AppointmentService.CountAppointmentWithRepeatVisitsInDate(lastMonthStart, lastMonthEnd);
+        var result = fixture.AppointmentRepository.ReadAll()
+            .Count(a => a.IsReturnVisit &&
+                        a.AppointmentDateTime >= lastMonthStart &&
+                        a.AppointmentDateTime <= lastMonthEnd);
 
         Assert.Equal(expectedCount, result);
     }
@@ -71,27 +79,30 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
     /// Test to verify retrieval of patients over 30 years old who have
     /// appointments with multiple doctors, ordered by birthdate.
     /// </summary>
-    [Theory]
-    [InlineData("2025-09-15", 30)] // Фиксированная дата для тестирования
-    public void GetPatients_WhenOverAgeWithMultipleDoctors_ReturnsPatientsOrderedByBirthDate(string currentDateString, int age)
+[Theory]
+[InlineData("2025-09-15")] // Фиксированная дата для тестирования
+public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBirthDate(string currentDateString)
+{
+    // Парсим дату с явным указанием формата
+    var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+    var age30 = currentDate.AddYears(-30);
+
+    var expectedPatients = new List<string>
     {
-        // Парсим дату с явным указанием формата
-        var currentDate = DateTime.ParseExact(currentDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-        var age30 = currentDate.AddYears(-1 * age);
+        "Сидоров Михаил Петрович",
+        "Иванов Иван Иванович",
+        "Петрова Анна Сергеевна"
+    };
 
-        var expectedPatients = new List<string>
-        {
-            "Сидоров Михаил Петрович",
-            "Иванов Иван Иванович",
-            "Петрова Анна Сергеевна"
-        };
+    var result = fixture.PatientRepository.ReadAll()
+        .Where(p => p.DateOfBirth <= age30)
+        .Where(p => fixture.AppointmentRepository.ReadAll().Count(a => a.Patient.Id == p.Id) > 1)
+        .OrderBy(p => p.DateOfBirth)
+        .Select(p => p.FullName)
+        .ToList();
 
-        var result = fixture.AppointmentService
-            .SortPatientWithMultipleDoctors(fixture.PatientService.FindPatientsOverAge(currentDate, age))
-            .Select(p => p.FullName).ToList();
-
-        Assert.Equal(expectedPatients, result);
-    }   
+    Assert.Equal(expectedPatients, result);
+}
     /// <summary>
     /// Test to verify retrieval of appointments for the current month
     /// happening in a specific room. 
@@ -105,8 +116,13 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
         var currentMonthStart = new DateTime(currentDate.Year, currentDate.Month, 1).AddDays(-1*currentDate.Day);
         var currentMonthEnd = currentMonthStart.AddMonths(1).AddDays(-1);
 
-        var result = fixture.AppointmentService.FindAppoinmentsInSpecificRoomInDate(roomNumber, currentMonthStart, currentMonthEnd)
-            .Select(a => a.Id);
+        var result = fixture.AppointmentRepository.ReadAll()
+            .Where(a => a.RoomNumber == roomNumber &&
+                       a.AppointmentDateTime >= currentMonthStart &&
+                       a.AppointmentDateTime <= currentMonthEnd)
+            .OrderBy(a => a.AppointmentDateTime)
+            .Select(a => a.Id)
+            .ToList();
 
         Assert.Equal(expectedAppointments, result);
     }

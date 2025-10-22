@@ -1,55 +1,36 @@
-using Hospital.Application.Dto;
+using AutoMapper;
+using Hospital.Application.Contracts.Interfaces;
+using Hospital.Application.Contracts.Dtos;
+using Hospital.Domain;
 using Hospital.Domain.Models;
-using Hospital.Domain.Repositories;
 
 namespace Hospital.Application.Services;
 
-public class PatientService(IPatientRepository repository)
+public class PatientService(IRepository<Patient, int> repository, IMapper mapper) 
+    : IApplicationService<PatientDto, int>
 {
-    private static Patient MapDto(PatientDto entity)
+    public int Create(PatientDto entity)
     {
-        return new Patient
-        {
-            Id = -1,
-            FullName = entity.FullName,
-            Gender = entity.Gender,
-            DateOfBirth = entity.DateOfBirth,
-            Address = entity.Address,
-            BloodType = entity.BloodType,
-            RhFactor = entity.RhFactor,
-            PhoneNumber = entity.PhoneNumber,
-        };
+        return repository.Create(mapper.Map<Patient>(entity));
     }
 
-    public int CreatePatient(PatientDto entity)
+    public List<PatientDto> GetAll()
     {
-        return repository.Create(MapDto(entity));
+        return mapper.Map<List<PatientDto>>(repository.ReadAll());
     }
 
-    public List<Patient> ReadPatients()
+    public PatientDto? Get(int id)
     {
-        return repository.Read();
+        return mapper.Map<PatientDto>(repository.Read(id));
     }
 
-    public Patient? ReadPatient(int id)
+    public PatientDto? Update(int id, PatientDto entity)
     {
-        return repository.Read(id);
+        return mapper.Map<PatientDto>(repository.Update(id, mapper.Map<Patient>(entity)));
     }
 
-    public Patient? UpdatePatient(int id, PatientDto entity)
-    {
-        return repository.Update(id, MapDto(entity));
-    }
-
-    public bool DeletePatient(int id)
+    public bool Delete(int id)
     {
         return repository.Delete(id);
-    }
-
-    public List<Patient> FindPatientsOverAge(DateTime today, int age)
-    {
-        return (from p in repository.Read()
-            where (today - p.DateOfBirth).Days / 365 >= age
-            select p).ToList();
     }
 }

@@ -1,53 +1,35 @@
-using Hospital.Application.Dto;
+using AutoMapper;
+using Hospital.Application.Contracts.Interfaces;
+using Hospital.Application.Contracts.Dtos;
+using Hospital.Domain;
 using Hospital.Domain.Models;
-using Hospital.Domain.Repositories;
 
 namespace Hospital.Application.Services;
 
-public class DoctorService(IDoctorRepository repository)
+public class DoctorService(IRepository<Doctor, int> repository, IMapper mapper) : IApplicationService<DoctorDto, int>
 {
-    private static Doctor MapDto(DoctorDto entity)
+    public int Create(DoctorDto entity)
     {
-        return new Doctor
-        {
-            Id = -1,
-            FullName = entity.FullName,
-            DateOfBirth = entity.DateOfBirth,
-            Specialization = entity.Specialization,
-            ExperienceYears = entity.ExperienceYears
-        };
-    }
-    
-    public int CreateDoctor(DoctorDto entity)
-    {
-        return repository.Create(MapDto(entity));
+        return repository.Create(mapper.Map<Doctor>(entity));
     }
 
-    public List<Doctor> ReadDoctors()
+    public List<DoctorDto> GetAll()
     {
-        return repository.Read();
+        return mapper.Map<List<DoctorDto>>(repository.ReadAll());
     }
 
-    public Doctor? ReadDoctor(int id)
+    public DoctorDto? Get(int id)
     {
-        return repository.Read(id);
+        return mapper.Map<DoctorDto>(repository.Read(id));
     }
 
-    public Doctor? UpdateDoctor(int id, DoctorDto entity)
+    public DoctorDto? Update(int id, DoctorDto entity)
     {
-        return repository.Update(id, MapDto(entity));
+        return mapper.Map<DoctorDto>(repository.Update(id, mapper.Map<Doctor>(entity)));
     }
 
-    public bool DeleteDoctor(int id)
+    public bool Delete(int id)
     {
         return repository.Delete(id);
-    }
-
-    public List<Doctor> FindDoctorsWithExperienceAtLeastYears(int experienceYears)
-    {
-        return (
-            from d in repository.Read()
-            where d.ExperienceYears >= experienceYears select d
-            ).ToList();
     }
 }
