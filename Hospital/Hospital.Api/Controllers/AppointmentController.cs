@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Hospital.Api.Controllers;
 
 /// <summary>
-/// Info about appointment
+/// Provides API methods working with appointments
 /// </summary>
-/// <param name="service"></param>
+/// <param name="service">Service for appointments repository</param>
+/// <param name="logger">Logger for logging</param>
 [ApiController]
 [Route("api/[controller]")]
 public class AppointmentController(IApplicationService<AppointmentDto, int> service, ILogger<AppointmentController> logger) 

@@ -3,6 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Api.Controllers;
 
+/// <summary>
+/// Generic base controller providing CRUD endpoints for all entities.
+/// </summary>
+/// <typeparam name="TDto">DTO type returned by the API.</typeparam>
+/// <typeparam name="TKey">Type of the entity identifier.</typeparam>
+/// <param name="appService">Service for work with DTO.</param>
+/// <param name="logger">Logger for information.</param>
 [ApiController]
 [Route("api/[controller]")]
 public class CrudBaseController<TDto, TKey>(
@@ -12,7 +19,9 @@ public class CrudBaseController<TDto, TKey>(
     where TDto : class
     where TKey : struct
 {
-    
+    /// <summary>
+    /// Helper method for consistent logging and error handling.
+    /// </summary>
     protected ActionResult Logging(string method, Func<ActionResult> action)
     {
         logger.LogInformation("START: {Method}", method);
@@ -38,30 +47,53 @@ public class CrudBaseController<TDto, TKey>(
         }
     }
 
+    /// <summary>
+    /// Creates a new entity.
+    /// </summary>
+    /// <param name="newDto">Data for the new entity.</param>
+    /// <returns>The created entity.</returns>
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(500)]
-    public ActionResult<TDto> Create(TDto dto) =>
-        Logging(nameof(Create), () => Created(nameof(Create), appService.Create(dto)));
+    public ActionResult<TDto> Create(TDto newDto) =>
+        Logging(nameof(Create), () => Created(nameof(Create), appService.Create(newDto)));
 
-    [HttpPut("{dtoId:int}")]
+    /// <summary>
+    /// Updates an existing entity.
+    /// </summary>
+    /// <param name="id">Identifier of the entity to update.</param>
+    /// <param name="newDto">Updated entity data.</param>
+    /// <returns>The updated entity.</returns>
+    [HttpPut("{id:int}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<TDto> Edit(TKey dtoId, [FromBody] TDto newDto) =>
-        Logging(nameof(Edit), () => Ok(appService.Update(dtoId, newDto)));
+    public ActionResult<TDto> Edit(TKey id, [FromBody] TDto newDto) =>
+        Logging(nameof(Edit), () => Ok(appService.Update(id, newDto)));
 
-    [HttpGet("{dtoId:int}")]
+    /// <summary>
+    /// Retrieves an entity by its ID.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <returns>The entity if found, otherwise 204 No Content.</returns>
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<TDto> Get(TKey dtoId) => Logging(nameof(Get), () => Ok(appService.Get(dtoId)));
+    public ActionResult<TDto> Get(TKey id) => Logging(nameof(Get), () => Ok(appService.Get(id)));
 
+    /// <summary>
+    /// Retrieves all entities.
+    /// </summary>
+    /// <returns>List of all entities.</returns>
     [HttpGet]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
     public ActionResult<List<TDto>> GetAll() => Logging(nameof(GetAll), () => Ok(appService.GetAll()));
 
-    [HttpDelete("{dtoId:int}")]
+    /// <summary>
+    /// Deletes an entity by ID.
+    /// </summary>
+    /// <param name="id">Identifier of the entity to delete.</param>
+    [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<bool> Delete(TKey dtoId) => Logging(nameof(Delete), () => Ok(appService.Delete(dtoId)));
+    public ActionResult<bool> Delete(TKey id) => Logging(nameof(Delete), () => Ok(appService.Delete(id)));
 }
