@@ -35,36 +35,36 @@
 
 ### Hospital.Infrastructure.InMemory - Слой для доступа к данным
 - **Repositories** - Реализации репозиториев:
-    - [InMemoryPatientRepository.cs](./Hospital.Infrastructure.InMemory/Repositories/InMemoryPatientRepository.cs)
-    - [InMemoryDoctorRepository.cs](./Hospital.Infrastructure/Repositories/InMemoryDoctorRepository.cs)
-    - [InMemoryAppointmentRepository.cs](./Hospital.Infrastructure/Repositories/InMemoryAppointmentRepository.cs)
-    - [InMemoryRepository.cs](./Hospital.Infrastructure/Repositories/InMemoryRepository.cs)
+    - [InMemoryPatientRepository.cs](./Hospital/Hospital.Infrastructure.InMemory/Repositories/InMemoryPatientRepository.cs)
+    - [InMemoryDoctorRepository.cs](./Hospital/HospitalHospital.Infrastructure/Repositories/InMemoryDoctorRepository.cs)
+    - [InMemoryAppointmentRepository.cs](./Hospital/Hospital.Infrastructure/Repositories/InMemoryAppointmentRepository.cs)
+    - [InMemoryRepository.cs](./Hospital/Hospital.Infrastructure/Repositories/InMemoryRepository.cs)
 
 ### Hospital.Application.Contracts - Контракты для сервисного слоя
 #### Dtos
 - DTO:
-    - [AppointmentDto.cs](./Hospital.Application.Contracts/Dtos/AppointmentDto.cs)  - Для приема.
-    - [DoctorDto.cs](./Hospital.Application.Contracts/Dtos/DoctorDto.cs)  - Для доктора.
-    - [PatientDto.cs](./Hospital.Application.Contracts/Dtos/PatientDto.cs)  - Для пациента.
+    - [AppointmentDto.cs](./Hospital/Hospital.Application.Contracts/Dtos/AppointmentDto.cs)  - Для приема.
+    - [DoctorDto.cs](./Hospital/Hospital.Application.Contracts/Dtos/DoctorDto.cs)  - Для доктора.
+    - [PatientDto.cs](./Hospital/Hospital.Application.Contracts/Dtos/PatientDto.cs)  - Для пациента.
    
 #### Interfaces - Контракты сервисов
-- [IApplicationService.cs](./Hospital.Application.Contracts/Interfaces/IApplicationService.cs) - Интерфейс для CRUD операций.
-- [ILibraryAnalyticsService.cs](./Hospital.Application.Contracts/Interfaces/ILibraryAnalyticsService.cs) - Интерфейс для аналитической службы.
+- [IApplicationService.cs](./Hospital/Hospital.Application.Contracts/Interfaces/IApplicationService.cs) - Интерфейс для CRUD операций.
+- [ILibraryAnalyticsService.cs](./Hospital/Hospital.Application.Contracts/Interfaces/ILibraryAnalyticsService.cs) - Интерфейс для аналитической службы.
 
 ### Hospital.Application - Сервисы
 #### Services - Реализации сервисов с CRUD операциями
-- [PatientService.cs](./Hospital.Application/Services/PatientService.cs) - Для пациентов.
-- [DoctorService.cs](./Hospital.Application/Services/DoctorService.cs) - Для докторов.
-- [AppointmentService.cs](./Hospital.Application/Services/AppointmentService.cs) - Для приемов к врачу.
-- [LibraryAnalyticsService.cs](./Hospital.Application/Services/LibraryAnalyticsService.cs) - Сервис аналитических запросов.
+- [PatientService.cs](./Hospital/Hospital.Application/Services/PatientService.cs) - Для пациентов.
+- [DoctorService.cs](./Hospital/Hospital.Application/Services/DoctorService.cs) - Для докторов.
+- [AppointmentService.cs](./Hospital/Hospital.Application/Services/AppointmentService.cs) - Для приемов к врачу.
+- [LibraryAnalyticsService.cs](./Hospital/Hospital.Application/Services/LibraryAnalyticsService.cs) - Сервис аналитических запросов.
 
-- [MappingProfile.cs](./Hospital.Application/MappingProfile.cs) - Настройки AutoMapper для преобразования между DTO и доменной областью.
+- [MappingProfile.cs](./Hospital/Hospital.Application/MappingProfile.cs) - Настройки AutoMapper для преобразования между DTO и доменной областью.
 
 
 ### Library.Api - Веб-API
 #### Controllers - API контроллеры
-- [AnalyticsController.cs](./Hospital.Api/Controllers/AnalyticController.cs) - Контроллер для аналитических запросов (содержит те же запросы, которые проверяются в юнит-тестах).
-- [PatientController.cs](./Hospital.Api/Controllers/PatientController.cs) - Управление пациентами.
-- [DoctorController.cs](./Hospital.Api/Controllers/DoctorController.cs) - Управление докторами.
-- [AppointmentController.cs](./Hospital.Api/Controllers/AppointmentController.cs) - Управление приемами к врачу.
-- [CrudControllerBase.cs](./Hospital.Api/Controllers/CrudControllerBase.cs) - Базовый класс для CRUD операций.
+- [AnalyticsController.cs](./Hospital/Hospital.Api/Controllers/AnalyticController.cs) - Контроллер для аналитических запросов (содержит те же запросы, которые проверяются в юнит-тестах).
+- [PatientController.cs](./Hospital/Hospital.Api/Controllers/PatientController.cs) - Управление пациентами.
+- [DoctorController.cs](./Hospital/Hospital.Api/Controllers/DoctorController.cs) - Управление докторами.
+- [AppointmentController.cs](./Hospital/Hospital.Api/Controllers/AppointmentController.cs) - Управление приемами к врачу.
+- [CrudControllerBase.cs](./Hospital/Hospital.Api/Controllers/CrudControllerBase.cs) - Базовый класс для CRUD операций.
