@@ -3,8 +3,15 @@ using Hospital.Domain.Models;
 
 namespace Hospital.Infrastructure.InMemory.Seeders;
 
+/// <summary>
+/// Seeder for patient repository
+/// </summary>
 public class InMemoryPatientRepositorySeeder : ISeeder<Patient, int>
 {
+    /// <summary>
+    /// Get list of data
+    /// </summary>
+    /// <returns>List of data</returns>
     public List<Patient> GetItems() =>
     [
         new Patient
@@ -64,5 +71,9 @@ public class InMemoryPatientRepositorySeeder : ISeeder<Patient, int>
         }
     ];
 
+    /// <summary>
+    /// ID for start counting
+    /// </summary>
+    /// <returns>ID</returns>
     public int GetCurrentId() => 6;
 }

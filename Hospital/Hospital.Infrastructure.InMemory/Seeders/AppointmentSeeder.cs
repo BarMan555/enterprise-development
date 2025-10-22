@@ -4,12 +4,25 @@ using Hospital.Domain.Models;
 
 namespace Hospital.Infrastructure.InMemory.Seeders;
 
+/// <summary>
+/// Seeder for appointments repository
+/// </summary>
 public class InMemoryAppointmentRepositorySeeder :  ISeeder<Appointment, int>
 {
-
+    /// <summary>
+    /// List of patients
+    /// </summary>
     private List<Patient> _patients = (new InMemoryPatientRepositorySeeder()).GetItems();
+    
+    /// <summary>
+    /// List of doctors
+    /// </summary>
     private List<Doctor> _doctors = (new InMemoryDoctorRepositorySeeder()).GetItems();
     
+    /// <summary>
+    /// Get list of data
+    /// </summary>
+    /// <returns>List of data</returns>
     public List<Appointment> GetItems() =>
     [
 
@@ -87,5 +100,9 @@ public class InMemoryAppointmentRepositorySeeder :  ISeeder<Appointment, int>
         }
     ];
     
+    /// <summary>
+    /// Get ID to start counting
+    /// </summary>
+    /// <returns>ID</returns>
     public int GetCurrentId() => 9;
 }
