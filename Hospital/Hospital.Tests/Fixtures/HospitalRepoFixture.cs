@@ -7,12 +7,29 @@ using Hospital.Infrastructure.InMemory.Seeders;
 
 namespace Hospital.Tests.Fixtures;
 
+/// <summary>
+/// Fixture data for Unit-Tests
+/// </summary>
 public class HospitalRepoFixture
 {
+    /// <summary>
+    /// Repository of patients
+    /// </summary>
     public InMemoryPatientRepository PatientRepository { get; }
+    
+    /// <summary>
+    /// Repository of doctors
+    /// </summary>
     public InMemoryDoctorRepository DoctorRepository { get; }
+    
+    /// <summary>
+    /// Repository of appointments
+    /// </summary>
     public InMemoryAppointmentRepository AppointmentRepository { get; }
 
+    /// <summary>
+    /// Make data for all repositories
+    /// </summary>
     public HospitalRepoFixture()
     {
         var patientSeeder = new InMemoryPatientRepositorySeeder();

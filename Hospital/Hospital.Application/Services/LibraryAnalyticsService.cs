@@ -6,6 +6,13 @@ using Hospital.Domain;
 
 namespace Hospital.Application.Services;
 
+/// <summary>
+/// Service for analyze repositories 
+/// </summary>
+/// <param name="patientRepository">Patient repository</param>
+/// <param name="doctorRepository">Doctor repository</param>
+/// <param name="appointmentRepository">Appointment repository</param>
+/// <param name="mapper">Mapper for DTOs</param>
 public class LibraryAnalyticsService(
     IRepository<Patient, int> patientRepository,
     IRepository<Doctor, int> doctorRepository,
@@ -13,7 +20,11 @@ public class LibraryAnalyticsService(
     IMapper mapper
     ) : ILibraryAnalyticsService
 {
-    
+    /// <summary>
+    /// Get doctors with at least some years of experience
+    /// </summary>
+    /// <param name="year">years</param>
+    /// <returns>List of doctors</returns>
     public List<DoctorDto> GetDoctorsWithExperienceAtLeastYears(int year)
     {
         return mapper.Map<List<DoctorDto>>((
@@ -23,6 +34,11 @@ public class LibraryAnalyticsService(
         ).ToList());
     }
 
+    /// <summary>
+    /// Get patients assigned to a specific doctor
+    /// </summary>
+    /// <param name="doctorId">ID</param>
+    /// <returns>List of patient</returns>
     public List<PatientDto> GetPatientsByDoctor(int doctorId)
     {
         return mapper.Map<List<PatientDto>>((from a in appointmentRepository.ReadAll()
@@ -30,6 +46,12 @@ public class LibraryAnalyticsService(
             select a.Patient).ToList());
     }
 
+    /// <summary>
+    /// Get counting of repeat patient appointments in specific period.
+    /// </summary>
+    /// <param name="start">Start period</param>
+    /// <param name="end">End period</param>
+    /// <returns>Counting</returns>
     public int GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(DateTime start, DateTime end)
     {
         return (from a in appointmentRepository.ReadAll()
@@ -37,6 +59,12 @@ public class LibraryAnalyticsService(
             select a.Id).Count();
     }
 
+    /// <summary>
+    /// Get patients over some years old who have
+    /// appointments with multiple doctors
+    /// </summary>
+    /// <param name="age">Age of patient</param>
+    /// <returns>List of patients</returns>
     public List<PatientDto> GetPatientsOlderThaneWithMultipleDoctors(int age)
     {
         var today = DateTime.Today;
@@ -58,6 +86,14 @@ public class LibraryAnalyticsService(
         return mapper.Map<List<PatientDto>>(result);
     }
 
+    /// <summary>
+    /// Get appointments in specific period
+    /// happening in a specific room. 
+    /// </summary>
+    /// <param name="roomId">ID of room</param>
+    /// <param name="start">Start period</param>
+    /// <param name="end">End period</param>
+    /// <returns>List of appointments</returns>
     public List<AppointmentDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
     {
         return mapper.Map<List<AppointmentDto>>((from a in appointmentRepository.ReadAll()
