@@ -75,6 +75,7 @@ public class CrudBaseController<TDto, TKey>(
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <returns>The entity if found, otherwise 204 No Content.</returns>
+    [HttpGet("{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
     public ActionResult<TDto> Get(TKey id) => Logging(nameof(Get), () => Ok(appService.Get(id)));
