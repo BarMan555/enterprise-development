@@ -8,6 +8,11 @@ namespace Hospital.Application.Contracts.Dtos;
 public class DoctorDto
 {
     /// <summary>
+    /// Unique identificator of the Appointment
+    /// </summary>
+    public required int Id { get; set; }
+    
+    /// <summary>
     /// Name of the Doctor
     /// </summary>
     public required string FullName { get; set; }

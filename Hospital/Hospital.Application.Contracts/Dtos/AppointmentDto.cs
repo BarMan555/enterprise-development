@@ -8,6 +8,11 @@ namespace Hospital.Application.Contracts.Dtos;
 public class AppointmentDto
 {
     /// <summary>
+    /// Unique identificator of the Appointment
+    /// </summary>
+    public required int Id { get; set; }
+    
+    /// <summary>
     /// <see cref="Patient"/> which registering on Appointment
     /// </summary>
     public required Patient Patient { get; set; }

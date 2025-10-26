@@ -9,6 +9,11 @@ namespace Hospital.Application.Contracts.Dtos;
 public class PatientDto
 {
     /// <summary>
+    /// Unique identifier of the Patient
+    /// </summary>
+    public required int Id { get; set; }
+    
+    /// <summary>
     /// Namec of the Patient
     /// </summary>
     public required string FullName { get; set; }
