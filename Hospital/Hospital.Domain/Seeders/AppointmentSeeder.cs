@@ -1,8 +1,6 @@
-using Hospital.Domain.Enums;
 using Hospital.Domain.Models;
 
-
-namespace Hospital.Infrastructure.InMemory.Seeders;
+namespace Hospital.Domain.Seeders;
 
 /// <summary>
 /// Seeder for appointments repository

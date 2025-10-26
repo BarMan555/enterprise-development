@@ -1,4 +1,4 @@
-namespace Hospital.Infrastructure.InMemory.Seeders;
+namespace Hospital.Domain.Seeders;
 
 /// <summary>
 /// Interface for any seeder

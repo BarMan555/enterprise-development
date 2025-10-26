@@ -1,5 +1,5 @@
 using Hospital.Domain;
-using Hospital.Infrastructure.InMemory.Seeders;
+using Hospital.Domain.Seeders;
 
 namespace Hospital.Infrastructure.InMemory.Repositories;
 

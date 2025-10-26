@@ -1,8 +1,8 @@
 using Hospital.Application.Services;
 using Hospital.Domain;
 using Hospital.Domain.Models;
+using Hospital.Domain.Seeders;
 using Hospital.Infrastructure.InMemory.Repositories;
-using Hospital.Infrastructure.InMemory.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
