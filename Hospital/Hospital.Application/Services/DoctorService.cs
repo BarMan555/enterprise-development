@@ -11,7 +11,11 @@ namespace Hospital.Application.Services;
 /// </summary>
 /// <param name="repository">repository of doctors</param>
 /// <param name="mapper">Mapper for DTOs</param>
-public class DoctorService(IRepository<Doctor, int> repository, IMapper mapper) : IApplicationService<DoctorDto, int>
+public class DoctorService(
+    IRepository<Doctor, int> repository, 
+    IRepository<Appointment, int> appointmentRepository,
+    IMapper mapper) 
+    : IApplicationService<DoctorDto, int>
 {
     /// <summary>
     /// Create DTO entity
@@ -61,5 +65,15 @@ public class DoctorService(IRepository<Doctor, int> repository, IMapper mapper) 
     public bool Delete(int id)
     {
         return repository.Delete(id);
+    }
+    
+    /// <inheritdoc cref="IDoctorService"/>
+    public List<AppointmentDto> GetAppointmentsByDoctor(int id)
+    {
+        return mapper.Map<List<AppointmentDto>>(
+            from  appointment in appointmentRepository.ReadAll() 
+            where appointment.Doctor.Id == id 
+            select appointment
+        );
     }
 }

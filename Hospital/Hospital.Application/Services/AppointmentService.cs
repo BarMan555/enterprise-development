@@ -62,4 +62,16 @@ public class AppointmentService(IRepository<Appointment, int> repository, IMappe
     {
         return repository.Delete(id);
     }
+
+    /// <inheritdoc cref="IAppointmentService"/>
+    public DoctorDto GetDoctorByAppointment(int id)
+    {
+        return mapper.Map<DoctorDto>(repository.Read(id)?.Doctor);
+    }
+    
+    /// <inheritdoc cref="IAppointmentService"/>
+    public PatientDto GetParientByAppointment(int id)
+    {
+        return mapper.Map<PatientDto>(repository.Read(id)?.Patient);
+    }
 }

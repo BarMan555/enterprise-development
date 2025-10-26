@@ -56,7 +56,8 @@ public abstract class InMemoryRepository<TEntity, TKey> : IRepository<TEntity, T
     /// </summary>
     /// <param name="entityId">ID of entity</param>
     /// <returns>Object</returns>
-    public virtual TEntity? Read(TKey entityId) => _entities.FirstOrDefault(x => GetEntityId(x).Equals(entityId));
+    public virtual TEntity? Read(TKey entityId) => 
+        _entities.FirstOrDefault(x => GetEntityId(x).Equals(entityId));
 
     /// <summary>
     /// Update information about entity by its ID

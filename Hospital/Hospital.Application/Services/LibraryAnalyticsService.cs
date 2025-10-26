@@ -60,12 +60,12 @@ public class LibraryAnalyticsService(
     }
 
     /// <summary>
-    /// Get patients over some years old who have
+    /// Get patients over some year old who have
     /// appointments with multiple doctors
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public List<PatientDto> GetPatientsOlderThaneWithMultipleDoctors(int age)
+    public List<PatientDto> GetPatientsOlderThanWithMultipleDoctors(int age)
     {
         var today = DateTime.Today;
         var patients = patientRepository.ReadAll().Where(p => (today - p.DateOfBirth).Days / 365 >= age).ToList();

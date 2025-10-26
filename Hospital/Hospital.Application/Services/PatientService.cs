@@ -11,7 +11,10 @@ namespace Hospital.Application.Services;
 /// </summary>
 /// <param name="repository">repository of patients</param>
 /// <param name="mapper">Mapper for DTOs</param>
-public class PatientService(IRepository<Patient, int> repository, IMapper mapper) 
+public class PatientService(
+    IRepository<Patient, int> repository, 
+    IRepository<Appointment, int> appointmentRepository,
+    IMapper mapper) 
     : IApplicationService<PatientDto, int>
 {
     /// <summary>
@@ -62,5 +65,15 @@ public class PatientService(IRepository<Patient, int> repository, IMapper mapper
     public bool Delete(int id)
     {
         return repository.Delete(id);
+    }
+    
+    /// <inheritdoc cref="IPatientService"/>
+    public List<AppointmentDto> GetAppointmentsByPatient(int id)
+    {
+        return mapper.Map<List<AppointmentDto>>(
+            from  appointment in appointmentRepository.ReadAll() 
+            where appointment.Patient.Id == id 
+            select appointment
+        );
     }
 }

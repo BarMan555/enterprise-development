@@ -12,7 +12,7 @@ namespace Hospital.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class AnalyticController(
-    ILibraryAnalyticsService analService, 
+    ILibraryAnalyticsService analyticsService, 
     ILogger<AnalyticController> logger) 
     : ControllerBase
 {
@@ -57,7 +57,7 @@ public class AnalyticController(
     {
         return Logging(nameof(GetDoctorsWithExperienceAtLeastYears), () =>
         {
-            var result = analService.GetDoctorsWithExperienceAtLeastYears(year);
+            var result = analyticsService.GetDoctorsWithExperienceAtLeastYears(year);
             return Ok(result);
         });
     }
@@ -74,7 +74,7 @@ public class AnalyticController(
     {
         return Logging(nameof(GetPatientsByDoctor), () =>
         {
-            var result = analService.GetPatientsByDoctor(doctorId);
+            var result = analyticsService.GetPatientsByDoctor(doctorId);
             return Ok(result);
         });
     }
@@ -94,13 +94,13 @@ public class AnalyticController(
     {
         return Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
         {
-            var result = analService.GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(start, end);
+            var result = analyticsService.GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(start, end);
             return Ok(result);
         });
     }
     
     /// <summary>
-    /// Get patients over some years old who have
+    /// Get patients over some year old who have
     /// appointments with multiple doctors
     /// </summary>
     /// <param name="age">Age of patient</param>
@@ -108,11 +108,11 @@ public class AnalyticController(
     [HttpGet("patients-older-than")]
     [ProducesResponseType(typeof(List<PatientDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<PatientDto>> GetPatientsOlderThaneWithMultipleDoctors([FromQuery] int age)
+    public ActionResult<List<PatientDto>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
     {
-        return Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
+        return Logging(nameof(GetPatientsOlderThanWithMultipleDoctors), () =>
         {
-            var result = analService.GetPatientsOlderThaneWithMultipleDoctors(age);
+            var result = analyticsService.GetPatientsOlderThanWithMultipleDoctors(age);
             return Ok(result);
         });
     }
@@ -135,7 +135,7 @@ public class AnalyticController(
     {
         return Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
         {
-            var result = analService.GetAppointmentsWhenInSpecificRoomInSpecificPeriod(roomId, start, end);
+            var result = analyticsService.GetAppointmentsWhenInSpecificRoomInSpecificPeriod(roomId, start, end);
             return Ok(result);
         });
     }

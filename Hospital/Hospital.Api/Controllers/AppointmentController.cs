@@ -11,5 +11,40 @@ namespace Hospital.Api.Controllers;
 /// <param name="logger">Logger for logging</param>
 [ApiController]
 [Route("api/[controller]")]
-public class AppointmentController(IApplicationService<AppointmentDto, int> service, ILogger<AppointmentController> logger) 
-    : CrudBaseController<AppointmentDto, int>(service, logger);
+public class AppointmentController(
+    IAppointmentService service,
+    ILogger<AppointmentController> logger)
+    : CrudBaseController<AppointmentDto, int>(service, logger)
+{
+    /// <summary>
+    /// Get Patient of the appointment by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>doctor</returns>
+    [HttpGet("{id}/patient")]
+    [ProducesResponseType(typeof(AppointmentDto), 200)]
+    [ProducesResponseType(500)]
+    public ActionResult<PatientDto> GetPatientById(int id)
+    {
+        return Logging(
+            nameof(GetPatientById),
+            () => Ok(service.GetParientByAppointment(id))
+        );
+    }
+    
+    /// <summary>
+    /// Get doctor of the appointment by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>patient</returns>
+    [HttpGet("{id}/doctor")]
+    [ProducesResponseType(typeof(AppointmentDto), 200)]
+    [ProducesResponseType(500)]
+    public ActionResult<PatientDto> GetDoctorById(int id)
+    {
+        return Logging(
+            nameof(GetDoctorById),
+            () => Ok(service.GetDoctorByAppointment(id))
+        );
+    }
+}

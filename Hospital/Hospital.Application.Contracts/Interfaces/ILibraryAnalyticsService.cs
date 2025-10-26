@@ -30,12 +30,12 @@ public interface ILibraryAnalyticsService
     public int GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(DateTime start, DateTime end);
     
     /// <summary>
-    /// Get patients over some years old who have
+    /// Get patients over some year old who have
     /// appointments with multiple doctors
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public List<PatientDto> GetPatientsOlderThaneWithMultipleDoctors(int age);
+    public List<PatientDto> GetPatientsOlderThanWithMultipleDoctors(int age);
     
     /// <summary>
     /// Get appointments in specific period
