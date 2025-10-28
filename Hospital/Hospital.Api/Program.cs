@@ -1,5 +1,6 @@
 using AutoMapper;
 using Hospital.Application;
+using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Services;
 using Hospital.Domain;
 using Hospital.Domain.Models;
@@ -23,10 +24,10 @@ builder.Services.AddSingleton<IRepository<Patient, int>, InMemoryPatientReposito
 builder.Services.AddSingleton<IRepository<Doctor, int>, InMemoryDoctorRepository>();
 builder.Services.AddSingleton<IRepository<Appointment, int>, InMemoryAppointmentRepository>();
 
-builder.Services.AddScoped<PatientService>();
-builder.Services.AddScoped<DoctorService>();
-builder.Services.AddScoped<AppointmentService>();
-
+builder.Services.AddScoped<ILibraryAnalyticsService, LibraryAnalyticsService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

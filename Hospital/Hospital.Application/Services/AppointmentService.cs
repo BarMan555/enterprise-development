@@ -11,7 +11,10 @@ namespace Hospital.Application.Services;
 /// </summary>
 /// <param name="repository">repository of appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
-public class AppointmentService(IRepository<Appointment, int> repository, IMapper mapper) : IApplicationService<AppointmentDto, int>
+public class AppointmentService(
+    IRepository<Appointment, int> repository, 
+    IMapper mapper) 
+    : IAppointmentService
 {
     /// <summary>
     /// Create DTO entity

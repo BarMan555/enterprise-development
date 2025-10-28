@@ -15,7 +15,7 @@ public class DoctorService(
     IRepository<Doctor, int> repository, 
     IRepository<Appointment, int> appointmentRepository,
     IMapper mapper) 
-    : IApplicationService<DoctorDto, int>
+    : IDoctorService
 {
     /// <summary>
     /// Create DTO entity
