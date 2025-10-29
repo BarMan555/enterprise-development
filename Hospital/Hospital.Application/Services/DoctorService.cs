@@ -22,7 +22,7 @@ public class DoctorService(
     /// </summary>
     /// <param name="dto">DTO for creating</param>
     /// <returns>DTO entity</returns>
-    public int Create(DoctorDto entity)
+    public int Create(DoctorCreateUpdateDto entity)
     {
         return repository.Create(mapper.Map<Doctor>(entity));
     }
@@ -31,9 +31,9 @@ public class DoctorService(
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public List<DoctorDto> GetAll()
+    public List<DoctorGetDto> GetAll()
     {
-        return mapper.Map<List<DoctorDto>>(repository.ReadAll());
+        return mapper.Map<List<DoctorGetDto>>(repository.ReadAll());
     }
 
     /// <summary>
@@ -41,9 +41,9 @@ public class DoctorService(
     /// </summary>
     /// <param name="dtoId">ID</param>
     /// <returns>DTO</returns>
-    public DoctorDto? Get(int id)
+    public DoctorGetDto? Get(int id)
     {
-        return mapper.Map<DoctorDto>(repository.Read(id));
+        return mapper.Map<DoctorGetDto>(repository.Read(id));
     }
 
     /// <summary>
@@ -52,9 +52,9 @@ public class DoctorService(
     /// <param name="dtoId">ID old entity</param>
     /// <param name="dto">New DTO</param>
     /// <returns></returns>
-    public DoctorDto? Update(int id, DoctorDto entity)
+    public DoctorGetDto? Update(int id, DoctorCreateUpdateDto entity)
     {
-        return mapper.Map<DoctorDto>(repository.Update(id, mapper.Map<Doctor>(entity)));
+        return mapper.Map<DoctorGetDto>(repository.Update(id, mapper.Map<Doctor>(entity)));
     }
 
     /// <summary>
@@ -68,9 +68,9 @@ public class DoctorService(
     }
     
     /// <inheritdoc cref="IDoctorService"/>
-    public List<AppointmentDto> GetAppointmentsByDoctor(int id)
+    public List<AppointmentGetDto> GetAppointmentsByDoctor(int id)
     {
-        return mapper.Map<List<AppointmentDto>>(
+        return mapper.Map<List<AppointmentGetDto>>(
             from  appointment in appointmentRepository.ReadAll() 
             where appointment.Doctor.Id == id 
             select appointment

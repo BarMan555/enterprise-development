@@ -3,15 +3,10 @@ using Hospital.Domain.Enums;
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
-/// DTO Represents a Doctor
+/// DTO Represents a Doctor for creating and updating Doctor entities
 /// </summary>
-public class DoctorDto
-{
-    /// <summary>
-    /// Unique identificator of the Appointment
-    /// </summary>
-    public required int Id { get; set; }
-    
+public class DoctorCreateUpdateDto
+{  
     /// <summary>
     /// Name of the Doctor
     /// </summary>

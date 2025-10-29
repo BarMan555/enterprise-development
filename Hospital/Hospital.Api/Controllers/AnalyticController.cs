@@ -51,9 +51,9 @@ public class AnalyticController(
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
     [HttpGet("doctors-with-experience")]
-    [ProducesResponseType(typeof(List<DoctorDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<DoctorGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<DoctorDto>> GetDoctorsWithExperienceAtLeastYears([FromQuery] int year)
+    public ActionResult<List<DoctorGetDto>> GetDoctorsWithExperienceAtLeastYears([FromQuery] int year)
     {
         return Logging(nameof(GetDoctorsWithExperienceAtLeastYears), () =>
         {
@@ -68,9 +68,9 @@ public class AnalyticController(
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
     [HttpGet("patients-by-doctor")]
-    [ProducesResponseType(typeof(List<PatientDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<PatientGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<PatientDto>> GetPatientsByDoctor([FromQuery] int doctorId)
+    public ActionResult<List<PatientGetDto>> GetPatientsByDoctor([FromQuery] int doctorId)
     {
         return Logging(nameof(GetPatientsByDoctor), () =>
         {
@@ -106,9 +106,9 @@ public class AnalyticController(
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
     [HttpGet("patients-older-than")]
-    [ProducesResponseType(typeof(List<PatientDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<PatientGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<PatientDto>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
+    public ActionResult<List<PatientGetDto>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
     {
         return Logging(nameof(GetPatientsOlderThanWithMultipleDoctors), () =>
         {
@@ -126,9 +126,9 @@ public class AnalyticController(
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
     [HttpGet("appointments-in-specific-room")]
-    [ProducesResponseType(typeof(List<AppointmentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<AppointmentGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<AppointmentDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(
+    public ActionResult<List<AppointmentGetDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(
         [FromQuery] int roomId,  
         [FromQuery] DateTime start, 
         [FromQuery] DateTime end)

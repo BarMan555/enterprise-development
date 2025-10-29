@@ -14,7 +14,7 @@ namespace Hospital.Api.Controllers;
 public class AppointmentController(
     IAppointmentService service,
     ILogger<AppointmentController> logger)
-    : CrudBaseController<AppointmentDto, int>(service, logger)
+    : CrudBaseController<AppointmentGetDto, AppointmentCreateUpdateDto, int>(service, logger)
 {
     /// <summary>
     /// Get Patient of the appointment by id
@@ -22,9 +22,9 @@ public class AppointmentController(
     /// <param name="id"></param>
     /// <returns>doctor</returns>
     [HttpGet("{id}/patient")]
-    [ProducesResponseType(typeof(AppointmentDto), 200)]
+    [ProducesResponseType(typeof(PatientGetDto), 200)]
     [ProducesResponseType(500)]
-    public ActionResult<PatientDto> GetPatientById(int id)
+    public ActionResult<PatientGetDto> GetPatientById(int id)
     {
         return Logging(
             nameof(GetPatientById),
@@ -38,9 +38,9 @@ public class AppointmentController(
     /// <param name="id"></param>
     /// <returns>patient</returns>
     [HttpGet("{id}/doctor")]
-    [ProducesResponseType(typeof(AppointmentDto), 200)]
+    [ProducesResponseType(typeof(DoctorGetDto), 200)]
     [ProducesResponseType(500)]
-    public ActionResult<PatientDto> GetDoctorById(int id)
+    public ActionResult<DoctorGetDto> GetDoctorById(int id)
     {
         return Logging(
             nameof(GetDoctorById),

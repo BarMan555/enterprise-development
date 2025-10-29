@@ -6,19 +6,19 @@ namespace Hospital.Application.Contracts.Interfaces;
 /// <summary>
 /// Interface of Appointment Service
 /// </summary>
-public interface IAppointmentService : IApplicationService<AppointmentDto, int>
+public interface IAppointmentService : IApplicationService<AppointmentGetDto, AppointmentCreateUpdateDto, int>
 {
     /// <summary>
     /// Get Doctor of the appointment
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>doctor</returns>
-    public DoctorDto GetDoctorByAppointment(int id);
+    /// <returns>doctor dto</returns>
+    public DoctorGetDto GetDoctorByAppointment(int id);
 
     /// <summary>
     /// Get patient of the appointment
     /// </summary>
     /// <param name="id"></param>
-    /// <returns>patient</returns>
-    public PatientDto GetParientByAppointment(int id);
+    /// <returns>patient dto</returns>
+    public PatientGetDto GetParientByAppointment(int id);
 }

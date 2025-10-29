@@ -12,14 +12,14 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
-    public List<DoctorDto> GetDoctorsWithExperienceAtLeastYears(int year);
+    public List<DoctorGetDto> GetDoctorsWithExperienceAtLeastYears(int year);
     
     /// <summary>
     /// Get patients assigned to a specific doctor
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public List<PatientDto> GetPatientsByDoctor(int doctorId);
+    public List<PatientGetDto> GetPatientsByDoctor(int doctorId);
     
     /// <summary>
     /// Get counting of repeat patient appointments in specific period.
@@ -35,7 +35,7 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public List<PatientDto> GetPatientsOlderThanWithMultipleDoctors(int age);
+    public List<PatientGetDto> GetPatientsOlderThanWithMultipleDoctors(int age);
     
     /// <summary>
     /// Get appointments in specific period
@@ -45,5 +45,5 @@ public interface ILibraryAnalyticsService
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
-    public List<AppointmentDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId, DateTime start, DateTime end);
+    public List<AppointmentGetDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId, DateTime start, DateTime end);
 }

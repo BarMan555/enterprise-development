@@ -25,9 +25,9 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
-    public List<DoctorDto> GetDoctorsWithExperienceAtLeastYears(int year)
+    public List<DoctorGetDto> GetDoctorsWithExperienceAtLeastYears(int year)
     {
-        return mapper.Map<List<DoctorDto>>((
+        return mapper.Map<List<DoctorGetDto>>((
             from d in doctorRepository.ReadAll()
             where d.ExperienceYears >= year
             select d
@@ -39,9 +39,9 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public List<PatientDto> GetPatientsByDoctor(int doctorId)
+    public List<PatientGetDto> GetPatientsByDoctor(int doctorId)
     {
-        return mapper.Map<List<PatientDto>>((from a in appointmentRepository.ReadAll()
+        return mapper.Map<List<PatientGetDto>>((from a in appointmentRepository.ReadAll()
             where a.Doctor.Id == doctorId
             select a.Patient).ToList());
     }
@@ -65,7 +65,7 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public List<PatientDto> GetPatientsOlderThanWithMultipleDoctors(int age)
+    public List<PatientGetDto> GetPatientsOlderThanWithMultipleDoctors(int age)
     {
         var today = DateTime.Today;
         var patients = patientRepository.ReadAll().Where(p => (today - p.DateOfBirth).Days / 365 >= age).ToList();
@@ -83,7 +83,7 @@ public class LibraryAnalyticsService(
                         patientDoctorGroups[p.Id].Count > 1)
             .ToList();
 
-        return mapper.Map<List<PatientDto>>(result);
+        return mapper.Map<List<PatientGetDto>>(result);
     }
 
     /// <summary>
@@ -94,9 +94,9 @@ public class LibraryAnalyticsService(
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
-    public List<AppointmentDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
+    public List<AppointmentGetDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
     {
-        return mapper.Map<List<AppointmentDto>>((from a in appointmentRepository.ReadAll()
+        return mapper.Map<List<AppointmentGetDto>>((from a in appointmentRepository.ReadAll()
             where a.RoomNumber == roomId
             where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
             select a).ToList());

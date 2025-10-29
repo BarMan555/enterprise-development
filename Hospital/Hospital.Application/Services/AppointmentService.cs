@@ -21,7 +21,7 @@ public class AppointmentService(
     /// </summary>
     /// <param name="dto">DTO for creating</param>
     /// <returns>DTO entity</returns>
-    public int Create(AppointmentDto entity)
+    public int Create(AppointmentCreateUpdateDto entity)
     {
         return repository.Create(mapper.Map<Appointment>(entity));
     }
@@ -30,9 +30,9 @@ public class AppointmentService(
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public List<AppointmentDto> GetAll()
+    public List<AppointmentGetDto> GetAll()
     {
-        return mapper.Map<List<AppointmentDto>>(repository.ReadAll());
+        return mapper.Map<List<AppointmentGetDto>>(repository.ReadAll());
     }
 
     /// <summary>
@@ -40,9 +40,9 @@ public class AppointmentService(
     /// </summary>
     /// <param name="dtoId">ID</param>
     /// <returns>DTO</returns>
-    public AppointmentDto? Get(int id)
+    public AppointmentGetDto? Get(int id)
     {
-        return mapper.Map<AppointmentDto>(repository.Read(id));
+        return mapper.Map<AppointmentGetDto>(repository.Read(id));
     }
 
     /// <summary>
@@ -51,9 +51,9 @@ public class AppointmentService(
     /// <param name="dtoId">ID old entity</param>
     /// <param name="dto">New DTO</param>
     /// <returns></returns>
-    public AppointmentDto? Update(int id, AppointmentDto entity)
+    public AppointmentGetDto? Update(int id, AppointmentCreateUpdateDto entity)
     {
-        return mapper.Map<AppointmentDto>(repository.Update(id, mapper.Map<Appointment>(entity)));
+        return mapper.Map<AppointmentGetDto>(repository.Update(id, mapper.Map<Appointment>(entity)));
     }
 
     /// <summary>
@@ -67,14 +67,14 @@ public class AppointmentService(
     }
 
     /// <inheritdoc cref="IAppointmentService"/>
-    public DoctorDto GetDoctorByAppointment(int id)
+    public DoctorGetDto GetDoctorByAppointment(int id)
     {
-        return mapper.Map<DoctorDto>(repository.Read(id)?.Doctor);
+        return mapper.Map<DoctorGetDto>(repository.Read(id)?.Doctor);
     }
     
     /// <inheritdoc cref="IAppointmentService"/>
-    public PatientDto GetParientByAppointment(int id)
+    public PatientGetDto GetParientByAppointment(int id)
     {
-        return mapper.Map<PatientDto>(repository.Read(id)?.Patient);
+        return mapper.Map<PatientGetDto>(repository.Read(id)?.Patient);
     }
 }

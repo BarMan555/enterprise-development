@@ -12,17 +12,17 @@ namespace Hospital.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class PatientController(IPatientService service, ILogger<PatientController> logger)
-    : CrudBaseController<PatientDto, int>(service, logger)
+    : CrudBaseController<PatientGetDto, PatientCreateUpdateDto, int>(service, logger)
 {
     /// <summary>
     /// Get appointments where is the patient
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id">id of patient</param>
     /// <returns>list of appintments</returns>
     [HttpGet("{id}/appointments")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError),]
-    public ActionResult<List<AppointmentDto>> GetAppointmentsById(int id)
+    public ActionResult<List<AppointmentGetDto>> GetAppointmentsById(int id)
     {
         return Logging(
             nameof(GetAppointmentsById), 

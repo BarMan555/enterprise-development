@@ -5,22 +5,17 @@ namespace Hospital.Application.Contracts.Dtos;
 /// <summary>
 /// DTO Represents a Appointment for registering a <see cref="Patient"/> with a <see cref="Doctor"/>
 /// </summary>
-public class AppointmentDto
+public class AppointmentCreateUpdateDto
 {
     /// <summary>
-    /// Unique identificator of the Appointment
+    /// Id <see cref="Patient"/> which registering on Appointment
     /// </summary>
-    public required int Id { get; set; }
-    
-    /// <summary>
-    /// <see cref="Patient"/> which registering on Appointment
-    /// </summary>
-    public required Patient Patient { get; set; }
+    public required int IdPatient { get; set; }
 
     /// <summary>
-    /// <see cref="Doctor"/> for Appointment
+    /// Id <see cref="Doctor"/> for Appointment
     /// </summary>
-    public required Doctor Doctor { get; set; }
+    public required int IdDoctor { get; set; }
 
     /// <summary>
     /// Date of the Appointment

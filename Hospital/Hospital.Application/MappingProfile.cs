@@ -8,8 +8,13 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Patient, PatientDto>().ReverseMap();
-        CreateMap<Doctor, DoctorDto>().ReverseMap();
-        CreateMap<Appointment, AppointmentDto>().ReverseMap();
+        CreateMap<Patient, PatientGetDto>();
+        CreateMap<PatientCreateUpdateDto, Patient>();
+
+        CreateMap<Doctor, DoctorGetDto>();
+        CreateMap<DoctorCreateUpdateDto, Doctor>();
+        
+        CreateMap<Appointment, AppointmentGetDto>();
+        CreateMap<AppointmentCreateUpdateDto, Appointment>();
     }
 }

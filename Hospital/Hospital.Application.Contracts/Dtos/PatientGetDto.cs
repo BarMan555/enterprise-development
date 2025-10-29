@@ -4,9 +4,9 @@ using Hospital.Domain.Models;
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
-/// DTO Represents a Patient who can book <see cref="Appointment"/>.
+/// DTO Represents a Patient for recieving Patient entities
 /// </summary>
-public class PatientDto
+public class PatientGetDto
 {
     /// <summary>
     /// Unique identifier of the Patient

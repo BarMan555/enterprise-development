@@ -22,7 +22,7 @@ public class PatientService(
     /// </summary>
     /// <param name="dto">DTO for creating</param>
     /// <returns>DTO entity</returns>
-    public int Create(PatientDto entity)
+    public int Create(PatientCreateUpdateDto entity)
     {
         return repository.Create(mapper.Map<Patient>(entity));
     }
@@ -31,9 +31,9 @@ public class PatientService(
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public List<PatientDto> GetAll()
+    public List<PatientGetDto> GetAll()
     {
-        return mapper.Map<List<PatientDto>>(repository.ReadAll());
+        return mapper.Map<List<PatientGetDto>>(repository.ReadAll());
     }
 
     /// <summary>
@@ -41,9 +41,9 @@ public class PatientService(
     /// </summary>
     /// <param name="dtoId">ID</param>
     /// <returns>DTO</returns>
-    public PatientDto? Get(int id)
+    public PatientGetDto? Get(int id)
     {
-        return mapper.Map<PatientDto>(repository.Read(id));
+        return mapper.Map<PatientGetDto>(repository.Read(id));
     }
 
     /// <summary>
@@ -52,9 +52,9 @@ public class PatientService(
     /// <param name="dtoId">ID old entity</param>
     /// <param name="dto">New DTO</param>
     /// <returns></returns>
-    public PatientDto? Update(int id, PatientDto entity)
+    public PatientGetDto? Update(int id, PatientCreateUpdateDto entity)
     {
-        return mapper.Map<PatientDto>(repository.Update(id, mapper.Map<Patient>(entity)));
+        return mapper.Map<PatientGetDto>(repository.Update(id, mapper.Map<Patient>(entity)));
     }
 
     /// <summary>
@@ -68,9 +68,9 @@ public class PatientService(
     }
     
     /// <inheritdoc cref="IPatientService"/>
-    public List<AppointmentDto> GetAppointmentsByPatient(int id)
+    public List<AppointmentGetDto> GetAppointmentsByPatient(int id)
     {
-        return mapper.Map<List<AppointmentDto>>(
+        return mapper.Map<List<AppointmentGetDto>>(
             from  appointment in appointmentRepository.ReadAll() 
             where appointment.Patient.Id == id 
             select appointment

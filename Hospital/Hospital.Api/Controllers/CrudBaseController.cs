@@ -6,17 +6,19 @@ namespace Hospital.Api.Controllers;
 /// <summary>
 /// Generic base controller providing CRUD endpoints for all entities.
 /// </summary>
-/// <typeparam name="TDto">DTO type returned by the API.</typeparam>
 /// <typeparam name="TKey">Type of the entity identifier.</typeparam>
+/// <typeparam name="TGetDto">Dto dor receiving</typeparam>
+/// <typeparam name="TCreateUpdateDto">Dto for creating or updating</typeparam>
 /// <param name="appService">Service for work with DTO.</param>
 /// <param name="logger">Logger for information.</param>
 [ApiController]
 [Route("api/[controller]")]
-public class CrudBaseController<TDto, TKey>(
-    IApplicationService<TDto, TKey> appService,
-    ILogger<CrudBaseController<TDto, TKey>> logger) 
+public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
+    IApplicationService<TGetDto, TCreateUpdateDto, TKey> appService,
+    ILogger<CrudBaseController<TGetDto, TCreateUpdateDto, TKey>> logger) 
     : ControllerBase
-    where TDto : class
+    where TGetDto : class
+    where TCreateUpdateDto : class
     where TKey : struct
 {
     /// <summary>
@@ -55,7 +57,7 @@ public class CrudBaseController<TDto, TKey>(
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(500)]
-    public ActionResult<TDto> Create(TDto newDto) =>
+    public ActionResult<TKey> Create(TCreateUpdateDto newDto) =>
         Logging(nameof(Create), () => Created(nameof(Create), appService.Create(newDto)));
 
     /// <summary>
@@ -67,7 +69,7 @@ public class CrudBaseController<TDto, TKey>(
     [HttpPut("{id:int}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<TDto> Edit(TKey id, [FromBody] TDto newDto) =>
+    public ActionResult<TGetDto> Edit(TKey id, [FromBody] TCreateUpdateDto newDto) =>
         Logging(nameof(Edit), () => Ok(appService.Update(id, newDto)));
 
     /// <summary>
@@ -78,7 +80,7 @@ public class CrudBaseController<TDto, TKey>(
     [HttpGet("{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<TDto> Get(TKey id) => Logging(nameof(Get), () => Ok(appService.Get(id)));
+    public ActionResult<TGetDto> Get(TKey id) => Logging(nameof(Get), () => Ok(appService.Get(id)));
 
     /// <summary>
     /// Retrieves all entities.
@@ -87,7 +89,7 @@ public class CrudBaseController<TDto, TKey>(
     [HttpGet]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<List<TDto>> GetAll() => Logging(nameof(GetAll), () => Ok(appService.GetAll()));
+    public ActionResult<List<TGetDto>> GetAll() => Logging(nameof(GetAll), () => Ok(appService.GetAll()));
 
     /// <summary>
     /// Deletes an entity by ID.
