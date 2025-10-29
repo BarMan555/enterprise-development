@@ -27,11 +27,18 @@ public class LibraryAnalyticsService(
     /// <returns>List of doctors</returns>
     public List<DoctorGetDto> GetDoctorsWithExperienceAtLeastYears(int year)
     {
-        return mapper.Map<List<DoctorGetDto>>((
+        var doctors = (
             from d in doctorRepository.ReadAll()
             where d.ExperienceYears >= year
             select d
-        ).ToList());
+        ).ToList();
+        var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors);
+        
+        for (var i = 0; i < doctorsDto.Count; i++)
+        {
+            doctorsDto[i].IdSpecialization = doctors[i].Specialization.Id;
+        }
+        return doctorsDto;
     }
 
     /// <summary>
@@ -41,9 +48,17 @@ public class LibraryAnalyticsService(
     /// <returns>List of patient</returns>
     public List<PatientGetDto> GetPatientsByDoctor(int doctorId)
     {
-        return mapper.Map<List<PatientGetDto>>((from a in appointmentRepository.ReadAll()
+        var patients = ((from a in appointmentRepository.ReadAll()
             where a.Doctor.Id == doctorId
             select a.Patient).ToList());
+        var patientsDto = mapper.Map<List<PatientGetDto>>(patients);
+        for (var i = 0; i < patientsDto.Count; i++)
+        {
+            patientsDto[i].Gender = (int)patients[i].Gender;
+            patientsDto[i].BloodType = (int)patients[i].BloodType;
+            patientsDto[i].RhFactor = (int)patients[i].RhFactor;
+        }
+        return patientsDto;
     }
 
     /// <summary>
@@ -82,8 +97,17 @@ public class LibraryAnalyticsService(
             .Where(p => patientDoctorGroups.ContainsKey(p.Id) &&
                         patientDoctorGroups[p.Id].Count > 1)
             .ToList();
+        
+        var patientsDto = mapper.Map<List<PatientGetDto>>(result);
+        
+        for (var i = 0; i < patientsDto.Count; i++)
+        {
+            patientsDto[i].Gender = (int)result[i].Gender;
+            patientsDto[i].BloodType = (int)result[i].BloodType;
+            patientsDto[i].RhFactor = (int)result[i].RhFactor;
+        }
 
-        return mapper.Map<List<PatientGetDto>>(result);
+        return patientsDto;
     }
 
     /// <summary>
@@ -96,9 +120,16 @@ public class LibraryAnalyticsService(
     /// <returns>List of appointments</returns>
     public List<AppointmentGetDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
     {
-        return mapper.Map<List<AppointmentGetDto>>((from a in appointmentRepository.ReadAll()
+         var appointments = (from a in appointmentRepository.ReadAll()
             where a.RoomNumber == roomId
             where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
-            select a).ToList());
+            select a).ToList();
+         var appointmentsDto = mapper.Map<List<AppointmentGetDto>>(appointments);
+         for(var i = 0; i < appointmentsDto.Count; i++)
+         {
+             appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id;
+             appointmentsDto[i].IdPatient = appointments[i].Patient.Id;
+         }
+         return appointmentsDto;
     }
 }
