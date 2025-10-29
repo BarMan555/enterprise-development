@@ -23,7 +23,10 @@ public class AppointmentService(
     /// <returns>DTO entity</returns>
     public int Create(AppointmentCreateUpdateDto entity)
     {
-        return repository.Create(mapper.Map<Appointment>(entity));
+        var newAppointment = mapper.Map<Appointment>(entity);
+        newAppointment.Doctor.Id = entity.IdDoctor; 
+        newAppointment.Patient.Id = entity.IdPatient; 
+        return repository.Create(newAppointment);
     }
 
     /// <summary>
@@ -32,7 +35,16 @@ public class AppointmentService(
     /// <returns>DTO</returns>
     public List<AppointmentGetDto> GetAll()
     {
-        return mapper.Map<List<AppointmentGetDto>>(repository.ReadAll());
+        var appointments = repository.ReadAll();
+        var appointmentsDto = mapper.Map<List<AppointmentGetDto>>(appointments);
+
+        for (var i = 0; i < appointmentsDto.Count; i++)
+        {
+            appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id;
+            appointmentsDto[i].IdPatient = appointments[i].Patient.Id;
+        }
+
+        return appointmentsDto;
     }
 
     /// <summary>
@@ -42,7 +54,11 @@ public class AppointmentService(
     /// <returns>DTO</returns>
     public AppointmentGetDto? Get(int id)
     {
-        return mapper.Map<AppointmentGetDto>(repository.Read(id));
+        var appointment = repository.Read(id);
+        var appointmentDto = mapper.Map<AppointmentGetDto>(appointment);
+        appointmentDto.IdDoctor = appointment.Doctor.Id;
+        appointmentDto.IdPatient = appointment.Patient.Id;
+        return appointmentDto;
     }
 
     /// <summary>
@@ -53,7 +69,10 @@ public class AppointmentService(
     /// <returns></returns>
     public AppointmentGetDto? Update(int id, AppointmentCreateUpdateDto entity)
     {
-        return mapper.Map<AppointmentGetDto>(repository.Update(id, mapper.Map<Appointment>(entity)));
+        var updatedAppointment = mapper.Map<Appointment>(entity);
+        updatedAppointment.Doctor.Id = entity.IdDoctor;
+        updatedAppointment.Patient.Id = entity.IdPatient;
+        return mapper.Map<AppointmentGetDto>(repository.Update(id, updatedAppointment));
     }
 
     /// <summary>
@@ -69,12 +88,20 @@ public class AppointmentService(
     /// <inheritdoc cref="IAppointmentService"/>
     public DoctorGetDto GetDoctorByAppointment(int id)
     {
-        return mapper.Map<DoctorGetDto>(repository.Read(id)?.Doctor);
+        var doctor = repository.Read(id)?.Doctor;
+        var doctorDto = mapper.Map<DoctorGetDto>(doctor);
+        doctorDto.IdSpecialization = doctor.Specialization.Id;
+        return doctorDto;
     }
     
     /// <inheritdoc cref="IAppointmentService"/>
     public PatientGetDto GetParientByAppointment(int id)
     {
-        return mapper.Map<PatientGetDto>(repository.Read(id)?.Patient);
+        var patient = repository.Read(id)?.Patient;
+        var patientDto = mapper.Map<PatientGetDto>(patient);
+        patientDto.Gender = (int)patient.Gender;
+        patientDto.BloodType = (int)patient.BloodType;
+        patientDto.RhFactor = (int)patient.RhFactor;
+        return patientDto;
     }
 }

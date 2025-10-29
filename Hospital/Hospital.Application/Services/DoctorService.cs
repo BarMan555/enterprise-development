@@ -36,10 +36,11 @@ public class DoctorService(
     public List<DoctorGetDto> GetAll()
     {
         var doctors = repository.ReadAll();
-        var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors); 
-        foreach (var doctorDto in doctorsDto)
-            foreach (var doctor in doctors)
-                doctorDto.Specialization = doctor.Specialization.Id;
+        var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors);
+        
+        for (var i = 0; i < doctorsDto.Count; i++)
+            doctorsDto[i].IdSpecialization = doctors[i].Specialization.Id;
+        
         return doctorsDto;
     }
 
@@ -52,7 +53,7 @@ public class DoctorService(
     {
         var doctor = repository.Read(id);
         var doctorDto = mapper.Map<DoctorGetDto>(doctor);
-        doctorDto.Specialization = doctor.Specialization.Id;
+        doctorDto.IdSpecialization = doctor.Specialization.Id;
         return doctorDto;
     }
 
@@ -86,15 +87,14 @@ public class DoctorService(
             from appointment in appointmentRepository.ReadAll()
             where appointment.Doctor.Id == id
             select appointment
-        );
+        ).ToList();
         var appointmnetsDto =  mapper.Map<List<AppointmentGetDto>>(appointmets);
         
-        foreach (var appointmentDto in appointmnetsDto)
-            appointmentDto.IdDoctor = id;
+        for (var i = 0; i < appointmnetsDto.Count; i++)
+            appointmnetsDto[i].IdDoctor = id;
         
-        foreach (var appointmentDto in appointmnetsDto)
-            foreach (var appointment in appointmets)
-                appointmentDto.IdPatient = appointment.Patient.Id;
+        for (var i = 0; i < appointmnetsDto.Count; i++)
+            appointmnetsDto[i].IdPatient = appointmets[i].Patient.Id;
         
         return appointmnetsDto;
     }

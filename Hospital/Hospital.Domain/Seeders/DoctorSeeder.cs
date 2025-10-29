@@ -11,7 +11,7 @@ public class InMemoryDoctorRepositorySeeder : ISeeder<Doctor, int>
     /// <summary>
     /// List of doctor's specialization
     /// </summary>
-    private List<Specialization> _specializations =
+    private readonly List<Specialization> _specializations =
     [
         new Specialization() { Id = 0, Name = SpecializationName.Pediatrician },
         new Specialization() { Id = 1, Name = SpecializationName.Surgeon },
