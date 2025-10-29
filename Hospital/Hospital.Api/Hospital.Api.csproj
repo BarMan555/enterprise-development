@@ -14,6 +14,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Hospital.Application\Hospital.Application.csproj" />
       <ProjectReference Include="..\Hospital.Infrastructure.InMemory\Hospital.Infrastructure.InMemory.csproj" />
+      <ProjectReference Include="..\Hospital.Application.Contracts\Hospital.Application.Contracts.csproj" />
+      <ProjectReference Include="..\Hospital.Domain\Hospital.Domain.csproj" />
     </ItemGroup>
 
 </Project>
