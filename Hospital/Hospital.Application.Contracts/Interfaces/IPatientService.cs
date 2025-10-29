@@ -1,4 +1,3 @@
-using Hospital.Domain.Models;
 using Hospital.Application.Contracts.Dtos;
 
 namespace Hospital.Application.Contracts.Interfaces;

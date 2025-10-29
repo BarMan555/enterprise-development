@@ -1,5 +1,3 @@
-using Hospital.Domain.Enums;
-
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
@@ -23,9 +21,9 @@ public class DoctorGetDto
     public required DateTime DateOfBirth { get; set; }
 
     /// <summary>
-    /// Specialization of the Doctor
+    /// ID of specialization of the Doctor
     /// </summary>
-    public required Specialization Specialization { get; set; }
+    public required int Specialization { get; set; }
 
     /// <summary>
     /// Experience of the Doctor

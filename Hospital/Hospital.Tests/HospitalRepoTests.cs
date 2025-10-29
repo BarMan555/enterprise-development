@@ -30,7 +30,7 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
             .Select(d => d.FullName)
             .ToList();
 
-        Assert.Equal(expectedDoctors.OrderBy(doc => doc), result.OrderBy(doc => doc));
+        Assert.Equal<IOrderedEnumerable<string>>(expectedDoctors.OrderBy(doc => doc), result.OrderBy(doc => doc));
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public class HospitalRepoTests(HospitalRepoFixture fixture) : IClassFixture<Hosp
             .OrderBy(name => name)
             .ToList();
 
-        Assert.Equal(expectedPatients.OrderBy(name => name), result.OrderBy(name => name));
+        Assert.Equal<IOrderedEnumerable<string>>(expectedPatients.OrderBy(name => name), result.OrderBy(name => name));
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBi
         .Select(p => p.FullName)
         .ToList();
 
-    Assert.Equal(expectedPatients, result);
+    Assert.Equal<IEnumerable<string>>(expectedPatients, result);
 }
     /// <summary>
     /// Test to verify retrieval of appointments for the current month
@@ -118,12 +118,11 @@ public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBi
 
         var result = fixture.AppointmentRepository.ReadAll()
             .Where(a => a.RoomNumber == roomNumber &&
-                       a.AppointmentDateTime >= currentMonthStart &&
-                       a.AppointmentDateTime <= currentMonthEnd)
+                        a.AppointmentDateTime >= currentMonthStart &&
+                        a.AppointmentDateTime <= currentMonthEnd)
             .OrderBy(a => a.AppointmentDateTime)
-            .Select(a => a.Id)
-            .ToList();
+            .Select(a => a.Id);
 
-        Assert.Equal(expectedAppointments, result);
+        Assert.Equal<IEnumerable<int>>(expectedAppointments, result);
     }
 }

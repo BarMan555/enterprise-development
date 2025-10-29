@@ -24,7 +24,9 @@ public class DoctorService(
     /// <returns>DTO entity</returns>
     public int Create(DoctorCreateUpdateDto entity)
     {
-        return repository.Create(mapper.Map<Doctor>(entity));
+        var newDoctor = mapper.Map<Doctor>(entity);
+        newDoctor.Specialization.Id = entity.IdSpecialization; 
+        return repository.Create(newDoctor);
     }
 
     /// <summary>
@@ -33,7 +35,12 @@ public class DoctorService(
     /// <returns>DTO</returns>
     public List<DoctorGetDto> GetAll()
     {
-        return mapper.Map<List<DoctorGetDto>>(repository.ReadAll());
+        var doctors = repository.ReadAll();
+        var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors); 
+        foreach (var doctorDto in doctorsDto)
+            foreach (var doctor in doctors)
+                doctorDto.Specialization = doctor.Specialization.Id;
+        return doctorsDto;
     }
 
     /// <summary>
@@ -43,7 +50,10 @@ public class DoctorService(
     /// <returns>DTO</returns>
     public DoctorGetDto? Get(int id)
     {
-        return mapper.Map<DoctorGetDto>(repository.Read(id));
+        var doctor = repository.Read(id);
+        var doctorDto = mapper.Map<DoctorGetDto>(doctor);
+        doctorDto.Specialization = doctor.Specialization.Id;
+        return doctorDto;
     }
 
     /// <summary>
@@ -54,7 +64,9 @@ public class DoctorService(
     /// <returns></returns>
     public DoctorGetDto? Update(int id, DoctorCreateUpdateDto entity)
     {
-        return mapper.Map<DoctorGetDto>(repository.Update(id, mapper.Map<Doctor>(entity)));
+        var updatedDoctor = mapper.Map<Doctor>(entity);
+        updatedDoctor.Specialization.Id = entity.IdSpecialization;
+        return mapper.Map<DoctorGetDto>(repository.Update(id, updatedDoctor));
     }
 
     /// <summary>
@@ -70,10 +82,20 @@ public class DoctorService(
     /// <inheritdoc cref="IDoctorService"/>
     public List<AppointmentGetDto> GetAppointmentsByDoctor(int id)
     {
-        return mapper.Map<List<AppointmentGetDto>>(
-            from  appointment in appointmentRepository.ReadAll() 
-            where appointment.Doctor.Id == id 
+        var appointmets = (
+            from appointment in appointmentRepository.ReadAll()
+            where appointment.Doctor.Id == id
             select appointment
         );
+        var appointmnetsDto =  mapper.Map<List<AppointmentGetDto>>(appointmets);
+        
+        foreach (var appointmentDto in appointmnetsDto)
+            appointmentDto.IdDoctor = id;
+        
+        foreach (var appointmentDto in appointmnetsDto)
+            foreach (var appointment in appointmets)
+                appointmentDto.IdPatient = appointment.Patient.Id;
+        
+        return appointmnetsDto;
     }
 }

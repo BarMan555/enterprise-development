@@ -1,6 +1,3 @@
-using Hospital.Domain.Enums;
-using Hospital.Domain.Models;
-
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
@@ -21,7 +18,7 @@ public class PatientGetDto
     /// <summary>
     /// Gender of the Patient
     /// </summary>
-    public required Gender Gender { get; set; }
+    public required int Gender { get; set; }
 
     /// <summary>
     /// Date of Birthday of the Patient
@@ -36,12 +33,12 @@ public class PatientGetDto
     /// <summary>
     /// Blood type of the Patient
     /// </summary>
-    public required BloodType BloodType { get; set; }
+    public required int BloodType { get; set; }
 
     /// <summary>
     /// RhFactor of the Patient
     /// </summary>
-    public required RhFactor RhFactor { get; set; }
+    public required int RhFactor { get; set; }
 
     /// <summary>
     /// Phone Number of the Patient

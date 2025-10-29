@@ -1,19 +1,17 @@
-using Hospital.Domain.Models;
-
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
-/// DTO Represents a Appointment for registering a <see cref="Patient"/> with a <see cref="Doctor"/>
+/// DTO Represents an Appointment
 /// </summary>
 public class AppointmentCreateUpdateDto
 {
     /// <summary>
-    /// Id <see cref="Patient"/> which registering on Appointment
+    /// ID Patient which registering on Appointment
     /// </summary>
     public required int IdPatient { get; set; }
 
     /// <summary>
-    /// Id <see cref="Doctor"/> for Appointment
+    /// ID Doctor for Appointment
     /// </summary>
     public required int IdDoctor { get; set; }
 
