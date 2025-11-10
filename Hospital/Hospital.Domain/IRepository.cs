@@ -14,7 +14,7 @@ public interface IRepository<TEntity, TKey>
     /// </summary>
     /// <param name="entity">Entity for creating</param>
     /// <returns>ID of new object</returns>
-    public Task<TKey> Create(TEntity entity);
+    public Task<TEntity> Create(TEntity entity);
     
     /// <summary>
     /// Get list of all entities from repository
