@@ -14,20 +14,20 @@ public interface IRepository<TEntity, TKey>
     /// </summary>
     /// <param name="entity">Entity for creating</param>
     /// <returns>ID of new object</returns>
-    public TKey Create(TEntity entity);
+    public Task<TKey> Create(TEntity entity);
     
     /// <summary>
     /// Get list of all entities from repository
     /// </summary>
     /// <returns>List of all objects</returns>
-    public List<TEntity> ReadAll();
+    public Task<List<TEntity>> ReadAll();
     
     /// <summary>
     /// Get entity from repository by its ID
     /// </summary>
     /// <param name="entityId">ID of entity</param>
     /// <returns>Object</returns>
-    public TEntity? Read(TKey entityId);
+    public Task<TEntity?> Read(TKey entityId);
     
     /// <summary>
     /// Update information about entity by its ID
@@ -35,12 +35,12 @@ public interface IRepository<TEntity, TKey>
     /// <param name="entityId">ID of old entity</param>
     /// <param name="entity">New entity</param>
     /// <returns></returns>
-    public TEntity? Update(TKey entityId, TEntity entity);
+    public Task<TEntity?> Update(TKey entityId, TEntity entity);
     
     /// <summary>
     /// Delete entity from repository
     /// </summary>
     /// <param name="entityId">ID of entity</param>
     /// <returns>Result of deleting</returns>
-    public bool Delete(TKey entityId);
+    public Task<bool> Delete(TKey entityId);
 }
