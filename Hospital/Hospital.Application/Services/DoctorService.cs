@@ -20,22 +20,23 @@ public class DoctorService(
     /// <summary>
     /// Create DTO entity
     /// </summary>
-    /// <param name="dto">DTO for creating</param>
+    /// <param name="entity">DTO for creating</param>
     /// <returns>DTO entity</returns>
-    public int Create(DoctorCreateUpdateDto entity)
+    public async Task<DoctorGetDto> Create(DoctorCreateUpdateDto entity)
     {
         var newDoctor = mapper.Map<Doctor>(entity);
         newDoctor.Specialization.Id = entity.IdSpecialization; 
-        return repository.Create(newDoctor);
+        var created = await repository.Create(newDoctor);
+        return mapper.Map<DoctorGetDto>(created);
     }
 
     /// <summary>
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public List<DoctorGetDto> GetAll()
+    public async Task<List<DoctorGetDto>> GetAll()
     {
-        var doctors = repository.ReadAll();
+        var doctors = await repository.ReadAll();
         var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors);
         
         for (var i = 0; i < doctorsDto.Count; i++)
@@ -47,11 +48,11 @@ public class DoctorService(
     /// <summary>
     /// Get DTO from repository by ID
     /// </summary>
-    /// <param name="dtoId">ID</param>
+    /// <param name="id">ID</param>
     /// <returns>DTO</returns>
-    public DoctorGetDto? Get(int id)
+    public async Task<DoctorGetDto> Get(int id)
     {
-        var doctor = repository.Read(id);
+        var doctor = await repository.Read(id);
         var doctorDto = mapper.Map<DoctorGetDto>(doctor);
         doctorDto.IdSpecialization = doctor.Specialization.Id;
         return doctorDto;
@@ -60,31 +61,31 @@ public class DoctorService(
     /// <summary>
     /// Update entity's data by new DTO 
     /// </summary>
-    /// <param name="dtoId">ID old entity</param>
-    /// <param name="dto">New DTO</param>
+    /// <param name="id">ID old entity</param>
+    /// <param name="entity">New DTO</param>
     /// <returns></returns>
-    public DoctorGetDto? Update(int id, DoctorCreateUpdateDto entity)
+    public async Task<DoctorGetDto> Update(int id, DoctorCreateUpdateDto entity)
     {
         var updatedDoctor = mapper.Map<Doctor>(entity);
         updatedDoctor.Specialization.Id = entity.IdSpecialization;
-        return mapper.Map<DoctorGetDto>(repository.Update(id, updatedDoctor));
+        return mapper.Map<DoctorGetDto>(await repository.Update(id, updatedDoctor));
     }
 
     /// <summary>
     /// Delete entity from repository
     /// </summary>
-    /// <param name="dtoId">Entity ID</param>
+    /// <param name="id">Entity ID</param>
     /// <returns>Result of deleting</returns>
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        return repository.Delete(id);
+        return await repository.Delete(id);
     }
     
     /// <inheritdoc cref="IDoctorService"/>
-    public List<AppointmentGetDto> GetAppointmentsByDoctor(int id)
+    public async Task<List<AppointmentGetDto>> GetAppointmentsByDoctor(int id)
     {
         var appointmets = (
-            from appointment in appointmentRepository.ReadAll()
+            from appointment in await appointmentRepository.ReadAll()
             where appointment.Doctor.Id == id
             select appointment
         ).ToList();

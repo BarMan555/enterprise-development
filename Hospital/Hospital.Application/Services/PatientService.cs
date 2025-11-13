@@ -21,24 +21,25 @@ public class PatientService(
     /// <summary>
     /// Create DTO entity
     /// </summary>
-    /// <param name="dto">DTO for creating</param>
+    /// <param name="entity">DTO for creating</param>
     /// <returns>DTO entity</returns>
-    public int Create(PatientCreateUpdateDto entity)
+    public async Task<PatientGetDto> Create(PatientCreateUpdateDto entity)
     { 
         var newPatient = mapper.Map<Patient>(entity);
         newPatient.Gender = (Gender)entity.Gender; 
         newPatient.BloodType = (BloodType)entity.BloodType; 
         newPatient.RhFactor = (RhFactor)entity.RhFactor; 
-        return repository.Create(newPatient);
+        var created = await repository.Create(newPatient);
+        return mapper.Map<PatientGetDto>(created);
     }
 
     /// <summary>
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public List<PatientGetDto> GetAll()
+    public async Task<List<PatientGetDto>> GetAll()
     {
-        var patients = repository.ReadAll();
+        var patients = await repository.ReadAll();
         var patientsDto = mapper.Map<List<PatientGetDto>>(patients);
 
         for (var i = 0; i < patientsDto.Count; i++)
@@ -54,11 +55,11 @@ public class PatientService(
     /// <summary>
     /// Get DTO from repository by ID
     /// </summary>
-    /// <param name="dtoId">ID</param>
+    /// <param name="id">ID</param>
     /// <returns>DTO</returns>
-    public PatientGetDto? Get(int id)
+    public async Task<PatientGetDto> Get(int id)
     {
-        var patient = repository.Read(id);
+        var patient = await repository.Read(id);
         var patientDto = mapper.Map<PatientGetDto>(patient);
         patientDto.Gender = (int)patient.Gender;
         patientDto.BloodType = (int)patient.BloodType;
@@ -69,33 +70,33 @@ public class PatientService(
     /// <summary>
     /// Update entity's data by new DTO 
     /// </summary>
-    /// <param name="dtoId">ID old entity</param>
-    /// <param name="dto">New DTO</param>
+    /// <param name="id">ID old entity</param>
+    /// <param name="entity">New DTO</param>
     /// <returns></returns>
-    public PatientGetDto? Update(int id, PatientCreateUpdateDto entity)
+    public async Task<PatientGetDto> Update(int id, PatientCreateUpdateDto entity)
     {
         var updatedPatient = mapper.Map<Patient>(entity);
         updatedPatient.Gender = (Gender)entity.Gender;
         updatedPatient.BloodType = (BloodType)entity.BloodType;
         updatedPatient.RhFactor = (RhFactor)entity.RhFactor;
-        return mapper.Map<PatientGetDto>(repository.Update(id, updatedPatient));
+        return mapper.Map<PatientGetDto>(await repository.Update(id, updatedPatient));
     }
 
     /// <summary>
     /// Delete entity from repository
     /// </summary>
-    /// <param name="dtoId">Entity ID</param>
+    /// <param name="id">Entity ID</param>
     /// <returns>Result of deleting</returns>
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        return repository.Delete(id);
+        return await repository.Delete(id);
     }
     
     /// <inheritdoc cref="IPatientService"/>
-    public List<AppointmentGetDto> GetAppointmentsByPatient(int id)
+    public async Task<List<AppointmentGetDto>> GetAppointmentsByPatient(int id)
     {
         var appointmets = (
-            from appointment in appointmentRepository.ReadAll()
+            from appointment in await appointmentRepository.ReadAll()
             where appointment.Patient.Id == id
             select appointment
         ).ToList();

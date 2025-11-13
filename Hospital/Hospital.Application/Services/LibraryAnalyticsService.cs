@@ -25,10 +25,10 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
-    public List<DoctorGetDto> GetDoctorsWithExperienceAtLeastYears(int year)
+    public async Task<List<DoctorGetDto>> GetDoctorsWithExperienceAtLeastYears(int year)
     {
         var doctors = (
-            from d in doctorRepository.ReadAll()
+            from d in await doctorRepository.ReadAll()
             where d.ExperienceYears >= year
             select d
         ).ToList();
@@ -46,9 +46,9 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public List<PatientGetDto> GetPatientsByDoctor(int doctorId)
+    public async Task<List<PatientGetDto>> GetPatientsByDoctor(int doctorId)
     {
-        var patients = ((from a in appointmentRepository.ReadAll()
+        var patients = ((from a in await appointmentRepository.ReadAll()
             where a.Doctor.Id == doctorId
             select a.Patient).ToList());
         var patientsDto = mapper.Map<List<PatientGetDto>>(patients);
@@ -67,9 +67,9 @@ public class LibraryAnalyticsService(
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>Counting</returns>
-    public int GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(DateTime start, DateTime end)
+    public async Task<int> GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(DateTime start, DateTime end)
     {
-        return (from a in appointmentRepository.ReadAll()
+        return (from a in await appointmentRepository.ReadAll()
             where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
             select a.Id).Count();
     }
@@ -80,13 +80,13 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public List<PatientGetDto> GetPatientsOlderThanWithMultipleDoctors(int age)
+    public async Task<List<PatientGetDto>> GetPatientsOlderThanWithMultipleDoctors(int age)
     {
         var today = DateTime.Today;
-        var patients = patientRepository.ReadAll().Where(p => (today - p.DateOfBirth).Days / 365 >= age).ToList();
+        var patients = (await patientRepository.ReadAll()).Where(p => (today - p.DateOfBirth).Days / 365 >= age).ToList();
         var appointments = appointmentRepository.ReadAll();
 
-        var patientDoctorGroups = appointments
+        var patientDoctorGroups = (await appointments)
             .GroupBy(a => a.Patient.Id)
             .ToDictionary(
                 g => g.Key,
@@ -118,9 +118,9 @@ public class LibraryAnalyticsService(
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
-    public List<AppointmentGetDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
+    public async Task<List<AppointmentGetDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
     {
-         var appointments = (from a in appointmentRepository.ReadAll()
+         var appointments = (from a in await appointmentRepository.ReadAll()
             where a.RoomNumber == roomId
             where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
             select a).ToList();
