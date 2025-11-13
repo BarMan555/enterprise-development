@@ -5,17 +5,17 @@ namespace Hospital.Domain.Seeders;
 /// <summary>
 /// Seeder for appointments repository
 /// </summary>
-public class InMemoryAppointmentRepositorySeeder :  ISeeder<Appointment, int>
+public class AppointmentRepositorySeeder :  ISeeder<Appointment, int>
 {
     /// <summary>
     /// List of patients
     /// </summary>
-    private List<Patient> _patients = (new InMemoryPatientRepositorySeeder()).GetItems();
+    private List<Patient> _patients = (new PatientRepositorySeeder()).GetItems();
     
     /// <summary>
     /// List of doctors
     /// </summary>
-    private List<Doctor> _doctors = (new InMemoryDoctorRepositorySeeder()).GetItems();
+    private List<Doctor> _doctors = (new DoctorRepositorySeeder()).GetItems();
     
     /// <summary>
     /// Get list of data

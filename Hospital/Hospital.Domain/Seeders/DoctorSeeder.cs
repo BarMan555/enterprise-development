@@ -6,7 +6,7 @@ namespace Hospital.Domain.Seeders;
 /// <summary>
 /// Seeder for doctor repository
 /// </summary>
-public class InMemoryDoctorRepositorySeeder : ISeeder<Doctor, int>
+public class DoctorRepositorySeeder : ISeeder<Doctor, int>
 {
     /// <summary>
     /// List of doctor's specialization
