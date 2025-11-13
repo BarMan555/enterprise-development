@@ -24,9 +24,9 @@ public class AppointmentController(
     [HttpGet("{id}/patient")]
     [ProducesResponseType(typeof(PatientGetDto), 200)]
     [ProducesResponseType(500)]
-    public ActionResult<PatientGetDto> GetPatientById(int id)
+    public async Task<ActionResult<PatientGetDto>> GetPatientById(int id)
     {
-        return Logging(
+        return await Logging(
             nameof(GetPatientById),
             () => Ok(service.GetParientByAppointment(id))
         );
@@ -40,9 +40,9 @@ public class AppointmentController(
     [HttpGet("{id}/doctor")]
     [ProducesResponseType(typeof(DoctorGetDto), 200)]
     [ProducesResponseType(500)]
-    public ActionResult<DoctorGetDto> GetDoctorById(int id)
+    public async Task<ActionResult<DoctorGetDto>> GetDoctorById(int id)
     {
-        return Logging(
+        return await Logging(
             nameof(GetDoctorById),
             () => Ok(service.GetDoctorByAppointment(id))
         );

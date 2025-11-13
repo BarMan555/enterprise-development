@@ -22,9 +22,9 @@ public class PatientController(IPatientService service, ILogger<PatientControlle
     [HttpGet("{id}/appointments")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError),]
-    public ActionResult<List<AppointmentGetDto>> GetAppointmentsById(int id)
+    public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsById(int id)
     {
-        return Logging(
+        return await Logging(
             nameof(GetAppointmentsById), 
             () => Ok(service.GetAppointmentsByPatient(id))
         );

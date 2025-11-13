@@ -20,7 +20,7 @@ public class AnalyticController(
     /// <summary>
     /// Helper method for consistent logging and error handling.
     /// </summary>
-    private ActionResult Logging(string method, Func<ActionResult> action)
+    private async Task<ActionResult> Logging(string method, Func<ActionResult> action)
     {
         logger.LogInformation("START: {Method}", method);
         try
@@ -53,9 +53,9 @@ public class AnalyticController(
     [HttpGet("doctors-with-experience")]
     [ProducesResponseType(typeof(List<DoctorGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<DoctorGetDto>> GetDoctorsWithExperienceAtLeastYears([FromQuery] int year)
+    public async Task<ActionResult<List<DoctorGetDto>>> GetDoctorsWithExperienceAtLeastYears([FromQuery] int year)
     {
-        return Logging(nameof(GetDoctorsWithExperienceAtLeastYears), () =>
+        return await Logging(nameof(GetDoctorsWithExperienceAtLeastYears), () =>
         {
             var result = analyticsService.GetDoctorsWithExperienceAtLeastYears(year);
             return Ok(result);
@@ -70,9 +70,9 @@ public class AnalyticController(
     [HttpGet("patients-by-doctor")]
     [ProducesResponseType(typeof(List<PatientGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<PatientGetDto>> GetPatientsByDoctor([FromQuery] int doctorId)
+    public async Task<ActionResult<List<PatientGetDto>>> GetPatientsByDoctor([FromQuery] int doctorId)
     {
-        return Logging(nameof(GetPatientsByDoctor), () =>
+        return await Logging(nameof(GetPatientsByDoctor), () =>
         {
             var result = analyticsService.GetPatientsByDoctor(doctorId);
             return Ok(result);
@@ -88,11 +88,11 @@ public class AnalyticController(
     [HttpGet("count-appointments-with-repeat-visits")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<int> GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(
+    public async Task<ActionResult<int>> GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(
         [FromQuery] DateTime start, 
         [FromQuery] DateTime end)
     {
-        return Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
+        return await Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
         {
             var result = analyticsService.GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(start, end);
             return Ok(result);
@@ -108,9 +108,9 @@ public class AnalyticController(
     [HttpGet("patients-older-than")]
     [ProducesResponseType(typeof(List<PatientGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<PatientGetDto>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
+    public async Task<ActionResult<List<PatientGetDto>>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
     {
-        return Logging(nameof(GetPatientsOlderThanWithMultipleDoctors), () =>
+        return await Logging(nameof(GetPatientsOlderThanWithMultipleDoctors), () =>
         {
             var result = analyticsService.GetPatientsOlderThanWithMultipleDoctors(age);
             return Ok(result);
@@ -128,15 +128,15 @@ public class AnalyticController(
     [HttpGet("appointments-in-specific-room")]
     [ProducesResponseType(typeof(List<AppointmentGetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(500)]
-    public ActionResult<List<AppointmentGetDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(
+    public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(
         [FromQuery] int roomId,  
         [FromQuery] DateTime start, 
         [FromQuery] DateTime end)
     {
-        return Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
+        return await Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
         {
             var result = analyticsService.GetAppointmentsWhenInSpecificRoomInSpecificPeriod(roomId, start, end);
             return Ok(result);
-        });
+        }); 
     }
 }

@@ -24,7 +24,7 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     /// <summary>
     /// Helper method for consistent logging and error handling.
     /// </summary>
-    protected ActionResult Logging(string method, Func<ActionResult> action)
+    protected async Task<ActionResult> Logging(string method, Func<ActionResult> action)
     {
         logger.LogInformation("START: {Method}", method);
         try
@@ -57,8 +57,8 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(500)]
-    public ActionResult<TKey> Create(TCreateUpdateDto newDto) =>
-        Logging(nameof(Create), () => Created(nameof(Create), appService.Create(newDto)));
+    public async Task<ActionResult<TKey>> Create(TCreateUpdateDto newDto) =>
+        await Logging(nameof(Create), () => Created(nameof(Create), appService.Create(newDto)));
 
     /// <summary>
     /// Updates an existing entity.
@@ -69,8 +69,8 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpPut("{id:int}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<TGetDto> Edit(TKey id, [FromBody] TCreateUpdateDto newDto) =>
-        Logging(nameof(Edit), () => Ok(appService.Update(id, newDto)));
+    public async Task<ActionResult<TGetDto>> Edit(TKey id, [FromBody] TCreateUpdateDto newDto) => 
+        await Logging(nameof(Edit), () => Ok(appService.Update(id, newDto)));
 
     /// <summary>
     /// Retrieves an entity by its ID.
@@ -80,7 +80,8 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpGet("{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<TGetDto> Get(TKey id) => Logging(nameof(Get), () => Ok(appService.Get(id)));
+    public async Task<ActionResult<TGetDto>> Get(TKey id) => 
+        await Logging(nameof(Get), () => Ok(appService.Get(id)));
 
     /// <summary>
     /// Retrieves all entities.
@@ -89,7 +90,8 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpGet]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public ActionResult<List<TGetDto>> GetAll() => Logging(nameof(GetAll), () => Ok(appService.GetAll()));
+    public async Task<ActionResult<List<TGetDto>>> GetAll() => 
+        await Logging(nameof(GetAll), () => Ok(appService.GetAll()));
 
     /// <summary>
     /// Deletes an entity by ID.
@@ -98,5 +100,6 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<bool> Delete(TKey id) => Logging(nameof(Delete), () => Ok(appService.Delete(id)));
+    public async Task<ActionResult<bool>> Delete(TKey id) => 
+        await Logging(nameof(Delete), () => Ok(appService.Delete(id)));
 }
