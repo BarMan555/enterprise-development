@@ -12,14 +12,14 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
-    public List<DoctorGetDto> GetDoctorsWithExperienceAtLeastYears(int year);
+    public Task<List<DoctorGetDto>> GetDoctorsWithExperienceAtLeastYears(int year);
     
     /// <summary>
     /// Get patients assigned to a specific doctor
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public List<PatientGetDto> GetPatientsByDoctor(int doctorId);
+    public Task<List<PatientGetDto>> GetPatientsByDoctor(int doctorId);
     
     /// <summary>
     /// Get counting of repeat patient appointments in specific period.
@@ -27,7 +27,7 @@ public interface ILibraryAnalyticsService
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>Counting</returns>
-    public int GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(DateTime start, DateTime end);
+    public Task<int> GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(DateTime start, DateTime end);
     
     /// <summary>
     /// Get patients over some year old who have
@@ -35,7 +35,7 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public List<PatientGetDto> GetPatientsOlderThanWithMultipleDoctors(int age);
+    public Task<List<PatientGetDto>> GetPatientsOlderThanWithMultipleDoctors(int age);
     
     /// <summary>
     /// Get appointments in specific period
@@ -45,5 +45,5 @@ public interface ILibraryAnalyticsService
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
-    public List<AppointmentGetDto> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId, DateTime start, DateTime end);
+    public Task<List<AppointmentGetDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId, DateTime start, DateTime end);
 }

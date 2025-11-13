@@ -14,20 +14,20 @@ public interface IApplicationService<TGetDto, TCreateUpdateDto, TKey>
     /// </summary>
     /// <param name="dto">DTO for creating</param>
     /// <returns>DTO entity</returns>
-    public TKey Create(TCreateUpdateDto dto);
+    public Task<TGetDto> Create(TCreateUpdateDto dto);
     
     /// <summary>
     /// Get DTO from repository by ID
     /// </summary>
     /// <param name="dtoId">ID</param>
     /// <returns>DTO</returns>
-    public TGetDto Get(TKey dtoId);
+    public Task<TGetDto> Get(TKey dtoId);
     
     /// <summary>
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public List<TGetDto> GetAll();
+    public Task<List<TGetDto> >GetAll();
     
     /// <summary>
     /// Update entity's data by new DTO 
@@ -35,12 +35,12 @@ public interface IApplicationService<TGetDto, TCreateUpdateDto, TKey>
     /// <param name="dtoId">ID old entity</param>
     /// <param name="dto">New DTO</param>
     /// <returns></returns>
-    public TGetDto Update(TKey dtoId, TCreateUpdateDto dto);
+    public Task<TGetDto> Update(TKey dtoId, TCreateUpdateDto dto);
     
     /// <summary>
     /// Delete entity from repository
     /// </summary>
     /// <param name="dtoId">Entity ID</param>
     /// <returns>Result of deleting</returns>
-    public bool Delete(TKey dtoId);
+    public Task<bool> Delete(TKey dtoId);
 }

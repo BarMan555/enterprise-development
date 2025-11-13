@@ -12,5 +12,5 @@ public interface IDoctorService : IApplicationService<DoctorGetDto, DoctorCreate
     /// </summary>
     /// <param name="id"></param>
     /// <returns>list of appointments dto</returns>
-    public List<AppointmentGetDto> GetAppointmentsByDoctor(int id);
+    public Task<List<AppointmentGetDto>> GetAppointmentsByDoctor(int id);
 }

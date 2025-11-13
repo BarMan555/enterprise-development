@@ -12,12 +12,12 @@ public interface IAppointmentService : IApplicationService<AppointmentGetDto, Ap
     /// </summary>
     /// <param name="id"></param>
     /// <returns>doctor dto</returns>
-    public DoctorGetDto GetDoctorByAppointment(int id);
+    public Task<DoctorGetDto> GetDoctorByAppointment(int id);
 
     /// <summary>
     /// Get patient of the appointment
     /// </summary>
     /// <param name="id"></param>
     /// <returns>patient dto</returns>
-    public PatientGetDto GetParientByAppointment(int id);
+    public Task<PatientGetDto> GetParientByAppointment(int id);
 }
