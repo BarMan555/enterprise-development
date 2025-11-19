@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Contracts.Dtos;
+using MongoDB.Bson;
 
 namespace Hospital.Api.Controllers;
 
@@ -48,12 +49,18 @@ public class AnalyticController(
     [HttpGet("patients-by-doctor")]
     [ProducesResponseType(typeof(List<PatientGetDto>), 200)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<List<PatientGetDto>>> GetPatientsByDoctor([FromQuery] int doctorId)
+    public async Task<ActionResult<List<PatientGetDto>>> GetPatientsByDoctor([FromQuery] string doctorId)
     {
         logger.LogInformation("{method} method of {controller} is called with {doctorId} parameter", nameof(GetPatientsByDoctor), GetType().Name, doctorId);
         try
         {
-            var res = await analyticsService.GetPatientsByDoctor(doctorId);
+            if (!ObjectId.TryParse(doctorId, out var objectId))
+            {
+                logger.LogError("An exception happened during {method} method of {controller}", nameof(GetPatientsByDoctor), GetType().Name);
+                return BadRequest("Invalid Id format");
+            }
+            
+            var res = await analyticsService.GetPatientsByDoctor(objectId);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientsByDoctor), GetType().Name);
             return Ok(res);
         }

@@ -1,6 +1,7 @@
 using Hospital.Application.Contracts.Dtos;
 using Hospital.Application.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace Hospital.Api.Controllers;
 
@@ -14,7 +15,7 @@ namespace Hospital.Api.Controllers;
 public class AppointmentController(
     IAppointmentService service,
     ILogger<AppointmentController> logger)
-    : CrudBaseController<AppointmentGetDto, AppointmentCreateUpdateDto, int>(service, logger)
+    : CrudBaseController<AppointmentGetDto, AppointmentCreateUpdateDto, ObjectId>(service, logger)
 {
     /// <summary>
     /// Get Patient of the appointment by id
@@ -24,12 +25,18 @@ public class AppointmentController(
     [HttpGet("{id}/patient")]
     [ProducesResponseType(typeof(PatientGetDto), 200)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<PatientGetDto>> GetPatientById(int id)
+    public async Task<ActionResult<PatientGetDto>> GetPatientById(string id)
     {
         logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(GetPatientById), GetType().Name, id);
         try
         {
-            var res = await service.GetParientByAppointment(id);
+            if (!ObjectId.TryParse(id, out var objectId))
+            {
+                logger.LogError("An exception happened during {method} method of {controller}", nameof(GetPatientById), GetType().Name);
+                return BadRequest("Invalid Id format");
+            }
+            
+            var res = await service.GetParientByAppointment(objectId);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientById), GetType().Name);
             return Ok(res);
         }
@@ -48,12 +55,18 @@ public class AppointmentController(
     [HttpGet("{id}/doctor")]
     [ProducesResponseType(typeof(DoctorGetDto), 200)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<DoctorGetDto>> GetDoctorById(int id)
+    public async Task<ActionResult<DoctorGetDto>> GetDoctorById(string id)
     {
         logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(GetDoctorById), GetType().Name, id);
         try
         {
-            var res = await service.GetDoctorByAppointment(id);
+            if (!ObjectId.TryParse(id, out var objectId))
+            {
+                logger.LogError("An exception happened during {method} method of {controller}", nameof(GetDoctorById), GetType().Name);
+                return BadRequest("Invalid Id format");
+            }
+            
+            var res = await service.GetDoctorByAppointment(objectId);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetDoctorById), GetType().Name);
             return Ok(res);
         }
