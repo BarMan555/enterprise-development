@@ -4,6 +4,7 @@ using Hospital.Application.Contracts.Dtos;
 using Hospital.Domain;
 using Hospital.Domain.Models;
 using Hospital.Domain.Enums;
+using MongoDB.Bson;
 
 namespace Hospital.Application.Services;
 
@@ -14,16 +15,12 @@ namespace Hospital.Application.Services;
 /// <param name="appointmentRepository">repository od appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class PatientService(
-    IRepositoryAsync<Patient, int> repository, 
-    IRepositoryAsync<Appointment, int> appointmentRepository,
+    IRepositoryAsync<Patient, ObjectId> repository, 
+    IRepositoryAsync<Appointment, ObjectId> appointmentRepository,
     IMapper mapper) 
     : IPatientService
 {
-    /// <summary>
-    /// Create DTO entity
-    /// </summary>
-    /// <param name="entity">DTO for creating</param>
-    /// <returns>DTO entity</returns>
+    /// <inheritdoc cref="IPatientService"/>
     public async Task<PatientGetDto> Create(PatientCreateUpdateDto entity)
     { 
         var newPatient = mapper.Map<Patient>(entity);
@@ -34,10 +31,7 @@ public class PatientService(
         return mapper.Map<PatientGetDto>(created);
     }
 
-    /// <summary>
-    /// Get all DTO from repository
-    /// </summary>
-    /// <returns>DTO</returns>
+    /// <inheritdoc cref="IPatientService"/>
     public async Task<List<PatientGetDto>> GetAll()
     {
         var patients = await repository.ReadAll();
@@ -53,12 +47,8 @@ public class PatientService(
         return patientsDto;
     }
 
-    /// <summary>
-    /// Get DTO from repository by ID
-    /// </summary>
-    /// <param name="id">ID</param>
-    /// <returns>DTO</returns>
-    public async Task<PatientGetDto> Get(int id)
+    /// <inheritdoc cref="IPatientService"/>
+    public async Task<PatientGetDto> Get(ObjectId id)
     {
         var patient = await repository.Read(id);
         var patientDto = mapper.Map<PatientGetDto>(patient);
@@ -68,13 +58,8 @@ public class PatientService(
         return patientDto;
     }
 
-    /// <summary>
-    /// Update entity's data by new DTO 
-    /// </summary>
-    /// <param name="id">ID old entity</param>
-    /// <param name="entity">New DTO</param>
-    /// <returns></returns>
-    public async Task<PatientGetDto> Update(int id, PatientCreateUpdateDto entity)
+    /// <inheritdoc cref="IPatientService"/>
+    public async Task<PatientGetDto> Update(ObjectId id, PatientCreateUpdateDto entity)
     {
         var updatedPatient = mapper.Map<Patient>(entity);
         updatedPatient.Gender = (Gender)entity.Gender;
@@ -83,31 +68,31 @@ public class PatientService(
         return mapper.Map<PatientGetDto>(await repository.Update(id, updatedPatient));
     }
 
-    /// <summary>
-    /// Delete entity from repository
-    /// </summary>
-    /// <param name="id">Entity ID</param>
-    /// <returns>Result of deleting</returns>
-    public async Task<bool> Delete(int id)
+    /// <inheritdoc cref="IPatientService"/>
+    public async Task<bool> Delete(ObjectId id)
     {
         return await repository.Delete(id);
     }
     
     /// <inheritdoc cref="IPatientService"/>
-    public async Task<List<AppointmentGetDto>> GetAppointmentsByPatient(int id)
+    public async Task<List<AppointmentGetDto>?> GetAppointmentsByPatient(ObjectId id)
     {
-        var appointmets = (
-            from appointment in await appointmentRepository.ReadAll()
+        var appointments = (
+            from appointment in (await appointmentRepository.ReadAll())
             where appointment.Patient.Id == id
             select appointment
         ).ToList();
-        var appointmnetsDto =  mapper.Map<List<AppointmentGetDto>>(appointmets);
+        
+        if (appointments.Count == 0) 
+            return null;
+        
+        var appointmnetsDto =  mapper.Map<List<AppointmentGetDto>>(appointments);
         
         for (var i = 0; i < appointmnetsDto.Count; i++)
-            appointmnetsDto[i].IdDoctor = appointmets[i].Doctor.Id;
+            appointmnetsDto[i].IdDoctor = appointments[i].Doctor.Id.ToString();
         
         for (var i = 0; i < appointmnetsDto.Count; i++)
-            appointmnetsDto[i].IdPatient = id;
+            appointmnetsDto[i].IdPatient = id.ToString();
         
         return appointmnetsDto;
     }

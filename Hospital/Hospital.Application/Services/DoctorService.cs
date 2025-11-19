@@ -3,6 +3,8 @@ using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Contracts.Dtos;
 using Hospital.Domain;
 using Hospital.Domain.Models;
+using Hospital.Domain.Enums;
+using MongoDB.Bson;
 
 namespace Hospital.Application.Services;
 
@@ -13,28 +15,25 @@ namespace Hospital.Application.Services;
 /// <param name="appointmentRepository">repository od appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class DoctorService(
-    IRepositoryAsync<Doctor, int> repository, 
-    IRepositoryAsync<Appointment, int> appointmentRepository,
+    IRepositoryAsync<Doctor, ObjectId> repository, 
+    IRepositoryAsync<Appointment, ObjectId> appointmentRepository,
     IMapper mapper) 
     : IDoctorService
 {
-    /// <summary>
-    /// Create DTO entity
-    /// </summary>
-    /// <param name="entity">DTO for creating</param>
-    /// <returns>DTO entity</returns>
+    /// <inheritdoc cref="IDoctorService"/>
     public async Task<DoctorGetDto> Create(DoctorCreateUpdateDto entity)
     {
         var newDoctor = mapper.Map<Doctor>(entity);
+        
+        newDoctor.Id = ObjectId.GenerateNewId();
+        newDoctor.Specialization ??= new Specialization{Id=0, Name=null};
         newDoctor.Specialization.Id = entity.IdSpecialization; 
+        
         var created = await repository.Create(newDoctor);
         return mapper.Map<DoctorGetDto>(created);
     }
 
-    /// <summary>
-    /// Get all DTO from repository
-    /// </summary>
-    /// <returns>DTO</returns>
+    /// <inheritdoc cref="IDoctorService"/>
     public async Task<List<DoctorGetDto>> GetAll()
     {
         var doctors = await repository.ReadAll();
@@ -46,12 +45,8 @@ public class DoctorService(
         return doctorsDto;
     }
 
-    /// <summary>
-    /// Get DTO from repository by ID
-    /// </summary>
-    /// <param name="id">ID</param>
-    /// <returns>DTO</returns>
-    public async Task<DoctorGetDto> Get(int id)
+    /// <inheritdoc cref="IDoctorService"/>
+    public async Task<DoctorGetDto> Get(ObjectId id)
     {
         var doctor = await repository.Read(id);
         var doctorDto = mapper.Map<DoctorGetDto>(doctor);
@@ -59,45 +54,42 @@ public class DoctorService(
         return doctorDto;
     }
 
-    /// <summary>
-    /// Update entity's data by new DTO 
-    /// </summary>
-    /// <param name="id">ID old entity</param>
-    /// <param name="entity">New DTO</param>
-    /// <returns></returns>
-    public async Task<DoctorGetDto> Update(int id, DoctorCreateUpdateDto entity)
+    /// <inheritdoc cref="IDoctorService"/>
+    public async Task<DoctorGetDto> Update(ObjectId id, DoctorCreateUpdateDto entity)
     {
         var updatedDoctor = mapper.Map<Doctor>(entity);
+        
+        updatedDoctor.Specialization ??= new Specialization{Id=0, Name=null};
         updatedDoctor.Specialization.Id = entity.IdSpecialization;
+        
         return mapper.Map<DoctorGetDto>(await repository.Update(id, updatedDoctor));
     }
 
-    /// <summary>
-    /// Delete entity from repository
-    /// </summary>
-    /// <param name="id">Entity ID</param>
-    /// <returns>Result of deleting</returns>
-    public async Task<bool> Delete(int id)
+    /// <inheritdoc cref="IDoctorService"/>
+    public async Task<bool> Delete(ObjectId id)
     {
         return await repository.Delete(id);
     }
     
     /// <inheritdoc cref="IDoctorService"/>
-    public async Task<List<AppointmentGetDto>> GetAppointmentsByDoctor(int id)
+    public async Task<List<AppointmentGetDto>?> GetAppointmentsByDoctor(ObjectId id)
     {
-        var appointmets = (
+        var appointments = (
             from appointment in await appointmentRepository.ReadAll()
             where appointment.Doctor.Id == id
             select appointment
         ).ToList();
-        var appointmnetsDto =  mapper.Map<List<AppointmentGetDto>>(appointmets);
+        if (!appointments.Any()) 
+            return null;
         
-        for (var i = 0; i < appointmnetsDto.Count; i++)
-            appointmnetsDto[i].IdDoctor = id;
+        var appointmentsDto =  mapper.Map<List<AppointmentGetDto>>(appointments);
         
-        for (var i = 0; i < appointmnetsDto.Count; i++)
-            appointmnetsDto[i].IdPatient = appointmets[i].Patient.Id;
+        for (var i = 0; i < appointmentsDto.Count; i++)
+            appointmentsDto[i].IdDoctor = id.ToString();
         
-        return appointmnetsDto;
+        for (var i = 0; i < appointmentsDto.Count; i++)
+            appointmentsDto[i].IdPatient = appointments[i].Patient.Id.ToString();
+        
+        return appointmentsDto;
     }
 }
