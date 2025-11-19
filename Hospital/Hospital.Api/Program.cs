@@ -9,6 +9,7 @@ using Hospital.Infrastructure.EfCore;
 using Hospital.Infrastructure.EfCore.Repositories;
 using Hospital.ServiceDefaults;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,28 +30,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMongoDB(mongoConnectionString, "HospitalDb");
 });
 
-/*builder.Services.AddSingleton<IMongoClient>(sp =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("library");
-    return new MongoClient(connectionString);
-});
-
-builder.Services.AddSingleton(sp =>
-{
-    var client = sp.GetRequiredService<IMongoClient>();
-    var database = client.GetDatabase("library"); 
-    return new MongoClient(database);
-});*/
-
-
-// Add services to the container.
-builder.Services.AddSingleton<PatientRepositorySeeder>();
-builder.Services.AddSingleton<DoctorRepositorySeeder>();
-builder.Services.AddSingleton<AppointmentRepositorySeeder>();
-
-builder.Services.AddScoped<IRepositoryAsync<Patient, int>, PatientEfCoreRepository>();
-builder.Services.AddScoped<IRepositoryAsync<Doctor, int>, DoctorEfCoreRepository>();
-builder.Services.AddScoped<IRepositoryAsync<Appointment, int>, AppointmentEfCoreRepository>();
+// Add services to the container
+builder.Services.AddScoped<IRepositoryAsync<Patient, ObjectId>, PatientEfCoreRepository>();
+builder.Services.AddScoped<IRepositoryAsync<Doctor, ObjectId>, DoctorEfCoreRepository>();
+builder.Services.AddScoped<IRepositoryAsync<Appointment, ObjectId>, AppointmentEfCoreRepository>();
 
 builder.Services.AddScoped<ILibraryAnalyticsService, LibraryAnalyticsService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
