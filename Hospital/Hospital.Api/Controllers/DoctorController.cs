@@ -20,13 +20,21 @@ public class DoctorController(IDoctorService service, ILogger<DoctorController> 
     /// <param name="id"></param>
     /// <returns>list of appointments</returns>
     [HttpGet("{id}/appointments")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError),]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsById(int id)
     {
-        return await Logging(
-            nameof(GetAppointmentsById), 
-            () => Ok(service.GetAppointmentsByDoctor(id))
-        );
+        logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(GetAppointmentsById), GetType().Name, id);
+        try
+        {
+            var res = await service.GetAppointmentsByDoctor(id);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetAppointmentsById), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetAppointmentsById), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
 }

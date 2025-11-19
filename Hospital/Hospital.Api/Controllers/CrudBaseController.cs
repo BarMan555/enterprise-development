@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Hospital.Application.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace Hospital.Api.Controllers;
 /// <param name="logger">Logger for information.</param>
 [ApiController]
 [Route("api/[controller]")]
-public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
+public abstract class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     IApplicationService<TGetDto, TCreateUpdateDto, TKey> appService,
     ILogger<CrudBaseController<TGetDto, TCreateUpdateDto, TKey>> logger) 
     : ControllerBase
@@ -22,34 +23,6 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     where TKey : struct
 {
     /// <summary>
-    /// Helper method for consistent logging and error handling.
-    /// </summary>
-    protected async Task<ActionResult> Logging(string method, Func<ActionResult> action)
-    {
-        logger.LogInformation("START: {Method}", method);
-        try
-        {
-            var result = action();
-            var count = 0;
-            if (result is OkObjectResult okResult && okResult.Value != null)
-            {
-                if (okResult.Value is System.Collections.IEnumerable collection)
-                {
-                    count = collection.Cast<object>().Count();
-                }
-                else count = 1;
-            }
-            logger.LogInformation("SUCCESS: {Method}. Found {Count} records.", method, count);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "ERROR: {Method} failed.", method);
-            return StatusCode(500, $"Server error: {ex.Message}");
-        }
-    }
-
-    /// <summary>
     /// Creates a new entity.
     /// </summary>
     /// <param name="newDto">Data for the new entity.</param>
@@ -57,8 +30,22 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<TKey>> Create(TCreateUpdateDto newDto) =>
-        await Logging(nameof(Create), () => Created(nameof(Create), appService.Create(newDto)));
+    public async Task<ActionResult<TKey>> Create(TCreateUpdateDto newDto)
+    {
+        logger.LogInformation("{method} method of {controller} is called with {@dto} parameter", nameof(Create), GetType().Name, newDto);
+        try
+        {
+            var result = await appService.Create(newDto);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(Create), GetType().Name);
+            return CreatedAtAction(nameof(this.Create), result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e,"An exception happened during {method} method of {controller}", nameof(Create), GetType().Name);
+            return StatusCode(500, $"{e.Message}\n\r{e.InnerException?.Message}");
+        }
+    }
+
 
     /// <summary>
     /// Updates an existing entity.
@@ -66,11 +53,24 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     /// <param name="id">Identifier of the entity to update.</param>
     /// <param name="newDto">Updated entity data.</param>
     /// <returns>The updated entity.</returns>
-    [HttpPut("{id:int}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<TGetDto>> Edit(TKey id, [FromBody] TCreateUpdateDto newDto) => 
-        await Logging(nameof(Edit), () => Ok(appService.Update(id, newDto)));
+    public async Task<ActionResult<TGetDto>> Edit(TKey id, [FromBody] TCreateUpdateDto newDto)
+    {
+        logger.LogInformation("{method} method of {controller} is called with {@dto} parameter", nameof(Edit), GetType().Name, newDto);
+        try
+        {
+            var result = await appService.Update(id, newDto);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(Edit), GetType().Name);
+            return CreatedAtAction(nameof(this.Edit), result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e,"An exception happened during {method} method of {controller}", nameof(Edit), GetType().Name);
+            return StatusCode(500, $"{e.Message}\n\r{e.InnerException?.Message}");
+        }
+    }
 
     /// <summary>
     /// Retrieves an entity by its ID.
@@ -79,9 +79,23 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     /// <returns>The entity if found, otherwise 204 No Content.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(200)]
+    [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<TGetDto>> Get(TKey id) => 
-        await Logging(nameof(Get), () => Ok(appService.Get(id)));
+    public async Task<ActionResult<TGetDto>> Get(TKey id)
+    {
+        logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(Get), GetType().Name, id);
+        try
+        {
+            var res = await appService.Get(id);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(Get), GetType().Name);
+            return res != null ? Ok(res) : NoContent();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An exception happened during {method} method of {controller}", nameof(Get), GetType().Name);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
+    }
 
     /// <summary>
     /// Retrieves all entities.
@@ -90,16 +104,43 @@ public class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     [HttpGet]
     [ProducesResponseType(200)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<List<TGetDto>>> GetAll() => 
-        await Logging(nameof(GetAll), () => Ok(appService.GetAll()));
+    public async Task<ActionResult<List<TGetDto>>> GetAll()
+    {
+        logger.LogInformation("{method} method of {controller} is called", nameof(GetAll), GetType().Name);
+        try
+        {
+            var res = await appService.GetAll();
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetAll), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An exception happened during {method} method of {controller}", nameof(GetAll), GetType().Name);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
+    }
 
     /// <summary>
     /// Deletes an entity by ID.
     /// </summary>
     /// <param name="id">Identifier of the entity to delete.</param>
     [HttpDelete("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<bool>> Delete(TKey id) => 
-        await Logging(nameof(Delete), () => Ok(appService.Delete(id)));
+    [ProducesResponseType(200)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<bool>> Delete(TKey id)
+    {
+        logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(Delete), GetType().Name, id);
+        try
+        {
+            var res = await appService.Delete(id);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(Delete), GetType().Name);
+            return res ? Ok() : NoContent();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An exception happened during {method} method of {controller}", nameof(Delete), GetType().Name);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
+    }
 }

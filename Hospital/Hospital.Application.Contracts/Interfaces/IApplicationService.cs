@@ -21,7 +21,7 @@ public interface IApplicationService<TGetDto, TCreateUpdateDto, TKey>
     /// </summary>
     /// <param name="dtoId">ID</param>
     /// <returns>DTO</returns>
-    public Task<TGetDto> Get(TKey dtoId);
+    public Task<TGetDto?> Get(TKey dtoId);
     
     /// <summary>
     /// Get all DTO from repository

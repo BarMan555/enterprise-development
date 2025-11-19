@@ -26,10 +26,18 @@ public class AppointmentController(
     [ProducesResponseType(500)]
     public async Task<ActionResult<PatientGetDto>> GetPatientById(int id)
     {
-        return await Logging(
-            nameof(GetPatientById),
-            () => Ok(service.GetParientByAppointment(id))
-        );
+        logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(GetPatientById), GetType().Name, id);
+        try
+        {
+            var res = await service.GetParientByAppointment(id);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientById), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetPatientById), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
     
     /// <summary>
@@ -42,9 +50,17 @@ public class AppointmentController(
     [ProducesResponseType(500)]
     public async Task<ActionResult<DoctorGetDto>> GetDoctorById(int id)
     {
-        return await Logging(
-            nameof(GetDoctorById),
-            () => Ok(service.GetDoctorByAppointment(id))
-        );
+        logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(GetDoctorById), GetType().Name, id);
+        try
+        {
+            var res = await service.GetDoctorByAppointment(id);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetDoctorById), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetDoctorById), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
 }

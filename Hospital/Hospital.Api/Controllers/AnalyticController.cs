@@ -16,50 +16,28 @@ public class AnalyticController(
     ILogger<AnalyticController> logger) 
     : ControllerBase
 {
-    
-    /// <summary>
-    /// Helper method for consistent logging and error handling.
-    /// </summary>
-    private async Task<ActionResult> Logging(string method, Func<ActionResult> action)
-    {
-        logger.LogInformation("START: {Method}", method);
-        try
-        {
-            var result = action();
-            var count = 0;
-            if (result is OkObjectResult okResult && okResult.Value != null)
-            {
-                if (okResult.Value is System.Collections.IEnumerable collection)
-                {
-                    count = collection.Cast<object>().Count();
-                }
-                else count = 1;
-            }
-            logger.LogInformation("SUCCESS: {Method}. Found {Count} records.", method, count);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "ERROR: {Method} failed.", method);
-            return StatusCode(500, $"Server error: {ex.Message}");
-        }
-    }
-
     /// <summary>
     /// Get doctors with at least some years of experience
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
     [HttpGet("doctors-with-experience")]
-    [ProducesResponseType(typeof(List<DoctorGetDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<DoctorGetDto>), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<DoctorGetDto>>> GetDoctorsWithExperienceAtLeastYears([FromQuery] int year)
     {
-        return await Logging(nameof(GetDoctorsWithExperienceAtLeastYears), () =>
+        logger.LogInformation("{method} method of {controller} is called with {year} parameter", nameof(GetDoctorsWithExperienceAtLeastYears), GetType().Name, year);
+        try
         {
-            var result = analyticsService.GetDoctorsWithExperienceAtLeastYears(year);
-            return Ok(result);
-        });
+            var res = await analyticsService.GetDoctorsWithExperienceAtLeastYears(year);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetDoctorsWithExperienceAtLeastYears), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetDoctorsWithExperienceAtLeastYears), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
     
     /// <summary>
@@ -68,15 +46,22 @@ public class AnalyticController(
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
     [HttpGet("patients-by-doctor")]
-    [ProducesResponseType(typeof(List<PatientGetDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<PatientGetDto>), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<PatientGetDto>>> GetPatientsByDoctor([FromQuery] int doctorId)
     {
-        return await Logging(nameof(GetPatientsByDoctor), () =>
+        logger.LogInformation("{method} method of {controller} is called with {doctorId} parameter", nameof(GetPatientsByDoctor), GetType().Name, doctorId);
+        try
         {
-            var result = analyticsService.GetPatientsByDoctor(doctorId);
-            return Ok(result);
-        });
+            var res = await analyticsService.GetPatientsByDoctor(doctorId);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientsByDoctor), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetPatientsByDoctor), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
     
     /// <summary>
@@ -86,17 +71,24 @@ public class AnalyticController(
     /// <param name="end">End period</param>
     /// <returns>Counting</returns>
     [HttpGet("count-appointments-with-repeat-visits")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(int), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<int>> GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(
         [FromQuery] DateTime start, 
         [FromQuery] DateTime end)
     {
-        return await Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
+        logger.LogInformation("{method} method of {controller} is called with {start} and {end} parameters", nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), GetType().Name, start, end);
+        try
         {
-            var result = analyticsService.GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(start, end);
-            return Ok(result);
-        });
+            var res = await analyticsService.GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod(start, end);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
     
     /// <summary>
@@ -106,15 +98,22 @@ public class AnalyticController(
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
     [HttpGet("patients-older-than")]
-    [ProducesResponseType(typeof(List<PatientGetDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<PatientGetDto>), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<PatientGetDto>>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
     {
-        return await Logging(nameof(GetPatientsOlderThanWithMultipleDoctors), () =>
+        logger.LogInformation("{method} method of {controller} is called with {age} parameter", nameof(GetPatientsOlderThanWithMultipleDoctors), GetType().Name, age);
+        try
         {
-            var result = analyticsService.GetPatientsOlderThanWithMultipleDoctors(age);
-            return Ok(result);
-        });
+            var res = await analyticsService.GetPatientsOlderThanWithMultipleDoctors(age);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientsOlderThanWithMultipleDoctors), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetPatientsOlderThanWithMultipleDoctors), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
     
     /// <summary>
@@ -126,17 +125,24 @@ public class AnalyticController(
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
     [HttpGet("appointments-in-specific-room")]
-    [ProducesResponseType(typeof(List<AppointmentGetDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<AppointmentGetDto>), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(
         [FromQuery] int roomId,  
         [FromQuery] DateTime start, 
         [FromQuery] DateTime end)
     {
-        return await Logging(nameof(GetCountAppointmentsWhenRepeatVisitsInSpecificPeriod), () =>
+        logger.LogInformation("{method} method of {controller} is called with {roomId}, {start} and {end} parameters", nameof(GetAppointmentsWhenInSpecificRoomInSpecificPeriod), GetType().Name, roomId, start, end);
+        try
         {
-            var result = analyticsService.GetAppointmentsWhenInSpecificRoomInSpecificPeriod(roomId, start, end);
-            return Ok(result);
-        }); 
+            var res = await analyticsService.GetAppointmentsWhenInSpecificRoomInSpecificPeriod(roomId, start, end);
+            logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetAppointmentsWhenInSpecificRoomInSpecificPeriod), GetType().Name);
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An exception happened during {method} method of {controller}: {@exception}", nameof(GetAppointmentsWhenInSpecificRoomInSpecificPeriod), GetType().Name, ex);
+            return StatusCode(500, $"{ex.Message}\n\r{ex.InnerException?.Message}");
+        }
     }
 }
