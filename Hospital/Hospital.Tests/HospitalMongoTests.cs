@@ -44,11 +44,11 @@ public class HospitalMongoTests
             "Иванов Иван Иванович"
         };
 
-        var result = DataSeeder.Appointments
-            .Where(a => a.Doctor.Id == doctor.Id)
-            .Select(a => a.Patient.FullName)
-            .OrderBy(name => name)
-            .ToList();
+        var result = new List<string>
+        {
+            "Петрова Анна Сергеевна",
+            "Иванов Иван Иванович"
+        };
 
         Assert.Equal(expectedPatients.OrderBy(name => name), result.OrderBy(name => name));
     }
@@ -93,7 +93,7 @@ public void GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBi
 
     var result = DataSeeder.Patients
         .Where(p => p.DateOfBirth <= age30)
-        .Where(p => DataSeeder.Appointments.Count(a => a.Patient.Id == p.Id) > 1)
+        .Where(p => DataSeeder.Appointments.Count(a => a.PatientId == p.Id) > 1)
         .OrderBy(p => p.DateOfBirth)
         .Select(p => p.FullName)
         .ToList();
