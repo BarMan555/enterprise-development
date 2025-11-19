@@ -3,6 +3,7 @@ using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Contracts.Dtos;
 using Hospital.Domain;
 using Hospital.Domain.Models;
+using MongoDB.Bson;
 
 namespace Hospital.Application.Services;
 
@@ -12,28 +13,25 @@ namespace Hospital.Application.Services;
 /// <param name="repository">repository of appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class AppointmentService(
-    IRepositoryAsync<Appointment, int> repository, 
+    IRepositoryAsync<Appointment, ObjectId> repository, 
     IMapper mapper) 
     : IAppointmentService
 {
-    /// <summary>
-    /// Create DTO entity
-    /// </summary>
-    /// <param name="entity">DTO for creating</param>
-    /// <returns>DTO entity</returns>
+    /// <inheritdoc cref="IAppointmentService"/>
     public async Task<AppointmentGetDto> Create(AppointmentCreateUpdateDto entity)
     {
         var newAppointment = mapper.Map<Appointment>(entity);
-        newAppointment.Doctor.Id = entity.IdDoctor; 
-        newAppointment.Patient.Id = entity.IdPatient; 
+
+        if (!ObjectId.TryParse(entity.IdDoctor, out var doctorId) || !ObjectId.TryParse(entity.IdPatient, out var patientId))
+            throw new ApplicationException("An exception happened during parse doctor or patient id");
+        
+        newAppointment.DoctorId = doctorId; 
+        newAppointment.PatientId = patientId; 
         var created = await repository.Create(newAppointment);
         return mapper.Map<AppointmentGetDto>(created);
     }
 
-    /// <summary>
-    /// Get all DTO from repository
-    /// </summary>
-    /// <returns>DTO</returns>
+    /// <inheritdoc cref="IAppointmentService"/>
     public async Task<List<AppointmentGetDto>> GetAll()
     {
         var appointments = await repository.ReadAll();
@@ -41,53 +39,44 @@ public class AppointmentService(
 
         for (var i = 0; i < appointmentsDto.Count; i++)
         {
-            appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id;
-            appointmentsDto[i].IdPatient = appointments[i].Patient.Id;
+            appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id.ToString();
+            appointmentsDto[i].IdPatient = appointments[i].Patient.Id.ToString();
         }
 
         return appointmentsDto;
     }
 
-    /// <summary>
-    /// Get DTO from repository by ID
-    /// </summary>
-    /// <param name="id">ID</param>
-    /// <returns>DTO</returns>
-    public async Task<AppointmentGetDto> Get(int id)
+    /// <inheritdoc cref="IAppointmentService"/>
+    public async Task<AppointmentGetDto> Get(ObjectId id)
     {
         var appointment = await repository.Read(id);
         var appointmentDto = mapper.Map<AppointmentGetDto>(appointment);
-        appointmentDto.IdDoctor = appointment.Doctor.Id;
-        appointmentDto.IdPatient = appointment.Patient.Id;
+        appointmentDto.IdDoctor = appointment.Doctor.Id.ToString();
+        appointmentDto.IdPatient = appointment.Patient.Id.ToString();
         return appointmentDto;
     }
 
-    /// <summary>
-    /// Update entity's data by new DTO 
-    /// </summary>
-    /// <param name="id">ID old entity</param>
-    /// <param name="entity">New DTO</param>
-    /// <returns></returns>
-    public async Task<AppointmentGetDto> Update(int id, AppointmentCreateUpdateDto entity)
+    /// <inheritdoc cref="IAppointmentService"/>
+    public async Task<AppointmentGetDto> Update(ObjectId id, AppointmentCreateUpdateDto entity)
     {
         var updatedAppointment = mapper.Map<Appointment>(entity);
-        updatedAppointment.Doctor.Id = entity.IdDoctor;
-        updatedAppointment.Patient.Id = entity.IdPatient;
+        
+        if (!ObjectId.TryParse(entity.IdDoctor, out var doctorId) || !ObjectId.TryParse(entity.IdPatient, out var patientId))
+            throw new ApplicationException("An exception happened during parse doctor or patient id");
+        
+        updatedAppointment.Doctor.Id = doctorId;
+        updatedAppointment.Patient.Id = patientId;
         return mapper.Map<AppointmentGetDto>(await repository.Update(id, updatedAppointment));
     }
 
-    /// <summary>
-    /// Delete entity from repository
-    /// </summary>
-    /// <param name="id">Entity ID</param>
-    /// <returns>Result of deleting</returns>
-    public async Task<bool> Delete(int id)
+    /// <inheritdoc cref="IAppointmentService"/>
+    public async Task<bool> Delete(ObjectId id)
     {
         return await repository.Delete(id);
     }
 
     /// <inheritdoc cref="IAppointmentService"/>
-    public async Task<DoctorGetDto> GetDoctorByAppointment(int id)
+    public async Task<DoctorGetDto> GetDoctorByAppointment(ObjectId id)
     {
         var doctor = (await repository.Read(id))?.Doctor;
         var doctorDto = mapper.Map<DoctorGetDto>(doctor);
@@ -96,7 +85,7 @@ public class AppointmentService(
     }
     
     /// <inheritdoc cref="IAppointmentService"/>
-    public async Task<PatientGetDto> GetParientByAppointment(int id)
+    public async Task<PatientGetDto> GetParientByAppointment(ObjectId id)
     {
         var patient = (await repository.Read(id))?.Patient;
         var patientDto = mapper.Map<PatientGetDto>(patient);
