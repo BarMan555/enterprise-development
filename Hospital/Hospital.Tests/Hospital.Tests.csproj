@@ -20,7 +20,6 @@
   <ItemGroup>
       <ProjectReference Include="..\Hospital.Domain\Hospital.Domain.csproj" />
       <ProjectReference Include="..\Hospital.Infrastructure.EfCore\Hospital.Infrastructure.EfCore.csproj" />
-      <ProjectReference Include="..\Hospital.Infrastructure.InMemory\Hospital.Infrastructure.InMemory.csproj" />
   </ItemGroup>
 
   <ItemGroup>
