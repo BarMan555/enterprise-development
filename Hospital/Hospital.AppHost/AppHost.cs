@@ -1,11 +1,9 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var mongo = builder
-    .AddMongoDB("mongo")
-    .AddDatabase("hospital");
+    .AddMongoDB("mongo");
 
-builder.AddProject<Projects.Hospital_Api>("api")
-    .WithReference(mongo)
-    .WaitFor(mongo);
+builder.AddProject<Projects.Hospital_Api>("hospital")
+    .WithReference(mongo);
 
 builder.Build().Run();

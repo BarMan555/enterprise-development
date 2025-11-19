@@ -21,12 +21,12 @@ var mapperConfig = new MapperConfiguration(
 IMapper? mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB") 
+var mongoConnectionString = builder.Configuration.GetConnectionString("Mongo") 
                             ?? throw new InvalidOperationException("MongoDB connection string not found");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseMongoDB(mongoConnectionString, "hospital");
+    options.UseMongoDB(mongoConnectionString, "HospitalDb");
 });
 
 /*builder.Services.AddSingleton<IMongoClient>(sp =>
