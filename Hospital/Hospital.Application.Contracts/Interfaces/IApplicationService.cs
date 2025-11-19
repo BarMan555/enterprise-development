@@ -27,7 +27,7 @@ public interface IApplicationService<TGetDto, TCreateUpdateDto, TKey>
     /// Get all DTO from repository
     /// </summary>
     /// <returns>DTO</returns>
-    public Task<List<TGetDto> >GetAll();
+    public Task<List<TGetDto>> GetAll();
     
     /// <summary>
     /// Update entity's data by new DTO 

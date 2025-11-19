@@ -1,6 +1,7 @@
 using Hospital.Application.Contracts.Dtos;
 using Hospital.Application.Contracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace Hospital.Api.Controllers;
 
@@ -12,7 +13,7 @@ namespace Hospital.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class DoctorController(IDoctorService service, ILogger<DoctorController> logger)
-    : CrudBaseController<DoctorGetDto, DoctorCreateUpdateDto, int>(service, logger)
+    : CrudBaseController<DoctorGetDto, DoctorCreateUpdateDto, ObjectId>(service, logger)
 {
     /// <summary>
     /// Get appointment where is the doctor
@@ -21,15 +22,22 @@ public class DoctorController(IDoctorService service, ILogger<DoctorController> 
     /// <returns>list of appointments</returns>
     [HttpGet("{id}/appointments")]
     [ProducesResponseType(200)]
+    [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsById(int id)
+    public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsById(string id)
     {
         logger.LogInformation("{method} method of {controller} is called with {id} parameter", nameof(GetAppointmentsById), GetType().Name, id);
         try
         {
-            var res = await service.GetAppointmentsByDoctor(id);
+            if (!ObjectId.TryParse(id, out var objectId))
+            {
+                logger.LogError("An exception happened during {method} method of {controller}", nameof(GetAppointmentsById), GetType().Name);
+                return BadRequest("Invalid Id format");
+            }
+            
+            var res = await service.GetAppointmentsByDoctor(objectId);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetAppointmentsById), GetType().Name);
-            return Ok(res);
+            return res == null ? NotFound() : Ok(res);
         }
         catch (Exception ex)
         {

@@ -3,6 +3,7 @@ using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Contracts.Dtos;
 using Hospital.Domain.Models;
 using Hospital.Domain;
+using MongoDB.Bson;
 
 namespace Hospital.Application.Services;
 
@@ -14,9 +15,9 @@ namespace Hospital.Application.Services;
 /// <param name="appointmentRepository">Appointment repository</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class LibraryAnalyticsService(
-    IRepositoryAsync<Patient, int> patientRepository,
-    IRepositoryAsync<Doctor, int> doctorRepository,
-    IRepositoryAsync<Appointment, int> appointmentRepository,
+    IRepositoryAsync<Patient, ObjectId> patientRepository,
+    IRepositoryAsync<Doctor, ObjectId> doctorRepository,
+    IRepositoryAsync<Appointment, ObjectId> appointmentRepository,
     IMapper mapper
     ) : ILibraryAnalyticsService
 {
@@ -46,7 +47,7 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public async Task<List<PatientGetDto>> GetPatientsByDoctor(int doctorId)
+    public async Task<List<PatientGetDto>> GetPatientsByDoctor(ObjectId doctorId)
     {
         var patients = ((from a in await appointmentRepository.ReadAll()
             where a.Doctor.Id == doctorId
@@ -127,8 +128,8 @@ public class LibraryAnalyticsService(
          var appointmentsDto = mapper.Map<List<AppointmentGetDto>>(appointments);
          for(var i = 0; i < appointmentsDto.Count; i++)
          {
-             appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id;
-             appointmentsDto[i].IdPatient = appointments[i].Patient.Id;
+             appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id.ToString();
+             appointmentsDto[i].IdPatient = appointments[i].Patient.Id.ToString();
          }
          return appointmentsDto;
     }

@@ -20,7 +20,7 @@ public interface IRepositoryAsync<TEntity, TKey>
     /// Get list of all entities from repository
     /// </summary>
     /// <returns>List of all objects</returns>
-    public Task<List<TEntity>> ReadAll();
+    public Task<List<TEntity>?> ReadAll();
     
     /// <summary>
     /// Get entity from repository by its ID

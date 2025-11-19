@@ -1,4 +1,5 @@
 using Hospital.Application.Contracts.Dtos;
+using MongoDB.Bson;
 
 namespace Hospital.Application.Contracts.Interfaces;
 
@@ -19,7 +20,7 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public Task<List<PatientGetDto>> GetPatientsByDoctor(int doctorId);
+    public Task<List<PatientGetDto>> GetPatientsByDoctor(ObjectId doctorId);
     
     /// <summary>
     /// Get counting of repeat patient appointments in specific period.
