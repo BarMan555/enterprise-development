@@ -1,4 +1,6 @@
-﻿namespace Hospital.Domain.Models;
+﻿using MongoDB.Bson;
+
+namespace Hospital.Domain.Models;
 
 /// <summary>
 /// Represents a Appointment for registering a <see cref="Patient"/> with a <see cref="Doctor"/>
@@ -8,17 +10,27 @@ public class Appointment
     /// <summary>
     /// Unique identificator of the Appointment
     /// </summary>
-    public required int Id { get; set; }
+    public required ObjectId Id { get; set; }
+    
+    /// <summary>
+    /// ID of <see cref="Patient"/> which registering on Appointment
+    /// </summary>
+    public required ObjectId PatientId { get; set; }
 
     /// <summary>
     /// <see cref="Patient"/> which registering on Appointment
     /// </summary>
-    public required Patient Patient { get; set; }
+    public Patient? Patient { get; set; }
 
+    /// <summary>
+    /// ID of <see cref="Doctor"/> for Appointment
+    /// </summary>
+    public required ObjectId DoctorId { get; set; }
+    
     /// <summary>
     /// <see cref="Doctor"/> for Appointment
     /// </summary>
-    public required Doctor Doctor { get; set; }
+    public Doctor? Doctor { get; set; }
 
     /// <summary>
     /// Date of the Appointment

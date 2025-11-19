@@ -1,4 +1,5 @@
 ﻿using Hospital.Domain.Enums;
+using MongoDB.Bson;
 
 namespace Hospital.Domain.Models;
 
@@ -10,7 +11,7 @@ public class Doctor
     /// <summary>
     /// Unique identifier of the Doctor
     /// </summary>
-    public required int Id { get; set; }
+    public required ObjectId Id { get; set; }
 
     /// <summary>
     /// Name of the Doctor
