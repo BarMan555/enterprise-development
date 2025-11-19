@@ -24,21 +24,19 @@
 * [Speciallization](./Hospital/Hospital.Domain/Enums/Speciallization.cs) - специализация врача
 
 ### Тесты
-[HospitalRepoTests](./Hospital/Hospital.Tests/HospitalRepoTests.cs) - заданные по варианту юнит-тесты 
+[HospitalMongoTests](./Hospital/Hospital.Tests/HospitalMongoTests.cs) - заданные по варианту юнит-тесты 
 1. GetDoctorsWithExperience_WhenExperienceAtLeast10Years_ReturnsExperiencedDoctorsOrderedByName() - Вывести информацию о всех врачах, стаж работы которых не менее 10 лет.
 2. GetPatientsByDoctor_WhenDoctorIsSpecified_ReturnsPatientsOrderedByName() - Вывести информацию о всех пациентах, записанных на прием к указанному врачу, упорядочить по ФИО.
 3. CountAppointments_WhenRepeatVisitsInLastMonth_ReturnsCorrectCount() - Вывести информацию о количестве повторных приемов пациентов за последний месяц.
 4. GetPatients_WhenOver30WithMultipleDoctors_ReturnsPatientsOrderedByBirthDate() - Вывести информацию о пациентах старше 30 лет, которые записаны на прием к нескольким врачам, упорядочить по дате рождения.
 5. GetAppointments_WhenInSpecificRoomCurrentMonth_ReturnsAppointmentsOrderedByDateTime() - Вывести информацию о приемах за текущий месяц, проходящих в выбранном кабинете.
 
-[HospitalRepoFixture](./Hospital/Hospital.Tests/Fixtures/HospitalRepoFixture.cs) - фикстура, использующая для заполнения репозитории.
-
-### Hospital.Infrastructure.InMemory - Слой для доступа к данным
+### Hospital.Infrastructure.EfCore - Слой для доступа к данным в базе данных
 - **Repositories** - Реализации репозиториев:
-    - [InMemoryPatientRepository.cs](./Hospital/Hospital.Infrastructure.InMemory/Repositories/InMemoryPatientRepository.cs)
-    - [InMemoryDoctorRepository.cs](./Hospital/HospitalHospital.Infrastructure/Repositories/InMemoryDoctorRepository.cs)
-    - [InMemoryAppointmentRepository.cs](./Hospital/Hospital.Infrastructure/Repositories/InMemoryAppointmentRepository.cs)
-    - [InMemoryRepository.cs](./Hospital/Hospital.Infrastructure/Repositories/InMemoryRepository.cs)
+    - [AppointmentEfCoreRepository.cs](./Hospital/Hospital.Infrastructure.EfCore/Repositories/AppointmentEfCoreRepository.cs)
+    - [DoctorEfCoreRepository.cs](./Hospital/Hospital.Infrastructure.EfCore/Repositories/DoctorEfCoreRepository.cs)
+    - [PatientEfCoreRepository.cs](./Hospital/Hospital.Infrastructure.EfCore/Repositories/PatientEfCoreRepository.cs)
+    
 
 ### Hospital.Application.Contracts - Контракты для сервисного слоя
 #### Dtos
@@ -61,10 +59,13 @@
 - [MappingProfile.cs](./Hospital/Hospital.Application/MappingProfile.cs) - Настройки AutoMapper для преобразования между DTO и доменной областью.
 
 
-### Library.Api - Веб-API
+### Hospital.Api - Веб-API
 #### Controllers - API контроллеры
 - [AnalyticsController.cs](./Hospital/Hospital.Api/Controllers/AnalyticController.cs) - Контроллер для аналитических запросов (содержит те же запросы, которые проверяются в юнит-тестах).
 - [PatientController.cs](./Hospital/Hospital.Api/Controllers/PatientController.cs) - Управление пациентами.
 - [DoctorController.cs](./Hospital/Hospital.Api/Controllers/DoctorController.cs) - Управление докторами.
 - [AppointmentController.cs](./Hospital/Hospital.Api/Controllers/AppointmentController.cs) - Управление приемами к врачу.
 - [CrudControllerBase.cs](./Hospital/Hospital.Api/Controllers/CrudControllerBase.cs) - Базовый класс для CRUD операций.
+- 
+### Hospital.AppHost - Aspire для оркестрации
+- [AppHost.cs](./Hospital/Hospital.AppHost/AppHost.cs) - Настройка Aspire
