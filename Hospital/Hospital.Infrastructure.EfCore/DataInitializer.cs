@@ -2,10 +2,14 @@ using Hospital.Domain.Seeders;
 
 namespace Hospital.Infrastructure.EfCore;
 
+/// <summary>
+/// Class for initializer database with start data
+/// </summary>
 public static class DataInitializer
 {
     public static async Task SeedEnsureCreated(AppDbContext context)
     {
+        // true - DB is created now, false - DB was created later  
         var created =  await context.Database.EnsureCreatedAsync();
         if (created)
         {
