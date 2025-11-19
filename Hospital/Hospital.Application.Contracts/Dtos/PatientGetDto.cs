@@ -1,3 +1,5 @@
+using MongoDB.Bson;
+
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
@@ -8,7 +10,7 @@ public class PatientGetDto
     /// <summary>
     /// Unique identifier of the Patient
     /// </summary>
-    public required int Id { get; set; }
+    public required string Id { get; set; }
     
     /// <summary>
     /// Namec of the Patient

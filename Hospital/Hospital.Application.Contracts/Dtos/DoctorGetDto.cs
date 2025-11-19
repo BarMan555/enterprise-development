@@ -1,3 +1,5 @@
+using MongoDB.Bson;
+
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
@@ -8,7 +10,7 @@ public class DoctorGetDto
     /// <summary>
     /// Unique identificator of the Appointment
     /// </summary>
-    public required int Id { get; set; }
+    public required string Id { get; set; }
     
     /// <summary>
     /// Name of the Doctor
