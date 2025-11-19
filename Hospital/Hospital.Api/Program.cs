@@ -5,9 +5,15 @@ using Hospital.Application.Services;
 using Hospital.Domain;
 using Hospital.Domain.Models;
 using Hospital.Domain.Seeders;
-using Hospital.Infrastructure.InMemory.Repositories;
+using Hospital.Infrastructure.EfCore;
+using Hospital.Infrastructure.EfCore.Repositories;
+using Hospital.ServiceDefaults;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 var mapperConfig = new MapperConfiguration(
     config => config.AddProfile(new MappingProfile()),
@@ -15,14 +21,36 @@ var mapperConfig = new MapperConfiguration(
 IMapper? mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-// Add services to the container.
-builder.Services.AddSingleton<InMemoryPatientRepositorySeeder>();
-builder.Services.AddSingleton<InMemoryDoctorRepositorySeeder>();
-builder.Services.AddSingleton<InMemoryAppointmentRepositorySeeder>();
+var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB") 
+                            ?? throw new InvalidOperationException("MongoDB connection string not found");
 
-builder.Services.AddSingleton<IRepository<Patient, int>, InMemoryPatientRepository>();
-builder.Services.AddSingleton<IRepository<Doctor, int>, InMemoryDoctorRepository>();
-builder.Services.AddSingleton<IRepository<Appointment, int>, InMemoryAppointmentRepository>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseMongoDB(mongoConnectionString, "hospital");
+});
+
+/*builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("library");
+    return new MongoClient(connectionString);
+});
+
+builder.Services.AddSingleton(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    var database = client.GetDatabase("library"); 
+    return new MongoClient(database);
+});*/
+
+
+// Add services to the container.
+builder.Services.AddSingleton<PatientRepositorySeeder>();
+builder.Services.AddSingleton<DoctorRepositorySeeder>();
+builder.Services.AddSingleton<AppointmentRepositorySeeder>();
+
+builder.Services.AddScoped<IRepositoryAsync<Patient, int>, PatientEfCoreRepository>();
+builder.Services.AddScoped<IRepositoryAsync<Doctor, int>, DoctorEfCoreRepository>();
+builder.Services.AddScoped<IRepositoryAsync<Appointment, int>, AppointmentEfCoreRepository>();
 
 builder.Services.AddScoped<ILibraryAnalyticsService, LibraryAnalyticsService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
@@ -30,7 +58,6 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -40,6 +67,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DataInitializer.SeedEnsureCreated(dbContext);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

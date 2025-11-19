@@ -7,7 +7,7 @@ namespace Hospital.Infrastructure.InMemory.Repositories;
 /// In memory repository for doctors
 /// </summary>
 /// <param name="seeder">Data for repository</param>
-public class InMemoryDoctorRepository(InMemoryDoctorRepositorySeeder seeder) : InMemoryRepository<Doctor, int>(seeder)
+public class InMemoryDoctorRepository(DoctorRepositorySeeder seeder) : InMemoryRepository<Doctor, int>(seeder)
 {
     /// <summary>
     /// Get ID of input entity

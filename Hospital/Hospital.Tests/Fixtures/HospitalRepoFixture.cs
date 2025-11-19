@@ -28,9 +28,9 @@ public class HospitalRepoFixture
     /// </summary>
     public HospitalRepoFixture()
     {
-        var patientSeeder = new InMemoryPatientRepositorySeeder();
-        var doctorSeeder = new InMemoryDoctorRepositorySeeder();
-        var appointmentSeeder = new InMemoryAppointmentRepositorySeeder();
+        var patientSeeder = new PatientRepositorySeeder();
+        var doctorSeeder = new DoctorRepositorySeeder();
+        var appointmentSeeder = new AppointmentRepositorySeeder();
         
         PatientRepository = new InMemoryPatientRepository(patientSeeder); 
         DoctorRepository = new InMemoryDoctorRepository(doctorSeeder);

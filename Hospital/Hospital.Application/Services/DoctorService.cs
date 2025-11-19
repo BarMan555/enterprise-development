@@ -10,10 +10,11 @@ namespace Hospital.Application.Services;
 /// Service for doctors
 /// </summary>
 /// <param name="repository">repository of doctors</param>
+/// <param name="appointmentRepository">repository od appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class DoctorService(
-    IRepository<Doctor, int> repository, 
-    IRepository<Appointment, int> appointmentRepository,
+    IRepositoryAsync<Doctor, int> repository, 
+    IRepositoryAsync<Appointment, int> appointmentRepository,
     IMapper mapper) 
     : IDoctorService
 {

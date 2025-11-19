@@ -12,14 +12,14 @@ namespace Hospital.Application.Services;
 /// <param name="repository">repository of appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class AppointmentService(
-    IRepository<Appointment, int> repository, 
+    IRepositoryAsync<Appointment, int> repository, 
     IMapper mapper) 
     : IAppointmentService
 {
     /// <summary>
     /// Create DTO entity
     /// </summary>
-    /// <param name="dto">DTO for creating</param>
+    /// <param name="entity">DTO for creating</param>
     /// <returns>DTO entity</returns>
     public async Task<AppointmentGetDto> Create(AppointmentCreateUpdateDto entity)
     {
