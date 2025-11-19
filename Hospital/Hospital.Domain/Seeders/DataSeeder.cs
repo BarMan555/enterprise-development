@@ -1,5 +1,6 @@
 using Hospital.Domain.Models;
 using Hospital.Domain.Enums;
+using MongoDB.Bson;
 
 namespace Hospital.Domain.Seeders;
 /// <summary>
@@ -14,7 +15,7 @@ public static class DataSeeder
     [
         new Patient
         {
-            Id = 1,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Иванов Иван Иванович",
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1985, 3, 15),
@@ -25,7 +26,7 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = 2,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Петрова Анна Сергеевна",
             Gender = Gender.Female,
             DateOfBirth = new DateTime(1992, 7, 22),
@@ -36,7 +37,7 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = 3,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Сидоров Михаил Петрович",
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1978, 11, 5),
@@ -47,7 +48,7 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = 4,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Козлова Елена Викторовна",
             Gender = Gender.Female,
             DateOfBirth = new DateTime(2001, 1, 30),
@@ -58,7 +59,7 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = 5,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Николаев Дмитрий Александрович",
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1965, 9, 18),
@@ -90,7 +91,7 @@ public static class DataSeeder
     [
         new Doctor
         {
-            Id = 1,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Смирнов Александр Васильевич",
             DateOfBirth = new DateTime(1978, 5, 12),
             Specialization = _specializations[0],
@@ -98,7 +99,7 @@ public static class DataSeeder
         },
         new Doctor
         {
-            Id = 2,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Иванова Мария Петровна",
             DateOfBirth = new DateTime(1985, 8, 24),
             Specialization = _specializations[1],
@@ -106,7 +107,7 @@ public static class DataSeeder
         },
         new Doctor
         {
-            Id = 3,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Кузнецов Дмитрий Сергеевич",
             DateOfBirth = new DateTime(1970, 3, 5),
             Specialization = _specializations[2],
@@ -114,7 +115,7 @@ public static class DataSeeder
         },
         new Doctor
         {
-            Id = 4,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Петрова Ольга Игоревна",
             DateOfBirth = new DateTime(1990, 11, 17),
             Specialization = _specializations[3],
@@ -122,7 +123,7 @@ public static class DataSeeder
         },
         new Doctor
         {
-            Id = 5,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Васильев Игорь Николаевич",
             DateOfBirth = new DateTime(1965, 2, 28),
             Specialization = _specializations[4],
@@ -130,7 +131,7 @@ public static class DataSeeder
         },
         new Doctor
         {
-            Id = 6,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Николаева Екатерина Владимировна",
             DateOfBirth = new DateTime(1982, 7, 14),
             Specialization = _specializations[5],
@@ -138,7 +139,7 @@ public static class DataSeeder
         },
         new Doctor
         {
-            Id = 7,
+            Id = ObjectId.GenerateNewId(),
             FullName = "Алексеев Павел Михайлович",
             DateOfBirth = new DateTime(1975, 9, 3),
             Specialization = _specializations[6],
@@ -153,72 +154,72 @@ public static class DataSeeder
     [
         new Appointment
         {
-            Id = 1,
-            Patient = Patients[0], // Иванов Иван Иванович
-            Doctor = Doctors[0], // Смирнов Александр Васильевич (Кардиолог)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[0].Id, // Иванов Иван Иванович
+            DoctorId = Doctors[0].Id, // Смирнов Александр Васильевич (Кардиолог)
             AppointmentDateTime = new DateTime(2025, 8, 15, 10, 0, 0),
             RoomNumber = 101,
             IsReturnVisit = false
         },
         new Appointment
         {
-            Id = 2,
-            Patient = Patients[1], // Петрова Анна Сергеевна
-            Doctor = Doctors[1], // Иванова Мария Петровна (Педиатр)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[1].Id, // Петрова Анна Сергеевна
+            DoctorId = Doctors[1].Id, // Иванова Мария Петровна (Педиатр)
             AppointmentDateTime = new DateTime(2025, 8, 15, 11, 30, 0),
             RoomNumber = 205,
             IsReturnVisit = true
         },
         new Appointment
         {
-            Id = 3,
-            Patient = Patients[2], // Сидоров Михаил Петрович
-            Doctor = Doctors[2], // Кузнецов Дмитрий Сергеевич (Хирург)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[2].Id, // Сидоров Михаил Петрович
+            DoctorId = Doctors[2].Id, // Кузнецов Дмитрий Сергеевич (Хирург)
             AppointmentDateTime = new DateTime(2025, 9, 16, 9, 0, 0),
             RoomNumber = 312,
             IsReturnVisit = false
         },
         new Appointment
         {
-            Id = 4,
-            Patient = Patients[3], // Козлова Елена Викторовна
-            Doctor = Doctors[3], // Петрова Ольга Игоревна (Невролог)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[3].Id, // Козлова Елена Викторовна
+            DoctorId = Doctors[3].Id, // Петрова Ольга Игоревна (Невролог)
             AppointmentDateTime = new DateTime(2025, 8, 16, 14, 15, 0),
             RoomNumber = 118,
             IsReturnVisit = false
         },
         new Appointment
         {
-            Id = 5,
-            Patient = Patients[4], // Николаев Дмитрий Александрович
-            Doctor = Doctors[4], // Васильев Игорь Николаевич (Терапевт)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[4].Id, // Николаев Дмитрий Александрович
+            DoctorId = Doctors[4].Id, // Васильев Игорь Николаевич (Терапевт)
             AppointmentDateTime = new DateTime(2025, 8, 17, 16, 45, 0),
             RoomNumber = 201,
             IsReturnVisit = true
         },
         new Appointment
         {
-            Id = 6,
-            Patient = Patients[0], // Иванов Иван Иванович
-            Doctor = Doctors[6], // Алексеев Павел Михайлович (Офтальмолог)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[0].Id, // Иванов Иван Иванович
+            DoctorId = Doctors[6].Id, // Алексеев Павел Михайлович (Офтальмолог)
             AppointmentDateTime = new DateTime(2025, 8, 18, 13, 0, 0),
             RoomNumber = 404,
             IsReturnVisit = false
         },
         new Appointment
         {
-            Id = 7,
-            Patient = Patients[1], // Петрова Анна Сергеевна
-            Doctor = Doctors[0], // Соколова Анна Дмитриевна (Гинеколог)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[1].Id, // Петрова Анна Сергеевна
+            DoctorId = Doctors[0].Id, // Соколова Анна Дмитриевна (Гинеколог)
             AppointmentDateTime = new DateTime(2025, 8, 19, 10, 30, 0),
             RoomNumber = 222,
             IsReturnVisit = true
         },
         new Appointment
         {
-            Id = 8,
-            Patient = Patients[2], // Сидоров Михаил Петрович
-            Doctor = Doctors[1], // Смирнов Александр Васильевич (Кардиолог)
+            Id = ObjectId.GenerateNewId(),
+            PatientId = Patients[2].Id, // Сидоров Михаил Петрович
+            DoctorId = Doctors[1].Id, // Смирнов Александр Васильевич (Кардиолог)
             AppointmentDateTime = new DateTime(2025, 8, 19, 15, 20, 0),
             RoomNumber = 101,
             IsReturnVisit = false
