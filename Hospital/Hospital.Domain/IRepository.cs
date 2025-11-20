@@ -5,7 +5,7 @@ namespace Hospital.Domain;
 /// </summary>
 /// <typeparam name="TEntity">Type of entity</typeparam>
 /// <typeparam name="TKey">Type of id entity</typeparam>
-public interface IRepositoryAsync<TEntity, TKey>
+public interface IRepository<TEntity, TKey>
     where TEntity : class
     where TKey : struct
 {

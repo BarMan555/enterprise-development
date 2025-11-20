@@ -31,9 +31,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // Add services to the container
-builder.Services.AddScoped<IRepositoryAsync<Patient, ObjectId>, PatientEfCoreRepository>();
-builder.Services.AddScoped<IRepositoryAsync<Doctor, ObjectId>, DoctorEfCoreRepository>();
-builder.Services.AddScoped<IRepositoryAsync<Appointment, ObjectId>, AppointmentEfCoreRepository>();
+builder.Services.AddScoped<IRepository<Patient, ObjectId>, PatientEfCoreRepository>();
+builder.Services.AddScoped<IRepository<Doctor, ObjectId>, DoctorEfCoreRepository>();
+builder.Services.AddScoped<IRepository<Appointment, ObjectId>, AppointmentEfCoreRepository>();
 
 builder.Services.AddScoped<ILibraryAnalyticsService, LibraryAnalyticsService>();
 builder.Services.AddScoped<IPatientService, PatientService>();

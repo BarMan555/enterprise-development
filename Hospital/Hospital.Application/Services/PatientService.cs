@@ -15,8 +15,8 @@ namespace Hospital.Application.Services;
 /// <param name="appointmentRepository">repository od appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class PatientService(
-    IRepositoryAsync<Patient, ObjectId> repository, 
-    IRepositoryAsync<Appointment, ObjectId> appointmentRepository,
+    IRepository<Patient, ObjectId> repository, 
+    IRepository<Appointment, ObjectId> appointmentRepository,
     IMapper mapper) 
     : IPatientService
 {

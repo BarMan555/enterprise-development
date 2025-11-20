@@ -13,7 +13,7 @@ namespace Hospital.Application.Services;
 /// <param name="repository">repository of appointments</param>
 /// <param name="mapper">Mapper for DTOs</param>
 public class AppointmentService(
-    IRepositoryAsync<Appointment, ObjectId> repository, 
+    IRepository<Appointment, ObjectId> repository, 
     IMapper mapper) 
     : IAppointmentService
 {
@@ -34,7 +34,7 @@ public class AppointmentService(
     }
 
     /// <inheritdoc cref="IAppointmentService"/>
-    public async Task<AppointmentGetDto> Get(ObjectId id)
+    public async Task<AppointmentGetDto?> Get(ObjectId id)
     {
         var appointment = await repository.Read(id);
         var appointmentDto = mapper.Map<AppointmentGetDto>(appointment);

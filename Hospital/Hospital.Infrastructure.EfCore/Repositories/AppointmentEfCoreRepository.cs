@@ -8,7 +8,7 @@ namespace Hospital.Infrastructure.EfCore.Repositories;
 /// Repository for appointments 
 /// </summary>
 /// <param name="context">DataBase MongoDB context</param>
-public class AppointmentEfCoreRepository(AppDbContext context): IRepositoryAsync<Appointment, ObjectId>
+public class AppointmentEfCoreRepository(AppDbContext context): IRepository<Appointment, ObjectId>
 {
     /// <summary>
     /// Data of appointments 
@@ -23,7 +23,7 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepositoryAsync
     /// </summary>
     private readonly DbSet<Patient> _patients = context.Patients;
     
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment> Create(Appointment entity)
     {
         var result = await _appointments.AddAsync(entity);
@@ -31,7 +31,7 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepositoryAsync
         return result.Entity;
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<List<Appointment>> ReadAll()
     {
         var appointments = await _appointments.ToListAsync();
@@ -48,7 +48,7 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepositoryAsync
         return appointments;
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment?> Read(ObjectId id)
     {
         var appointment = await _appointments.FirstOrDefaultAsync(e => e.Id == id);
@@ -58,7 +58,7 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepositoryAsync
         return appointment;
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment?> Update(ObjectId id, Appointment entity)
     {
         _appointments.Update(entity);
@@ -66,7 +66,7 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepositoryAsync
         return (await Read(entity.Id));
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<bool> Delete(ObjectId id)
     {
         var entity = await _appointments.FirstOrDefaultAsync(e => e.Id == id);

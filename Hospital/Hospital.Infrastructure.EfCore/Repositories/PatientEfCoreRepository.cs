@@ -8,14 +8,14 @@ namespace Hospital.Infrastructure.EfCore.Repositories;
 /// Repository for appointments 
 /// </summary>
 /// <param name="context">DataBase MongoDB context</param>
-public class PatientEfCoreRepository(AppDbContext context) : IRepositoryAsync<Patient, ObjectId>
+public class PatientEfCoreRepository(AppDbContext context) : IRepository<Patient, ObjectId>
 {
     /// <summary>
     /// Data of patients
     /// </summary>
     private readonly DbSet<Patient> _patients = context.Patients;
     
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Patient> Create(Patient entity)
     {
         var result = await _patients.AddAsync(entity);
@@ -23,19 +23,19 @@ public class PatientEfCoreRepository(AppDbContext context) : IRepositoryAsync<Pa
         return result.Entity;
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<List<Patient>> ReadAll()
     {
         return await _patients.ToListAsync();
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Patient?> Read(ObjectId id)
     {
         return await _patients.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Patient?> Update(ObjectId id, Patient entity)
     {
         _patients.Update(entity);
@@ -43,7 +43,7 @@ public class PatientEfCoreRepository(AppDbContext context) : IRepositoryAsync<Pa
         return (await Read(entity.Id));
     }
 
-    /// <inheritdoc cref="IRepositoryAsync{TEntity,TKey}"/>
+    /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<bool> Delete(ObjectId id)
     {
         var entity = await _patients.FirstOrDefaultAsync(e => e.Id == id);
