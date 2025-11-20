@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Contracts.Dtos;
+using Hospital.Application.Contracts.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
 namespace Hospital.Api.Controllers;

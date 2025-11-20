@@ -1,5 +1,5 @@
-using Hospital.Domain.Models;
 using Hospital.Domain.Enums;
+using Hospital.Domain.Models;
 using MongoDB.Bson;
 
 namespace Hospital.Domain.Seeders;
