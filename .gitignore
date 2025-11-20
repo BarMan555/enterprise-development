@@ -437,6 +437,8 @@ Hospital/Hospital.Domain/obj
 Hospital/Hospital.Tests/bin
 Hospital/Hospital.Tests/obj
 
+Hospital/.idea/.idea.Hospital/.idea/vcs.xml
+Hospital/.idea/.idea.Hospital/.idea/indexLayout.xml
 
-
-
+/Hospital/.idea/
+/Hospital/Hospital.Infrastructure.EfCore/bin/
