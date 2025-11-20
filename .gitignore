@@ -439,6 +439,8 @@ Hospital/Hospital.Tests/obj
 
 Hospital/.idea/.idea.Hospital/.idea/vcs.xml
 Hospital/.idea/.idea.Hospital/.idea/indexLayout.xml
+Hospital/.idea/.idea.Hospital/.idea/.gitignore
 
 /Hospital/.idea/
 /Hospital/Hospital.Infrastructure.EfCore/bin/
+
