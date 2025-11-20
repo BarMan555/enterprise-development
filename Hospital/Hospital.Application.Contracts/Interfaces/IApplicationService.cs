@@ -1,4 +1,3 @@
-
 namespace Hospital.Application.Contracts.Interfaces;
 
 /// <summary>

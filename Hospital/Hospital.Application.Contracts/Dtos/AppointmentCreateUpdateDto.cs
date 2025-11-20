@@ -1,5 +1,3 @@
-using MongoDB.Bson;
-
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
