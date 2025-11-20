@@ -24,9 +24,6 @@ public class PatientService(
     public async Task<PatientGetDto> Create(PatientCreateUpdateDto entity)
     { 
         var newPatient = mapper.Map<Patient>(entity);
-        newPatient.Gender = (Gender)entity.Gender; 
-        newPatient.BloodType = (BloodType)entity.BloodType; 
-        newPatient.RhFactor = (RhFactor)entity.RhFactor; 
         var created = await repository.Create(newPatient);
         return mapper.Map<PatientGetDto>(created);
     }
@@ -36,14 +33,6 @@ public class PatientService(
     {
         var patients = await repository.ReadAll();
         var patientsDto = mapper.Map<List<PatientGetDto>>(patients);
-
-        for (var i = 0; i < patientsDto.Count; i++)
-        {
-            patientsDto[i].Gender = (int)patients[i].Gender;
-            patientsDto[i].BloodType = (int)patients[i].BloodType;
-            patientsDto[i].RhFactor = (int)patients[i].RhFactor;
-        }
-
         return patientsDto;
     }
 
@@ -52,9 +41,6 @@ public class PatientService(
     {
         var patient = await repository.Read(id);
         var patientDto = mapper.Map<PatientGetDto>(patient);
-        patientDto.Gender = (int)patient.Gender;
-        patientDto.BloodType = (int)patient.BloodType;
-        patientDto.RhFactor = (int)patient.RhFactor;
         return patientDto;
     }
 
@@ -62,9 +48,6 @@ public class PatientService(
     public async Task<PatientGetDto> Update(ObjectId id, PatientCreateUpdateDto entity)
     {
         var updatedPatient = mapper.Map<Patient>(entity);
-        updatedPatient.Gender = (Gender)entity.Gender;
-        updatedPatient.BloodType = (BloodType)entity.BloodType;
-        updatedPatient.RhFactor = (RhFactor)entity.RhFactor;
         return mapper.Map<PatientGetDto>(await repository.Update(id, updatedPatient));
     }
 
@@ -82,18 +65,10 @@ public class PatientService(
             where appointment.Patient.Id == id
             select appointment
         ).ToList();
-        
         if (appointments.Count == 0) 
             return null;
         
         var appointmnetsDto =  mapper.Map<List<AppointmentGetDto>>(appointments);
-        
-        for (var i = 0; i < appointmnetsDto.Count; i++)
-            appointmnetsDto[i].IdDoctor = appointments[i].Doctor.Id.ToString();
-        
-        for (var i = 0; i < appointmnetsDto.Count; i++)
-            appointmnetsDto[i].IdPatient = id.ToString();
-        
         return appointmnetsDto;
     }
 }

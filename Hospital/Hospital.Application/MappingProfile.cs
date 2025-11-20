@@ -1,6 +1,8 @@
 using AutoMapper;
 using Hospital.Application.Contracts.Dtos;
+using Hospital.Domain.Enums;
 using Hospital.Domain.Models;
+using MongoDB.Bson;
 
 namespace Hospital.Application;
 
@@ -14,13 +16,36 @@ public class MappingProfile : Profile
     /// </summary>
     public MappingProfile()
     {
-        CreateMap<Patient, PatientGetDto>();
-        CreateMap<PatientCreateUpdateDto, Patient>();
-
-        CreateMap<Doctor, DoctorGetDto>();
-        CreateMap<DoctorCreateUpdateDto, Doctor>();
+        CreateMap<Patient, PatientGetDto>()
+            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (int)src.Gender))
+            .ForMember(dest => dest.BloodType, opt => opt.MapFrom(src => (int)src.BloodType))
+            .ForMember(dest => dest.RhFactor, opt => opt.MapFrom(src => (int)src.RhFactor));
         
-        CreateMap<Appointment, AppointmentGetDto>();
-        CreateMap<AppointmentCreateUpdateDto, Appointment>();
+        CreateMap<PatientCreateUpdateDto, Patient>()
+            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (Gender)src.Gender))
+            .ForMember(dest => dest.BloodType, opt => opt.MapFrom(src => (BloodType)src.BloodType))
+            .ForMember(dest => dest.RhFactor, opt => opt.MapFrom(src => (RhFactor)src.RhFactor));
+
+        CreateMap<Doctor, DoctorGetDto>()
+            .ForMember(dest => dest.IdSpecialization, opt => opt.MapFrom(src => src.Specialization.Id));
+
+        
+        CreateMap<DoctorCreateUpdateDto, Doctor>()
+            .ForMember(dest => dest.Specialization, opt => opt.MapFrom(src => new Specialization { Id = src.IdSpecialization, Name = ""}));
+
+        
+        CreateMap<Appointment, AppointmentGetDto>()
+            .ForMember(
+                dest => dest.IdPatient,
+                opt => opt.MapFrom(src => src.Patient.Id.ToString()))
+            .ForMember(
+                dest => dest.IdDoctor,
+                opt => opt.MapFrom(src => src.Doctor.Id.ToString()));
+
+        CreateMap<AppointmentCreateUpdateDto, Appointment>()
+            .ForMember(dest => dest.PatientId,
+                opt => opt.MapFrom(src => ObjectId.Parse(src.IdPatient)))
+            .ForMember(dest => dest.DoctorId,
+                opt => opt.MapFrom(src => ObjectId.Parse(src.IdDoctor)));
     }
 }
