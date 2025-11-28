@@ -5,6 +5,24 @@
 /// </summary>
 public enum BloodType
 {
-    O, A, B, Ab
+    /// <summary>
+    /// Blood type O.
+    /// </summary>
+    O,
+
+    /// <summary>
+    /// Blood type A.
+    /// </summary>
+    A,
+
+    /// <summary>
+    /// Blood type B.
+    /// </summary>
+    B,
+
+    /// <summary>
+    /// Blood type AB.
+    /// </summary>
+    Ab
 }
         

@@ -1,9 +1,17 @@
 ﻿namespace Hospital.Domain.Enums;
 
 /// <summary>
-/// RhFactor of patient
+/// Rh factor of a patient's blood.
 /// </summary>
 public enum RhFactor
 {
-    Positive, Negative
+    /// <summary>
+    /// Positive Rh factor.
+    /// </summary>
+    Positive,
+
+    /// <summary>
+    /// Negative Rh factor.
+    /// </summary>
+    Negative
 }
