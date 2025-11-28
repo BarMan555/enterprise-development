@@ -140,7 +140,6 @@ public abstract class CrudBaseController<TGetDto, TCreateUpdateDto, TKey>(
     /// <param name="id">Identifier of the entity to delete.</param>
     [HttpDelete("{id:int}")]
     [ProducesResponseType(200)]
-    [ProducesResponseType(204)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<bool>> Delete(string id)
     {

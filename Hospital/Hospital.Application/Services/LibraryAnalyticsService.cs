@@ -26,19 +26,18 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
-    public async Task<List<DoctorGetDto>> GetDoctorsWithExperienceAtLeastYears(int year)
+    public async Task<List<DoctorGetDto>?> GetDoctorsWithExperienceAtLeastYears(int year)
     {
         var doctors = (
             from d in await doctorRepository.ReadAll()
             where d.ExperienceYears >= year
             select d
         ).ToList();
-        var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors);
         
-        for (var i = 0; i < doctorsDto.Count; i++)
-        {
-            doctorsDto[i].IdSpecialization = doctors[i].Specialization.Id;
-        }
+        if (doctors.Count == 0)
+            return null;
+        
+        var doctorsDto = mapper.Map<List<DoctorGetDto>>(doctors);
         return doctorsDto;
     }
 
@@ -47,18 +46,16 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public async Task<List<PatientGetDto>> GetPatientsByDoctor(ObjectId doctorId)
+    public async Task<List<PatientGetDto>?> GetPatientsByDoctor(ObjectId doctorId)
     {
         var patients = ((from a in await appointmentRepository.ReadAll()
-            where a.Doctor.Id == doctorId
+            where a.DoctorId == doctorId
             select a.Patient).ToList());
+        
+        if (patients.Count == 0) 
+            return null;
+        
         var patientsDto = mapper.Map<List<PatientGetDto>>(patients);
-        for (var i = 0; i < patientsDto.Count; i++)
-        {
-            patientsDto[i].Gender = (int)patients[i].Gender;
-            patientsDto[i].BloodType = (int)patients[i].BloodType;
-            patientsDto[i].RhFactor = (int)patients[i].RhFactor;
-        }
         return patientsDto;
     }
 
@@ -81,18 +78,24 @@ public class LibraryAnalyticsService(
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public async Task<List<PatientGetDto>> GetPatientsOlderThanWithMultipleDoctors(int age)
+    public async Task<List<PatientGetDto>?> GetPatientsOlderThanWithMultipleDoctors(int age)
     {
         var today = DateTime.Today;
-        var patients = (await patientRepository.ReadAll()).Where(p => (today - p.DateOfBirth).Days / 365 >= age).ToList();
+        var patients = (await patientRepository.ReadAll())?.Where(p => (today - p.DateOfBirth).Days / 365 >= age).ToList();
         var appointments = appointmentRepository.ReadAll();
+        
+        if (patients == null || patients.Count == 0)
+            return null;
 
-        var patientDoctorGroups = (await appointments)
-            .GroupBy(a => a.Patient.Id)
+        var patientDoctorGroups = (await appointments)?
+            .GroupBy(a => a.PatientId)
             .ToDictionary(
                 g => g.Key,
-                g => g.Select(a => a.Doctor.Id).Distinct().ToList()
+                g => g.Select(a => a.DoctorId).Distinct().ToList()
             );
+        
+        if (patientDoctorGroups == null || patientDoctorGroups.Count == 0)
+            return null;
 
         var result = patients
             .Where(p => patientDoctorGroups.ContainsKey(p.Id) &&
@@ -100,14 +103,6 @@ public class LibraryAnalyticsService(
             .ToList();
         
         var patientsDto = mapper.Map<List<PatientGetDto>>(result);
-        
-        for (var i = 0; i < patientsDto.Count; i++)
-        {
-            patientsDto[i].Gender = (int)result[i].Gender;
-            patientsDto[i].BloodType = (int)result[i].BloodType;
-            patientsDto[i].RhFactor = (int)result[i].RhFactor;
-        }
-
         return patientsDto;
     }
 
@@ -119,18 +114,17 @@ public class LibraryAnalyticsService(
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
-    public async Task<List<AppointmentGetDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
+    public async Task<List<AppointmentGetDto>?> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId,  DateTime start, DateTime end)
     {
          var appointments = (from a in await appointmentRepository.ReadAll()
             where a.RoomNumber == roomId
             where a.AppointmentDateTime >= start && a.AppointmentDateTime <= end
             select a).ToList();
+         
+         if (appointments.Count == 0) 
+             return null;
+         
          var appointmentsDto = mapper.Map<List<AppointmentGetDto>>(appointments);
-         for(var i = 0; i < appointmentsDto.Count; i++)
-         {
-             appointmentsDto[i].IdDoctor = appointments[i].Doctor.Id.ToString();
-             appointmentsDto[i].IdPatient = appointments[i].Patient.Id.ToString();
-         }
          return appointmentsDto;
     }
 }

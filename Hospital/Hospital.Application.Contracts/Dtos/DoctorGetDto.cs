@@ -23,7 +23,7 @@ public class DoctorGetDto
     /// <summary>
     /// ID of specialization of the Doctor
     /// </summary>
-    public required int IdSpecialization { get; set; }
+    public required string IdSpecialization { get; set; }
 
     /// <summary>
     /// Experience of the Doctor

@@ -37,7 +37,7 @@ public class PatientService(
     }
 
     /// <inheritdoc cref="IPatientService"/>
-    public async Task<PatientGetDto> Get(ObjectId id)
+    public async Task<PatientGetDto?> Get(ObjectId id)
     {
         var patient = await repository.Read(id);
         var patientDto = mapper.Map<PatientGetDto>(patient);
@@ -62,7 +62,7 @@ public class PatientService(
     {
         var appointments = (
             from appointment in (await appointmentRepository.ReadAll())
-            where appointment.Patient.Id == id
+            where appointment.PatientId == id
             select appointment
         ).ToList();
         if (appointments.Count == 0) 

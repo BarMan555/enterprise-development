@@ -13,14 +13,14 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="year">years</param>
     /// <returns>List of doctors</returns>
-    public Task<List<DoctorGetDto>> GetDoctorsWithExperienceAtLeastYears(int year);
+    public Task<List<DoctorGetDto>?> GetDoctorsWithExperienceAtLeastYears(int year);
     
     /// <summary>
     /// Get patients assigned to a specific doctor
     /// </summary>
     /// <param name="doctorId">ID</param>
     /// <returns>List of patient</returns>
-    public Task<List<PatientGetDto>> GetPatientsByDoctor(ObjectId doctorId);
+    public Task<List<PatientGetDto>?> GetPatientsByDoctor(ObjectId doctorId);
     
     /// <summary>
     /// Get counting of repeat patient appointments in specific period.
@@ -36,7 +36,7 @@ public interface ILibraryAnalyticsService
     /// </summary>
     /// <param name="age">Age of patient</param>
     /// <returns>List of patients</returns>
-    public Task<List<PatientGetDto>> GetPatientsOlderThanWithMultipleDoctors(int age);
+    public Task<List<PatientGetDto>?> GetPatientsOlderThanWithMultipleDoctors(int age);
     
     /// <summary>
     /// Get appointments in specific period
@@ -46,5 +46,5 @@ public interface ILibraryAnalyticsService
     /// <param name="start">Start period</param>
     /// <param name="end">End period</param>
     /// <returns>List of appointments</returns>
-    public Task<List<AppointmentGetDto>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId, DateTime start, DateTime end);
+    public Task<List<AppointmentGetDto>?> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(int roomId, DateTime start, DateTime end);
 }

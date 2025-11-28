@@ -24,6 +24,7 @@ public class AnalyticController(
     /// <returns>List of doctors</returns>
     [HttpGet("doctors-with-experience")]
     [ProducesResponseType(typeof(List<DoctorGetDto>), 200)]
+    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<DoctorGetDto>>> GetDoctorsWithExperienceAtLeastYears([FromQuery] int year)
     {
@@ -32,7 +33,7 @@ public class AnalyticController(
         {
             var res = await analyticsService.GetDoctorsWithExperienceAtLeastYears(year);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetDoctorsWithExperienceAtLeastYears), GetType().Name);
-            return Ok(res);
+            return res != null ? Ok(res) : StatusCode(404);
         }
         catch (Exception ex)
         {
@@ -48,6 +49,7 @@ public class AnalyticController(
     /// <returns>List of patient</returns>
     [HttpGet("patients-by-doctor")]
     [ProducesResponseType(typeof(List<PatientGetDto>), 200)]
+    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<PatientGetDto>>> GetPatientsByDoctor([FromQuery] string doctorId)
     {
@@ -62,7 +64,7 @@ public class AnalyticController(
             
             var res = await analyticsService.GetPatientsByDoctor(objectId);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientsByDoctor), GetType().Name);
-            return Ok(res);
+            return res != null ? Ok(res) : StatusCode(404);
         }
         catch (Exception ex)
         {
@@ -106,6 +108,7 @@ public class AnalyticController(
     /// <returns>List of patients</returns>
     [HttpGet("patients-older-than")]
     [ProducesResponseType(typeof(List<PatientGetDto>), 200)]
+    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<PatientGetDto>>> GetPatientsOlderThanWithMultipleDoctors([FromQuery] int age)
     {
@@ -114,7 +117,7 @@ public class AnalyticController(
         {
             var res = await analyticsService.GetPatientsOlderThanWithMultipleDoctors(age);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientsOlderThanWithMultipleDoctors), GetType().Name);
-            return Ok(res);
+            return res != null ? Ok(res) : StatusCode(404);
         }
         catch (Exception ex)
         {
@@ -133,6 +136,7 @@ public class AnalyticController(
     /// <returns>List of appointments</returns>
     [HttpGet("appointments-in-specific-room")]
     [ProducesResponseType(typeof(List<AppointmentGetDto>), 200)]
+    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<List<AppointmentGetDto>>> GetAppointmentsWhenInSpecificRoomInSpecificPeriod(
         [FromQuery] int roomId,  
@@ -144,7 +148,7 @@ public class AnalyticController(
         {
             var res = await analyticsService.GetAppointmentsWhenInSpecificRoomInSpecificPeriod(roomId, start, end);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetAppointmentsWhenInSpecificRoomInSpecificPeriod), GetType().Name);
-            return Ok(res);
+            return res != null ? Ok(res) : StatusCode(404);
         }
         catch (Exception ex)
         {
