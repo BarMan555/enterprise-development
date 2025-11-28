@@ -4,6 +4,7 @@ var mongo = builder
     .AddMongoDB("mongo");
 
 builder.AddProject<Projects.Hospital_Api>("hospital")
-    .WithReference(mongo);
+    .WithReference(mongo)
+    .WaitFor(mongo);
 
 builder.Build().Run();
