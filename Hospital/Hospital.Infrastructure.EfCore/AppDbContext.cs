@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<Specialization> Specializations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,17 +35,31 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             builder.Property(p => p.PhoneNumber).HasElementName("phone_number").IsRequired();
             builder.ToCollection("patients");
         });
+        
+        // Specialization
+        modelBuilder.Entity<Specialization>(builder =>
+        {
+            builder.ToCollection("specializations");
+            builder.HasKey(s => s.Id);
+            builder.Property(s => s.Id).HasElementName("_id").IsRequired();
+            builder.Property(s => s.Name).HasElementName("name").IsRequired();
+            builder.Property(s => s.IsActive).HasElementName("is_active").IsRequired();
+        });
 
         // Doctor
         modelBuilder.Entity<Doctor>(builder =>
         {
+            builder.ToCollection("doctors");
             builder.HasKey(d => d.Id);
             builder.Property(d => d.Id).HasElementName("_id").IsRequired();
             builder.Property(d => d.FullName).HasElementName("full_name").IsRequired();
             builder.Property(d => d.DateOfBirth).HasElementName("date_of_birth").IsRequired();
             builder.Property(d => d.ExperienceYears).HasElementName("experience_years").IsRequired();
-            builder.OwnsOne(d => d.Specialization);
-            builder.ToCollection("doctors");
+            builder.Property(d => d.SpecializationId).HasElementName("specialization_id").IsRequired();
+            
+            builder.HasOne(d => d.Specialization)
+                .WithMany()
+                .HasForeignKey(d => d.SpecializationId);
         });
 
         // Appointment
@@ -54,6 +69,15 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             builder.Property(a => a.Id).HasElementName("_id").IsRequired();
             builder.Property(a => a.PatientId).HasElementName("patient_id").IsRequired();
             builder.Property(a => a.DoctorId).HasElementName("doctor_id").IsRequired();
+            
+            builder.HasOne(a => a.Patient)
+                .WithMany()
+                .HasForeignKey(a => a.PatientId);
+
+            builder.HasOne(a => a.Doctor)
+                .WithMany()
+                .HasForeignKey(a => a.DoctorId);
+            
             builder.Property(a => a.RoomNumber).HasElementName("room_number").IsRequired();
             builder.Property(a => a.IsReturnVisit).HasElementName("is_return_visit").IsRequired();
             builder.Property(a => a.AppointmentDateTime).HasElementName("appointment_date_time").IsRequired();

@@ -16,6 +16,7 @@ public static class DataInitializer
             await context.Patients.AddRangeAsync(DataSeeder.Patients);
             await context.Doctors.AddRangeAsync(DataSeeder.Doctors);
             await context.Appointments.AddRangeAsync(DataSeeder.Appointments);
+            await context.Specializations.AddRangeAsync(DataSeeder.Specializations);
             await context.SaveChangesAsync();
         }
     }
