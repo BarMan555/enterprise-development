@@ -10,34 +10,21 @@ namespace Hospital.Infrastructure.EfCore.Repositories;
 /// <param name="context">DataBase MongoDB context</param>
 public class AppointmentEfCoreRepository(AppDbContext context): IRepository<Appointment, ObjectId>
 {
-    /// <summary>
-    /// Data of appointments 
-    /// </summary>
-    private readonly DbSet<Appointment> _appointments = context.Appointments;
-    /// <summary>
-    /// Data of doctors
-    /// </summary>
-    private readonly DbSet<Doctor> _doctors = context.Doctors;
-    /// <summary>
-    /// Data of patients
-    /// </summary>
-    private readonly DbSet<Patient> _patients = context.Patients;
-    
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment> Create(Appointment entity)
     {
-        var result = await _appointments.AddAsync(entity);
+        var result = await context.Appointments.AddAsync(entity);
         await context.SaveChangesAsync();
         return result.Entity;
     }
 
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
-    public async Task<List<Appointment>> ReadAll()
+    public async Task<List<Appointment>?> ReadAll()
     {
-        var appointments = await _appointments.ToListAsync();
+        var appointments = await context.Appointments.ToListAsync();
 
-        var patients = await _patients.ToListAsync();
-        var doctors = await _doctors.ToListAsync();
+        var patients = await context.Patients.ToListAsync();
+        var doctors = await context.Doctors.ToListAsync();
 
         foreach (var a in appointments)
         {
@@ -51,9 +38,9 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepository<Appo
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment?> Read(ObjectId id)
     {
-        var appointment = await _appointments.FirstOrDefaultAsync(e => e.Id == id);
-        appointment.Patient = _patients.FirstOrDefault(p => p.Id == appointment.PatientId);
-        appointment.Doctor = _doctors.FirstOrDefault(d => d.Id == appointment.DoctorId);
+        var appointment = await context.Appointments.FirstOrDefaultAsync(e => e.Id == id);
+        appointment.Patient = context.Patients.FirstOrDefault(p => p.Id == appointment.PatientId);
+        appointment.Doctor = context.Doctors.FirstOrDefault(d => d.Id == appointment.DoctorId);
 
         return appointment;
     }
@@ -61,7 +48,7 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepository<Appo
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment?> Update(ObjectId id, Appointment entity)
     {
-        _appointments.Update(entity);
+        context.Appointments.Update(entity);
         await context.SaveChangesAsync();
         return (await Read(entity.Id));
     }
@@ -69,10 +56,10 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepository<Appo
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<bool> Delete(ObjectId id)
     {
-        var entity = await _appointments.FirstOrDefaultAsync(e => e.Id == id);
+        var entity = await context.Appointments.FirstOrDefaultAsync(e => e.Id == id);
         if (entity == null)
             return false;
-        _appointments.Remove(entity);
+        context.Appointments.Remove(entity);
         await context.SaveChangesAsync();
         return true;
     }

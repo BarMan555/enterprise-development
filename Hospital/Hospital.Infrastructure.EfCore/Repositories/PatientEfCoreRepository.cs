@@ -24,7 +24,7 @@ public class PatientEfCoreRepository(AppDbContext context) : IRepository<Patient
     }
 
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
-    public async Task<List<Patient>> ReadAll()
+    public async Task<List<Patient>?> ReadAll()
     {
         return await _patients.ToListAsync();
     }
