@@ -63,7 +63,7 @@ public class AppointmentService(
     }
     
     /// <inheritdoc cref="IAppointmentService"/>
-    public async Task<PatientGetDto> GetParientByAppointment(ObjectId id)
+    public async Task<PatientGetDto> GetPatientByAppointment(ObjectId id)
     {
         var patient = (await repository.Read(id))?.Patient;
         var patientDto = mapper.Map<PatientGetDto>(patient);

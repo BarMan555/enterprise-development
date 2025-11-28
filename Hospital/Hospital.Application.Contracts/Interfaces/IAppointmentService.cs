@@ -20,5 +20,5 @@ public interface IAppointmentService : IApplicationService<AppointmentGetDto, Ap
     /// </summary>
     /// <param name="id"></param>
     /// <returns>patient dto</returns>
-    public Task<PatientGetDto> GetParientByAppointment(ObjectId id);
+    public Task<PatientGetDto> GetPatientByAppointment(ObjectId id);
 }

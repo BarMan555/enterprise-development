@@ -36,7 +36,7 @@ public class AppointmentController(
                 return BadRequest("Invalid Id format");
             }
             
-            var res = await service.GetParientByAppointment(objectId);
+            var res = await service.GetPatientByAppointment(objectId);
             logger.LogInformation("{method} method of {controller} executed successfully", nameof(GetPatientById), GetType().Name);
             return Ok(res);
         }
