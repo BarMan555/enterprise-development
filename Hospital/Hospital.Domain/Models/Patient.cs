@@ -11,7 +11,7 @@ public class Patient
     /// <summary>
     /// Unique identifier of the Patient
     /// </summary>
-    public required ObjectId Id { get; set; }
+    public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
 
     /// <summary>
     /// Namec of the Patient

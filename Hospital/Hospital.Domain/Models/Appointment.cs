@@ -10,7 +10,7 @@ public class Appointment
     /// <summary>
     /// Unique identificator of the Appointment
     /// </summary>
-    public required ObjectId Id { get; set; }
+    public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
     
     /// <summary>
     /// ID of <see cref="Patient"/> which registering on Appointment

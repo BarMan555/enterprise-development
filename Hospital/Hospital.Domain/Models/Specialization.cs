@@ -10,7 +10,7 @@ public class Specialization
     /// <summary>
     /// Unique identifier
     /// </summary>
-    public required ObjectId Id { get; set; }
+    public ObjectId Id { get; set; } =  ObjectId.GenerateNewId();
 
     /// <summary>
     /// Name of the specialization 

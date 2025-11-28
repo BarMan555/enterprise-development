@@ -9,13 +9,34 @@ namespace Hospital.Domain.Seeders;
 public static class DataSeeder
 {
     /// <summary>
+    /// IDs of specializations
+    /// </summary>
+    private static readonly ObjectId _cardiologyId = ObjectId.GenerateNewId();
+    private static readonly ObjectId _neurologyId = ObjectId.GenerateNewId();
+    private static readonly ObjectId _orthopedicsId = ObjectId.GenerateNewId();
+    private static readonly ObjectId _pediatricsId = ObjectId.GenerateNewId();
+    private static readonly ObjectId _dermatologyId = ObjectId.GenerateNewId();
+
+    /// <summary>
+    /// List of Specialization
+    /// </summary>
+    public static readonly List<Specialization> Specializations =
+    [
+
+        new() { Id = _cardiologyId, Name = "Кардиолог", IsActive = true },
+        new() { Id = _neurologyId, Name = "Нейролог", IsActive = true },
+        new() { Id = _orthopedicsId, Name = "Ортопед", IsActive = true },
+        new() { Id = _pediatricsId, Name = "Педиатр", IsActive = true },
+        new() { Id = _dermatologyId, Name = "Дерматолог", IsActive = true }
+    ];
+    
+    /// <summary>
     /// List of Patients
     /// </summary>
     public static readonly List<Patient> Patients =
     [
         new Patient
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Иванов Иван Иванович",
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1985, 3, 15),
@@ -26,7 +47,6 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Петрова Анна Сергеевна",
             Gender = Gender.Female,
             DateOfBirth = new DateTime(1992, 7, 22),
@@ -37,7 +57,6 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Сидоров Михаил Петрович",
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1978, 11, 5),
@@ -48,7 +67,6 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Козлова Елена Викторовна",
             Gender = Gender.Female,
             DateOfBirth = new DateTime(2001, 1, 30),
@@ -59,7 +77,6 @@ public static class DataSeeder
         },
         new Patient
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Николаев Дмитрий Александрович",
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1965, 9, 18),
@@ -71,78 +88,57 @@ public static class DataSeeder
     ];
 
     /// <summary>
-    /// List of doctor's specialization
-    /// </summary>
-    private static readonly List<Specialization> _specializations =
-    [
-        new Specialization() { Id = 0, Name = SpecializationName.Pediatrician },
-        new Specialization() { Id = 1, Name = SpecializationName.Surgeon },
-        new Specialization() { Id = 2, Name = SpecializationName.Neurologist },
-        new Specialization() { Id = 3, Name = SpecializationName.Cardiologist },
-        new Specialization() { Id = 4, Name = SpecializationName.Dentist },
-        new Specialization() { Id = 5, Name = SpecializationName.Ophthalmologist },
-        new Specialization() { Id = 6, Name = SpecializationName.Therapist },
-    ];
-    
-    /// <summary>
     /// List of Doctors
     /// </summary>
     public static readonly List<Doctor> Doctors =
     [
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Смирнов Александр Васильевич",
             DateOfBirth = new DateTime(1978, 5, 12),
-            Specialization = _specializations[0],
+            SpecializationId = _cardiologyId,
             ExperienceYears = 15
         },
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Иванова Мария Петровна",
             DateOfBirth = new DateTime(1985, 8, 24),
-            Specialization = _specializations[1],
+            SpecializationId = _dermatologyId,
             ExperienceYears = 8
         },
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Кузнецов Дмитрий Сергеевич",
             DateOfBirth = new DateTime(1970, 3, 5),
-            Specialization = _specializations[2],
+            SpecializationId = _neurologyId,
             ExperienceYears = 25
         },
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Петрова Ольга Игоревна",
             DateOfBirth = new DateTime(1990, 11, 17),
-            Specialization = _specializations[3],
+            SpecializationId = _orthopedicsId,
             ExperienceYears = 5
         },
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Васильев Игорь Николаевич",
             DateOfBirth = new DateTime(1965, 2, 28),
-            Specialization = _specializations[4],
+            SpecializationId = _pediatricsId,
             ExperienceYears = 30
         },
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Николаева Екатерина Владимировна",
             DateOfBirth = new DateTime(1982, 7, 14),
-            Specialization = _specializations[5],
+            SpecializationId = _cardiologyId,
             ExperienceYears = 12
         },
         new Doctor
         {
-            Id = ObjectId.GenerateNewId(),
             FullName = "Алексеев Павел Михайлович",
             DateOfBirth = new DateTime(1975, 9, 3),
-            Specialization = _specializations[6],
+            SpecializationId = _dermatologyId,
             ExperienceYears = 18
         }
     ];
@@ -154,7 +150,6 @@ public static class DataSeeder
     [
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[0].Id, // Иванов Иван Иванович
             DoctorId = Doctors[0].Id, // Смирнов Александр Васильевич (Кардиолог)
             AppointmentDateTime = new DateTime(2025, 8, 15, 10, 0, 0),
@@ -163,7 +158,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[1].Id, // Петрова Анна Сергеевна
             DoctorId = Doctors[1].Id, // Иванова Мария Петровна (Педиатр)
             AppointmentDateTime = new DateTime(2025, 8, 15, 11, 30, 0),
@@ -172,7 +166,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[2].Id, // Сидоров Михаил Петрович
             DoctorId = Doctors[2].Id, // Кузнецов Дмитрий Сергеевич (Хирург)
             AppointmentDateTime = new DateTime(2025, 9, 16, 9, 0, 0),
@@ -181,7 +174,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[3].Id, // Козлова Елена Викторовна
             DoctorId = Doctors[3].Id, // Петрова Ольга Игоревна (Невролог)
             AppointmentDateTime = new DateTime(2025, 8, 16, 14, 15, 0),
@@ -190,7 +182,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[4].Id, // Николаев Дмитрий Александрович
             DoctorId = Doctors[4].Id, // Васильев Игорь Николаевич (Терапевт)
             AppointmentDateTime = new DateTime(2025, 8, 17, 16, 45, 0),
@@ -199,7 +190,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[0].Id, // Иванов Иван Иванович
             DoctorId = Doctors[6].Id, // Алексеев Павел Михайлович (Офтальмолог)
             AppointmentDateTime = new DateTime(2025, 8, 18, 13, 0, 0),
@@ -208,7 +198,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[1].Id, // Петрова Анна Сергеевна
             DoctorId = Doctors[0].Id, // Соколова Анна Дмитриевна (Гинеколог)
             AppointmentDateTime = new DateTime(2025, 8, 19, 10, 30, 0),
@@ -217,7 +206,6 @@ public static class DataSeeder
         },
         new Appointment
         {
-            Id = ObjectId.GenerateNewId(),
             PatientId = Patients[2].Id, // Сидоров Михаил Петрович
             DoctorId = Doctors[1].Id, // Смирнов Александр Васильевич (Кардиолог)
             AppointmentDateTime = new DateTime(2025, 8, 19, 15, 20, 0),
