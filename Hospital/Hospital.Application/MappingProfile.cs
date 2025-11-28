@@ -27,20 +27,21 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.RhFactor, opt => opt.MapFrom(src => (RhFactor)src.RhFactor));
 
         CreateMap<Doctor, DoctorGetDto>()
-            .ForMember(dest => dest.IdSpecialization, opt => opt.MapFrom(src => src.Specialization.Id));
+            .ForMember(
+                dest => dest.IdSpecialization,
+                opt => opt.MapFrom(src => src.SpecializationId.ToString()));
 
-        
         CreateMap<DoctorCreateUpdateDto, Doctor>()
-            .ForMember(dest => dest.Specialization, opt => opt.MapFrom(src => new Specialization { Id = src.IdSpecialization, Name = ""}));
+            .ForMember(dest => dest.SpecializationId, opt => opt.MapFrom(src => ObjectId.Parse(src.IdSpecialization)));
 
         
         CreateMap<Appointment, AppointmentGetDto>()
             .ForMember(
                 dest => dest.IdPatient,
-                opt => opt.MapFrom(src => src.Patient.Id.ToString()))
+                opt => opt.MapFrom(src => src.PatientId.ToString()))
             .ForMember(
                 dest => dest.IdDoctor,
-                opt => opt.MapFrom(src => src.Doctor.Id.ToString()));
+                opt => opt.MapFrom(src => src.DoctorId.ToString()));
 
         CreateMap<AppointmentCreateUpdateDto, Appointment>()
             .ForMember(dest => dest.PatientId,
