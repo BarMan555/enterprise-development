@@ -6,21 +6,39 @@ using Hospital.Grpc.Contracts;
 
 namespace Hospital.Api.Grpc;
 
+/// <summary>
+/// Фоновый сервис-потребитель пациентов, работающий как gRPC клиент.
+/// Подключается к удалённому генератору билетов, получает поток данных
+/// и сохраняет их в базу данных с отправкой статусов обработки.
+/// </summary>
 public class PatientConsumerService(
     IServiceScopeFactory scopeFactory,
     ILogger<PatientConsumerService> logger,
     IConfiguration config) : BackgroundService
 {
-    private readonly string _generatorUrl = config["services:generator:https"] 
+    private readonly string _generatorUrl = config["services:generator:grpc:0"] 
                                             ?? throw new InvalidOperationException("URL генератора не найден в конфигурации");
-
+    
+    /// <summary>
+    /// Основной метод выполнения фонового сервиса.
+    /// Устанавливает соединение с генератором, получает поток пациентов
+    /// и обрабатывает каждого пациента с сохранением в БД.
+    /// </summary>
+    /// <param name="stoppingToken">Токен отмены для корректного завершения работы сервиса.</param>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.Delay(5000, stoppingToken);
 
         logger.LogInformation("Подключение к генератору данных по адресу: {Url}", _generatorUrl);
+        
+        var httpHandler = new HttpClientHandler();
+        httpHandler.ServerCertificateCustomValidationCallback = 
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
-        using var channel = GrpcChannel.ForAddress(_generatorUrl);
+        using var channel = GrpcChannel.ForAddress(_generatorUrl, new GrpcChannelOptions { 
+            HttpHandler = httpHandler 
+        });
+        
         var client = new HospitalGenerator.HospitalGeneratorClient(channel);
 
         try

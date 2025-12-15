@@ -10,7 +10,7 @@ var generator = builder.AddProject<Projects.Hospital_Grpc_Server>("generator")
 // Добавляем API и даем ему ссылку на генератор
 builder.AddProject<Projects.Hospital_Api>("hospital")
     .WithReference(mongo)
-    .WithEnvironment("GeneratorGrpcUrl", generator.GetEndpoint("grpc"))
+    .WithReference(generator)
     .WaitFor(mongo)
     .WaitFor(generator);
 

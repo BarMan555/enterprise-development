@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.ServiceDefaults", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Grpc.Server", "Hospital.Grpc.Server\Hospital.Grpc.Server.csproj", "{40C8033B-CB68-4B53-83E1-59ECB4585DD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.GrpcContracts", "Hospital.GrpcContracts \Hospital.GrpcContracts.csproj", "{82183BDE-1117-42A5-9054-CD1305DBBD33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.GrpcContracts", "Hospital.GrpcContracts\Hospital.GrpcContracts.csproj", "{82183BDE-1117-42A5-9054-CD1305DBBD33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,17 +4,22 @@ using Hospital.Grpc.Contracts;
 
 namespace Hospital.Grpc.Server.Services;
 
+/// <summary>
+/// gRPC сервис-генератор пациентов.
+/// Генерирует случайных пациентов и отправляет их клиентам (API).
+/// </summary>
 public class HospitalGeneratorService(
     ILogger<HospitalGeneratorService> logger,
     IConfiguration config) 
     : HospitalGenerator.HospitalGeneratorBase
 {
-    // Настройка Faker для генерации русских данных
     private readonly Faker _faker = new("ru");
-    
-    // Задержка между отправкой данных (по умолчанию 1 секунда)
     private readonly int _delaySeconds = config.GetValue<int?>("GeneratorDelaySeconds") ?? 1;
 
+    /// <summary>
+    /// Потоковая генерация билетов.
+    /// Клиент (API) подключается, генератор отправляет билеты, клиент возвращает статусы.
+    /// </summary>
     public override async Task StreamPatients(
         IAsyncStreamReader<GenerationCallback> requestStream,
         IServerStreamWriter<PatientResponse> responseStream,
@@ -31,7 +36,7 @@ public class HospitalGeneratorService(
                 var patient = GenerateRandomPatient();
                 count++;
 
-                logger.LogInformation("→ Отправка пациента #{Count}: {FullName}", count, patient.FullName);
+                logger.LogInformation("Отправка пациента #{Count}: {FullName}", count, patient.FullName);
 
                 await responseStream.WriteAsync(patient, context.CancellationToken);
 
@@ -46,11 +51,11 @@ public class HospitalGeneratorService(
             {
                 if (callback.Success)
                 {
-                    logger.LogInformation("← API подтвердил сохранение.");
+                    logger.LogInformation("API подтвердил сохранение.");
                 }
                 else
                 {
-                    logger.LogWarning("← API вернул ошибку: {Error}", callback.Error);
+                    logger.LogWarning("API вернул ошибку: {Error}", callback.Error);
                 }
             }
         }, context.CancellationToken);
@@ -65,13 +70,16 @@ public class HospitalGeneratorService(
         }
     }
 
+    /// <summary>
+    /// Метод генерации пациентов.
+    /// </summary>
     private PatientResponse GenerateRandomPatient()
     {
         return new PatientResponse
         {
             FullName = _faker.Name.FullName(),
-            Gender = _faker.PickRandom(0, 1), // 0 - Male, 1 - Female
-            DateOfBirth = _faker.Date.Past(50).ToString("yyyy-MM-dd"), // Строка или Timestamp в proto
+            Gender = _faker.PickRandom(0, 1), 
+            DateOfBirth = _faker.Date.Past(50).ToString("yyyy-MM-dd"), 
             Address = _faker.Address.FullAddress(),
             BloodType = _faker.PickRandom(0, 1, 2, 3),
             RhFactor = _faker.PickRandom(0, 1),
