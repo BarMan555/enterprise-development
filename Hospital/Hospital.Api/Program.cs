@@ -1,16 +1,15 @@
 using AutoMapper;
+using Hospital.Api.Grpc;
 using Hospital.Application;
 using Hospital.Application.Contracts.Interfaces;
 using Hospital.Application.Services;
 using Hospital.Domain;
 using Hospital.Domain.Models;
-using Hospital.Domain.Seeders;
 using Hospital.Infrastructure.EfCore;
 using Hospital.Infrastructure.EfCore.Repositories;
 using Hospital.ServiceDefaults;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +51,9 @@ builder.Services.AddSwaggerGen(c =>
     var contractsXmlPath = Path.Combine(AppContext.BaseDirectory, contractsXmlFile);
     c.IncludeXmlComments(contractsXmlPath);
 });
+
+// Регистрируем фоновую службу
+builder.Services.AddHostedService<PatientConsumerService>();
 
 var app = builder.Build();
 

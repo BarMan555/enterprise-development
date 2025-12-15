@@ -1,0 +1,79 @@
+using Grpc.Core;
+using Grpc.Net.Client;
+using Hospital.Application.Contracts.Dtos;
+using Hospital.Application.Contracts.Interfaces;
+using Hospital.Grpc.Contracts;
+
+namespace Hospital.Api.Grpc;
+
+public class PatientConsumerService(
+    IServiceScopeFactory scopeFactory,
+    ILogger<PatientConsumerService> logger,
+    IConfiguration config) : BackgroundService
+{
+    private readonly string _generatorUrl = config["services:generator:https"] 
+                                            ?? throw new InvalidOperationException("URL генератора не найден в конфигурации");
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await Task.Delay(5000, stoppingToken);
+
+        logger.LogInformation("Подключение к генератору данных по адресу: {Url}", _generatorUrl);
+
+        using var channel = GrpcChannel.ForAddress(_generatorUrl);
+        var client = new HospitalGenerator.HospitalGeneratorClient(channel);
+
+        try
+        {
+            using var call = client.StreamPatients(cancellationToken: stoppingToken);
+            
+            await foreach (var response in call.ResponseStream.ReadAllAsync(stoppingToken))
+            {
+                logger.LogInformation("Получен пациент: {Name}", response.FullName);
+
+                var success = false;
+                var error = string.Empty;
+
+                try
+                {
+                    using var scope = scopeFactory.CreateScope();
+                    var patientService = scope.ServiceProvider.GetRequiredService<IPatientService>();
+                    
+                    var createDto = new PatientCreateUpdateDto
+                    {
+                        FullName = response.FullName,
+                        Gender = response.Gender,
+                        DateOfBirth = DateTime.Parse(response.DateOfBirth),
+                        Address = response.Address,
+                        BloodType = response.BloodType,
+                        RhFactor = response.RhFactor,
+                        PhoneNumber = response.PhoneNumber
+                    };
+
+                    await patientService.Create(createDto);
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Ошибка при сохранении пациента");
+                    error = ex.Message;
+                }
+
+                // Отправляем ответ генератору (Callback)
+                await call.RequestStream.WriteAsync(new GenerationCallback
+                {
+                    Success = success,
+                    Error = error ?? ""
+                }, stoppingToken);
+            }
+        }
+        catch (RpcException ex) when (ex.StatusCode == StatusCode.Cancelled)
+        {
+            logger.LogInformation("Стрим был отменен.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Критическая ошибка в потребителе данных");
+        }
+    }
+}
