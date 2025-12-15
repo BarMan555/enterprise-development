@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Hospital.Grpc.Contracts";
+
+package hospital;
+
+// Сообщение с данными пациента (генерируется сервером)
+message PatientResponse {
+  string full_name = 1;
+  int32 gender = 2;        // 0 - Male, 1 - Female
+  string date_of_birth = 3; // Строка даты, например "1990-01-01"
+  string address = 4;
+  int32 blood_type = 5;    // 0 - O, 1 - A, 2 - B, 3 - Ab
+  int32 rh_factor = 6;     // 0 - Positive, 1 - Negative
+  string phone_number = 7;
+}
+
+// Ответ от API (клиента) о статусе обработки
+message GenerationCallback {
+  bool success = 1;
+  string error = 2;
+}
+
+// Сервис генерации
+service HospitalGenerator {
+  // Двунаправленный стриминг:
+  // Генератор шлет поток PatientResponse
+  // API шлет в ответ поток GenerationCallback
+  rpc StreamPatients (stream GenerationCallback) returns (stream PatientResponse);
+}

@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.AppHost", "Hospita
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.ServiceDefaults", "Hospital.ServiceDefaults\Hospital.ServiceDefaults.csproj", "{10116265-337D-438B-84A9-42528E369BEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Grpc.Server", "Hospital.Grpc.Server\Hospital.Grpc.Server.csproj", "{40C8033B-CB68-4B53-83E1-59ECB4585DD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.GrpcContracts", "Hospital.GrpcContracts \Hospital.GrpcContracts.csproj", "{82183BDE-1117-42A5-9054-CD1305DBBD33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{10116265-337D-438B-84A9-42528E369BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10116265-337D-438B-84A9-42528E369BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10116265-337D-438B-84A9-42528E369BEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C8033B-CB68-4B53-83E1-59ECB4585DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C8033B-CB68-4B53-83E1-59ECB4585DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C8033B-CB68-4B53-83E1-59ECB4585DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C8033B-CB68-4B53-83E1-59ECB4585DD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82183BDE-1117-42A5-9054-CD1305DBBD33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82183BDE-1117-42A5-9054-CD1305DBBD33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82183BDE-1117-42A5-9054-CD1305DBBD33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82183BDE-1117-42A5-9054-CD1305DBBD33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
