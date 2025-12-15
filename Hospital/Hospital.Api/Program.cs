@@ -47,6 +47,10 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
+    
+    var contractsXmlFile = $"Hospital.Application.Contracts.xml";
+    var contractsXmlPath = Path.Combine(AppContext.BaseDirectory, contractsXmlFile);
+    c.IncludeXmlComments(contractsXmlPath);
 });
 
 var app = builder.Build();

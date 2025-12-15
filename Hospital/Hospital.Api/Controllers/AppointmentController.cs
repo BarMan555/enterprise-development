@@ -24,6 +24,7 @@ public class AppointmentController(
     /// <returns>doctor</returns>
     [HttpGet("{id}/patient")]
     [ProducesResponseType(typeof(PatientGetDto), 200)]
+    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<PatientGetDto>> GetPatientById(string id)
     {
@@ -33,7 +34,7 @@ public class AppointmentController(
             if (!ObjectId.TryParse(id, out var objectId))
             {
                 logger.LogError("An exception happened during {method} method of {controller}", nameof(GetPatientById), GetType().Name);
-                return BadRequest("Invalid Id format");
+                return StatusCode(404);
             }
             
             var res = await service.GetPatientByAppointment(objectId);

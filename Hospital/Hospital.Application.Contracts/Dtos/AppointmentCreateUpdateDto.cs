@@ -1,7 +1,7 @@
 namespace Hospital.Application.Contracts.Dtos;
 
 /// <summary>
-/// DTO Represents an Appointment
+/// DTO Represents an Appointment for creating and updating Appointment entities
 /// </summary>
 public class AppointmentCreateUpdateDto
 {

@@ -19,27 +19,70 @@ public class AppointmentEfCoreRepository(AppDbContext context): IRepository<Appo
         await context.Entry(entity).Reference(a => a.Patient).LoadAsync();
         await context.Entry(entity).Reference(a => a.Doctor).LoadAsync();
         
+        if (entity.Doctor != null)
+        {
+            await context.Entry(entity.Doctor).Reference(d => d.Specialization).LoadAsync();
+        }
+        
         return result.Entity;
     }
 
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<List<Appointment>?> ReadAll()
     {
-        return await context.Appointments
-            .Include(a => a.Patient)
-            .Include(a => a.Doctor)
-            .ThenInclude(d => d.Specialization)
+        var appointments = await context.Appointments.ToListAsync();
+
+        if (appointments.Count == 0)
+            return appointments;
+
+        var patientIds = appointments.Select(a => a.PatientId).Distinct().ToList();
+        var doctorIds = appointments.Select(a => a.DoctorId).Distinct().ToList();
+
+        var patients = await context.Patients
+            .Where(p => patientIds.Contains(p.Id))
             .ToListAsync();
+
+        var doctors = await context.Doctors
+            .Where(d => doctorIds.Contains(d.Id))
+            .ToListAsync();
+
+        var specializationIds = doctors.Select(d => d.SpecializationId).Distinct().ToList();
+        var specializations = await context.Specializations
+            .Where(s => specializationIds.Contains(s.Id))
+            .ToListAsync();
+
+        foreach (var doctor in doctors)
+        {
+            doctor.Specialization = specializations.FirstOrDefault(s => s.Id == doctor.SpecializationId);
+        }
+
+        foreach (var appointment in appointments)
+        {
+            appointment.Patient = patients.FirstOrDefault(p => p.Id == appointment.PatientId);
+            appointment.Doctor = doctors.FirstOrDefault(d => d.Id == appointment.DoctorId);
+        }
+
+        return appointments;
     }
 
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
     public async Task<Appointment?> Read(ObjectId id)
     {
-        return await context.Appointments
-            .Include(a => a.Patient)
-            .Include(a => a.Doctor)
-            .ThenInclude(d => d.Specialization)
-            .FirstOrDefaultAsync(a => a.Id == id);
+        var appointment = await context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
+
+        if (appointment == null) 
+            return null;
+
+        await context.Entry(appointment).Reference(a => a.Patient).LoadAsync();
+
+        await context.Entry(appointment).Reference(a => a.Doctor).LoadAsync();
+
+        if (appointment.Doctor != null)
+        {
+            await context.Entry(appointment.Doctor).Reference(d => d.Specialization).LoadAsync();
+        }
+        
+        return appointment;
     }
 
     /// <inheritdoc cref="IRepository{TEntity,TKey}"/>
