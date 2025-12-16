@@ -15,8 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-var mapperConfig = new MapperConfiguration(
-    config => config.AddProfile(new MappingProfile()),
+var mapperConfig = new MapperConfiguration(config => 
+    {
+        config.AddProfile(new MappingProfile());     // Профиль из Application
+        config.AddProfile(new GrpcMappingProfile()); // Профиль из Api
+    },
     LoggerFactory.Create(builder => builder.AddConsole()));
 IMapper? mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Hospital.Application.Contracts.Dtos;
@@ -14,10 +15,11 @@ namespace Hospital.Api.Grpc;
 public class PatientConsumerService(
     IServiceScopeFactory scopeFactory,
     ILogger<PatientConsumerService> logger,
-    IConfiguration config) : BackgroundService
+    IConfiguration config,
+    IMapper mapper) : BackgroundService
 {
     private readonly string _generatorUrl = config["services:generator:grpc:0"] 
-                                            ?? throw new InvalidOperationException("URL генератора не найден в конфигурации");
+                                            ?? throw new KeyNotFoundException("URL генератора не найден в конфигурации");
     
     /// <summary>
     /// Основной метод выполнения фонового сервиса.
@@ -57,16 +59,7 @@ public class PatientConsumerService(
                     using var scope = scopeFactory.CreateScope();
                     var patientService = scope.ServiceProvider.GetRequiredService<IPatientService>();
                     
-                    var createDto = new PatientCreateUpdateDto
-                    {
-                        FullName = response.FullName,
-                        Gender = response.Gender,
-                        DateOfBirth = DateTime.Parse(response.DateOfBirth),
-                        Address = response.Address,
-                        BloodType = response.BloodType,
-                        RhFactor = response.RhFactor,
-                        PhoneNumber = response.PhoneNumber
-                    };
+                    var createDto = mapper.Map<PatientCreateUpdateDto>(response);
 
                     await patientService.Create(createDto);
                     success = true;
